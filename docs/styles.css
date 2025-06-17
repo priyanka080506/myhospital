@@ -95,12 +95,6 @@ p {
     font-size: 1.125rem;
 }
 
-/* NEW: Small button size for header */
-.btn-sm {
-    padding: 8px 16px;
-    font-size: 0.875rem;
-}
-
 /* Header */
 .header {
     background: white;
@@ -141,17 +135,8 @@ p {
 
 .desktop-nav {
     display: flex;
-    align-items: center; /* Align items vertically in desktop nav */
     gap: 2rem;
 }
-
-/* NEW: Style for welcome message in header */
-.nav-text {
-    font-weight: 500;
-    color: #374151;
-    margin-right: 1rem; /* Space before buttons */
-}
-
 
 .nav-link {
     color: #374151;
@@ -197,7 +182,6 @@ p {
     display: none;
     padding: 1rem 0;
     border-top: 1px solid var(--border-color);
-    text-align: center; /* Center items in mobile menu */
 }
 
 .mobile-nav {
@@ -214,11 +198,19 @@ p {
 
 .mobile-actions .phone-info {
     margin-bottom: 1rem;
-    justify-content: center; /* Center phone info in mobile */
 }
 
 .mobile-actions .btn {
     width: 100%;
+}
+
+/* View Sections */
+.view-section {
+    display: none; /* Hidden by default */
+}
+
+.view-section.active-view {
+    display: block; /* Shown when active */
 }
 
 /* Hero Section */
@@ -819,7 +811,7 @@ p {
     color: var(--text-light);
 }
 
-/* Form (Booking Form) */
+/* Form */
 .booking-form {
     padding: 1.5rem;
 }
@@ -942,32 +934,6 @@ p {
     min-width: 120px;
 }
 
-/* NEW: Doctor Sign-in Form Styles */
-.sign-in-form {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.sign-in-form .form-group label {
-    font-size: 1rem;
-}
-
-.sign-in-form .btn {
-    margin-top: 1rem;
-}
-
-/* NEW: Error Message Style */
-.error-message {
-    color: var(--danger-color);
-    text-align: center;
-    margin-top: 1rem;
-    font-weight: 500;
-    font-size: 0.9rem;
-    padding: 0 1.5rem; /* Match modal padding */
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
     .hero-content {
@@ -983,11 +949,6 @@ p {
     .services-grid,
     .doctors-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-
-    /* Adjust desktop nav gap for more space on smaller screens */
-    .desktop-nav {
-        gap: 1.5rem;
     }
 }
 
@@ -1057,19 +1018,6 @@ p {
     .form-actions .btn {
         width: 100%;
     }
-
-    /* NEW: Adjust mobile menu buttons and welcome text */
-    .mobile-nav .btn {
-        width: auto; /* Allow buttons to size naturally within mobile menu */
-        margin: 0.5rem auto; /* Center buttons */
-        display: block;
-    }
-
-    .mobile-nav .nav-text {
-        text-align: center;
-        margin: 1rem 0;
-        display: block; /* Ensure it takes full width for centering */
-    }
 }
 
 @media (max-width: 480px) {
@@ -1095,8 +1043,7 @@ p {
     }
     
     .modal-header,
-    .booking-form,
-    .sign-in-form { /* Apply padding to sign-in form too */
+    .booking-form {
         padding: 1rem;
     }
     
