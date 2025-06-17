@@ -106,38 +106,39 @@ const doctorsData = [
     }
 ];
 
-// Initialize the website
+// Initialize the website when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeServices();
-    initializeDoctors('patients'); // Initialize for patient view
-    initializeDoctors('doctors'); // Initialize for doctor view
+    initializeDoctors('patients'); // Initialize for the patient-facing doctor grid
+    initializeDoctors('doctors'); // Initialize for the doctor-portal's doctor grid
     initializeForm();
     initializeSmoothScrolling();
     setMinDate();
-    // Ensure the patient view is active on load
-    showView('patient-view');
+    // Ensure the patient view is active by default on page load
+    showView('patient-view'); 
 });
 
-// Function to switch between views
+// Function to switch between patient and doctor views
 function showView(viewId) {
+    // Hide all view sections first
     document.querySelectorAll('.view-section').forEach(view => {
         view.classList.remove('active-view');
     });
+    // Show the requested view
     document.getElementById(viewId).classList.add('active-view');
 
-    // Adjust scroll behavior for fixed header if needed
+    // Scroll to the top of the newly activated view for better UX
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Close mobile menu if open
+    // Close mobile menu if it was open
     closeMobileMenu();
 }
 
-
-// Initialize services section
+// Dynamically populate the services section
 function initializeServices() {
     const servicesGrid = document.getElementById('servicesGrid');
     
-    // Clear existing content to prevent duplication on re-initialization if any
+    // Clear any existing content to prevent duplication if called multiple times
     servicesGrid.innerHTML = ''; 
 
     servicesData.forEach(service => {
@@ -159,11 +160,12 @@ function initializeServices() {
     });
 }
 
-// Initialize doctors section
+// Dynamically populate the doctors sections based on the target view
 function initializeDoctors(targetView) {
+    // Determine which doctor grid to populate based on the targetView parameter
     const doctorsGrid = document.getElementById(targetView === 'patients' ? 'doctorsGrid' : 'doctorsViewGrid');
     
-    // Clear existing content to prevent duplication on re-initialization
+    // Clear any existing content to prevent duplication
     doctorsGrid.innerHTML = '';
 
     doctorsData.forEach(doctor => {
@@ -172,10 +174,12 @@ function initializeDoctors(targetView) {
         
         const stars = generateStars(doctor.rating);
         
-        // Conditional button for patient vs doctor view
+        // Customize the button on the doctor card based on the active view
+        // Patients view: "Book Appointment" button that opens the modal
+        // Doctors view: "View Profile" button (placeholder for doctor-specific action)
         const buttonHtml = targetView === 'patients' ? 
             `<button class="btn btn-primary" onclick="openBookingModal()">Book Appointment</button>` :
-            `<button class="btn btn-outline">View Profile</button>`;
+            `<button class="btn btn-outline">View Profile</button>`; // Or other doctor-specific action
 
         doctorCard.innerHTML = `
             <div class="doctor-image">
@@ -216,10 +220,11 @@ function initializeDoctors(targetView) {
     });
 }
 
-// Generate star rating HTML
+// Helper function to generate star rating HTML for doctor cards
 function generateStars(rating) {
     let stars = '';
     for (let i = 1; i <= 5; i++) {
+        // Add 'filled' class for stars up to the doctor's rating
         if (i <= Math.floor(rating)) {
             stars += '<i class="fas fa-star star filled"></i>';
         } else {
@@ -229,157 +234,170 @@ function generateStars(rating) {
     return stars;
 }
 
-// Mobile menu functions
+// Toggle mobile menu visibility and icon
 function toggleMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const menuBtn = document.querySelector('.mobile-menu-btn i');
     
-    mobileMenu.classList.toggle('active');
+    mobileMenu.classList.toggle('active'); // Toggle 'active' class for visibility
     
+    // Change menu icon based on its state
     if (mobileMenu.classList.contains('active')) {
-        menuBtn.className = 'fas fa-times';
+        menuBtn.className = 'fas fa-times'; // Change to 'X' icon
     } else {
-        menuBtn.className = 'fas fa-bars';
+        menuBtn.className = 'fas fa-bars'; // Change back to hamburger icon
     }
 }
 
+// Close mobile menu
 function closeMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const menuBtn = document.querySelector('.mobile-menu-btn i');
     
-    mobileMenu.classList.remove('active');
-    menuBtn.className = 'fas fa-bars';
+    mobileMenu.classList.remove('active'); // Remove 'active' class to hide
+    menuBtn.className = 'fas fa-bars'; // Ensure hamburger icon is displayed
 }
 
-// Smooth scrolling for navigation links
+// Initialize smooth scrolling for all internal anchor links
 function initializeSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent default jump behavior
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = target.offsetTop - headerHeight;
+                const headerHeight = document.querySelector('.header').offsetHeight; // Get fixed header height
+                const targetPosition = target.offsetTop - headerHeight; // Adjust scroll position
                 
                 window.scrollTo({
                     top: targetPosition,
-                    behavior: 'smooth'
+                    behavior: 'smooth' // Smooth scroll animation
                 });
             }
         });
     });
 }
 
-// Modal functions
+// Open the appointment booking modal
 function openBookingModal() {
     const modal = document.getElementById('bookingModal');
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    modal.classList.add('active'); // Show modal
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
 }
 
+// Close the appointment booking modal
 function closeBookingModal() {
     const modal = document.getElementById('bookingModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
+    modal.classList.remove('active'); // Hide modal
+    document.body.style.overflow = 'auto'; // Allow background scrolling
     
-    // Reset form
-    resetForm();
+    resetForm(); // Reset form state when modal closes
 }
 
-// Close modal when clicking outside
+// Close modal when clicking on the overlay itself
 document.getElementById('bookingModal').addEventListener('click', function(e) {
-    if (e.target === this) {
+    if (e.target === this) { // Check if the click target is the overlay itself
         closeBookingModal();
     }
 });
 
-// Form functions
+// Initialize form submission and input validation listeners
 function initializeForm() {
     const form = document.getElementById('bookingForm');
-    form.addEventListener('submit', handleFormSubmit);
+    form.addEventListener('submit', handleFormSubmit); // Handle form submission
     
-    // Add input event listeners for real-time validation
+    // Add input event listeners for real-time validation feedback
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
         input.addEventListener('input', validateCurrentStep);
     });
 }
 
+// Set the minimum date for the appointment date input to today
 function setMinDate() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
     document.getElementById('appointmentDate').setAttribute('min', today);
 }
 
+// Navigate to the next step in the multi-step form
 function nextStep() {
-    if (validateCurrentStep()) {
+    if (validateCurrentStep()) { // Only proceed if current step is valid
         if (currentStep < totalSteps) {
-            currentStep++;
-            updateStep();
+            currentStep++; // Increment step
+            updateStep(); // Update UI
             if (currentStep === 3) {
-                updateSummary();
+                updateSummary(); // Populate summary on the final step
             }
         }
     }
 }
 
+// Navigate to the previous step in the multi-step form
 function previousStep() {
     if (currentStep > 1) {
-        currentStep--;
-        updateStep();
+        currentStep--; // Decrement step
+        updateStep(); // Update UI
     }
 }
 
+// Update the visibility of form steps, progress bar, and navigation buttons
 function updateStep() {
-    // Update step visibility
+    // Hide/show form steps based on currentStep
     document.querySelectorAll('.form-step').forEach((step, index) => {
         step.classList.toggle('active', index + 1 === currentStep);
     });
     
-    // Update progress bar
+    // Update progress steps (circles)
     document.querySelectorAll('.progress-step').forEach((step, index) => {
         step.classList.toggle('active', index + 1 <= currentStep);
     });
     
+    // Update progress lines between steps
     document.querySelectorAll('.progress-line').forEach((line, index) => {
         line.classList.toggle('active', index + 1 < currentStep);
     });
     
-    // Update buttons
+    // Update button visibility
     const backBtn = document.getElementById('backBtn');
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
     
-    backBtn.style.display = currentStep > 1 ? 'block' : 'none';
-    nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
-    submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+    backBtn.style.display = currentStep > 1 ? 'block' : 'none'; // Show 'Back' button from step 2
+    nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none'; // Show 'Next' button until last step
+    submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none'; // Show 'Submit' button on last step
 }
 
+// Validate required fields in the current form step
 function validateCurrentStep() {
     const currentStepElement = document.getElementById(`step${currentStep}`);
+    // Select all required inputs and selects within the current active step
     const requiredInputs = currentStepElement.querySelectorAll('input[required], select[required]');
     
     let isValid = true;
     
     requiredInputs.forEach(input => {
-        if (!input.value.trim()) {
-            input.style.borderColor = '#ef4444';
+        if (!input.value.trim()) { // Check if input value is empty or just whitespace
+            input.style.borderColor = '#ef4444'; // Highlight invalid fields
             isValid = false;
         } else {
-            input.style.borderColor = '#e2e8f0';
+            input.style.borderColor = '#e2e8f0'; // Reset border for valid fields
         }
     });
     
     if (!isValid) {
-        alert('Please fill in all required fields.');
+        // Display a generic alert for missing fields
+        // In a production app, more specific error messages would be better
+        alert('Please fill in all required fields.'); 
     }
     
     return isValid;
 }
 
+// Populate the appointment summary on the final step
 function updateSummary() {
-    const formData = new FormData(document.getElementById('bookingForm'));
+    const formData = new FormData(document.getElementById('bookingForm')); // Get form data
     const summaryContent = document.getElementById('summaryContent');
     
+    // Extract values from form data
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
     const service = formData.get('service');
@@ -387,6 +405,7 @@ function updateSummary() {
     const appointmentDate = formData.get('appointmentDate');
     const appointmentTime = formData.get('appointmentTime');
     
+    // Generate HTML for the summary
     summaryContent.innerHTML = `
         <div class="summary-item">
             <span class="summary-label">Patient:</span>
@@ -407,6 +426,7 @@ function updateSummary() {
     `;
 }
 
+// Helper function to format date for display
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -417,48 +437,52 @@ function formatDate(dateString) {
     });
 }
 
+// Handle form submission
 function handleFormSubmit(e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
     
     if (validateCurrentStep()) {
-        // Simulate form submission
+        // Simulate form submission success
         alert('Appointment booked successfully! We will contact you shortly to confirm.');
-        closeBookingModal();
+        closeBookingModal(); // Close modal after successful submission
     }
 }
 
+// Reset the form and its UI state
 function resetForm() {
-    currentStep = 1;
-    document.getElementById('bookingForm').reset();
-    updateStep();
+    currentStep = 1; // Reset to first step
+    document.getElementById('bookingForm').reset(); // Clear form fields
+    updateStep(); // Update UI to reflect step 1
     
-    // Reset input border colors
+    // Reset border colors for all input fields
     document.querySelectorAll('input, select, textarea').forEach(input => {
         input.style.borderColor = '#e2e8f0';
     });
 }
 
-// Add scroll effect to header
+// Add a scroll effect to the header for a subtle visual change
 window.addEventListener('scroll', function() {
     const header = document.querySelector('.header');
     if (window.scrollY > 100) {
+        // Apply a slightly transparent background and blur when scrolled down
         header.style.background = 'rgba(255, 255, 255, 0.95)';
         header.style.backdropFilter = 'blur(10px)';
     } else {
+        // Revert to solid white background when at the top
         header.style.background = 'white';
         header.style.backdropFilter = 'none';
     }
 });
 
-// Add loading animation for images
+// Add a fade-in animation for images when they load
 document.addEventListener('DOMContentLoaded', function() {
     const images = document.querySelectorAll('img');
     images.forEach(img => {
         img.addEventListener('load', function() {
-            this.style.opacity = '1';
+            this.style.opacity = '1'; // Fade in the image when loaded
         });
         
-        // Set initial opacity
+        // Set initial opacity to 0 and add transition for the fade-in effect
         img.style.opacity = '0';
         img.style.transition = 'opacity 0.3s ease';
     });
