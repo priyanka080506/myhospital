@@ -3,162 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCare Patient Portal</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrojR7E4/QjA2E6tM9J/3S+6+E6gQ5/F9i+E6z5f+C+J0Q/V4G2M3f/t2U2/z9/k9+P+D+A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <title>Patient Medical Records</title>
+    
     <link rel="stylesheet" href="styles2.css">
-
-    </head>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
 <body>
+    <div id="authSection" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-user-md"></i>
+                <h1>Patient Portal</h1>
+                <p>Access your medical records and appointments</p>
+            </div>
 
-    <header class="portal-header">
-        <div class="container portal-nav-wrapper">
-            <a href="index.html" class="portal-logo">
-                <i class="fas fa-plus-circle logo-icon"></i>
-                <h1>MediCare Patient Portal</h1>
-            </a>
-            <nav class="portal-desktop-nav">
-                <a href="#dashboard" class="nav-link">Dashboard</a>
-                <a href="#appointments" class="nav-link">Appointments</a>
-                <a href="#reports" class="nav-link">Medical Records</a>
-                <a href="#profile" class="nav-link">Profile</a>
-                <button class="btn btn-outline" id="logoutBtn">Logout</button>
-            </nav>
-            <button class="portal-mobile-menu-btn" onclick="togglePortalMobileMenu()">
-                <i class="fas fa-bars"></i>
+            <div id="loginForm" class="auth-form active">
+                <h2>Login to Your Account</h2>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-button">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                </form>
+                <div class="auth-switch">
+                    <p>Don't have an account? <button id="showRegister" class="link-button">Create Account</button></p>
+                </div>
+            </div>
+
+            <div id="registerForm" class="auth-form">
+                <h2>Create New Account</h2>
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email Address</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPhone">Phone Number</label>
+                        <input type="tel" id="registerPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerDob">Date of Birth</label>
+                        <input type="date" id="registerDob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="auth-button">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+                </form>
+                <div class="auth-switch">
+                    <p>Already have an account? <button id="showLogin" class="link-button">Login</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainDashboard" class="container" style="display: none;">
+        <div class="patient-header">
+            <div class="patient-info">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="patient-details">
+                    <h1 id="patientName">John Smith</h1>
+                    <p class="patient-id">Patient ID: #PT-2024-001</p>
+                    <div class="patient-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>DOB: March 15, 1985</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>john.smith@email.com</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>New York, NY</span>
+                        </div>
+                    </div>
+                    <div class="badges">
+                        <span class="badge active">Active Patient</span>
+                        <span class="badge insurance">Insurance: Blue Cross</span>
+                    </div>
+                </div>
+            </div>
+            <div class="logout-section">
+                <button id="logoutButton" class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search appointments, doctors, or reports...">
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="appointments">
+                <i class="fas fa-calendar"></i>
+                Appointments
+            </button>
+            <button class="tab-button" data-tab="reports">
+                <i class="fas fa-file-text"></i>
+                Reports
             </button>
         </div>
-        <div class="portal-mobile-menu" id="portalMobileMenu">
-            <nav class="portal-mobile-nav">
-                <a href="#dashboard" class="nav-link" onclick="closePortalMobileMenu()">Dashboard</a>
-                <a href="#appointments" class="nav-link" onclick="closePortalMobileMenu()">Appointments</a>
-                <a href="#reports" class="nav-link" onclick="closePortalMobileMenu()">Medical Records</a>
-                <a href="#profile" class="nav-link" onclick="closePortalMobileMenu()">Profile</a>
-                <button class="btn btn-outline" id="mobileLogoutBtn" onclick="closePortalMobileMenu()">Logout</button>
-            </nav>
-        </div>
-    </header>
 
-    <main class="portal-main-content">
-        <div class="container">
-            <section id="login-section" class="portal-section active-section">
-                <h2>Patient Login</h2>
-                <form class="portal-form">
-                    <div class="form-group">
-                        <label for="patientEmail">Email:</label>
-                        <input type="email" id="patientEmail" name="patientEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="patientPassword">Password:</label>
-                        <input type="password" id="patientPassword" name="patientPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <p>Don't have an account? <a href="#create-account" onclick="showPortalSection('create-account'); return false;">Create Account</a></p>
-                </form>
-            </section>
-
-            <section id="create-account" class="portal-section">
-                <h2>Create Patient Account</h2>
-                <form class="portal-form">
-                    <div class="form-group">
-                        <label for="newPatientName">Full Name:</label>
-                        <input type="text" id="newPatientName" name="newPatientName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPatientEmail">Email:</label>
-                        <input type="email" id="newPatientEmail" name="newPatientEmail" required>
-                    </div>
-                     <div class="form-group">
-                        <label for="newPatientPhone">Phone:</label>
-                        <input type="tel" id="newPatientPhone" name="newPatientPhone">
-                    </div>
-                    <div class="form-group">
-                        <label for="newPatientPassword">Password:</label>
-                        <input type="password" id="newPatientPassword" name="newPatientPassword" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmNewPatientPassword">Confirm Password:</label>
-                        <input type="password" id="confirmNewPatientPassword" name="confirmNewPatientPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Create Account</button>
-                    <p>Already have an account? <a href="#login-section" onclick="showPortalSection('login-section'); return false;">Login</a></p>
-                </form>
-            </section>
-
-            <section id="dashboard" class="portal-section">
-                <h2>Dashboard</h2>
-                <p>Welcome, Patient Name! Here's a quick overview of your health information.</p>
-                </section>
-
-            <section id="appointments" class="portal-section">
-                <h2>My Appointments</h2>
-                <div class="appointments-list">
-                    <div class="appointment-card">
-                        <h3>Dr. Sarah Johnson</h3>
-                        <p><strong>Service:</strong> Cardiology</p>
-                        <p><strong>Date:</strong> July 10, 2025</p>
-                        <p><strong>Time:</strong> 10:00 AM</p>
-                        <p><strong>Status:</strong> Confirmed</p>
-                        <button class="btn btn-outline btn-small">Reschedule</button>
-                    </div>
-                    <div class="appointment-card">
-                        <h3>Dr. Michael Chen</h3>
-                        <p><strong>Service:</strong> Neurology</p>
-                        <p><strong>Date:</strong> June 25, 2025</p>
-                        <p><strong>Time:</strong> 02:00 PM</p>
-                        <p><strong>Status:</strong> Completed</p>
-                        <button class="btn btn-outline btn-small">View Details</button>
-                    </div>
-                    </div>
-            </section>
-
-            <section id="reports" class="portal-section">
-                <h2>Medical Records & Reports</h2>
-                <div class="reports-list">
-                    <div class="report-card">
-                        <h3>Blood Test Results - May 2025</h3>
-                        <p><strong>Date:</strong> May 15, 2025</p>
-                        <p><strong>Doctor:</strong> Dr. Robert Kumar</p>
-                        <a href="#" class="btn btn-primary btn-small">View Report (PDF)</a>
-                    </div>
-                    <div class="report-card">
-                        <h3>Cardiology Checkup - April 2025</h3>
-                        <p><strong>Date:</strong> April 01, 2025</p>
-                        <p><strong>Doctor:</strong> Dr. Sarah Johnson</p>
-                        <a href="#" class="btn btn-primary btn-small">View Report (PDF)</a>
-                    </div>
-                    </div>
-            </section>
-
-            <section id="profile" class="portal-section">
-                <h2>My Profile</h2>
-                <form class="portal-form">
-                    <div class="form-group">
-                        <label for="profileName">Name:</label>
-                        <input type="text" id="profileName" value="John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label for="profileEmail">Email:</label>
-                        <input type="email" id="profileEmail" value="john.doe@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="profilePhone">Phone:</label>
-                        <input type="tel" id="profilePhone" value="+91-9876543210">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </form>
-            </section>
-
+        <div class="tab-content">
+            <div id="appointments" class="tab-panel active">
+                <div class="section-header">
+                    <h2>Previous Appointments</h2>
+                    <span class="count-badge" id="appointmentCount">4 appointments</span>
+                </div>
+                <div id="appointmentsList" class="appointments-list"></div>
             </div>
-    </main>
 
-    <footer class="portal-footer">
-        <div class="container">
-            <p>&copy; 2025 MediCare Patient Portal. All rights reserved.</p>
+            <div id="reports" class="tab-panel">
+                <div class="section-header">
+                    <h2>Medical Reports</h2>
+                    <span class="count-badge" id="reportsCount">4 reports</span>
+                </div>
+                <div id="reportsList" class="reports-list"></div>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script src="script2.js"></script>
 </body>
