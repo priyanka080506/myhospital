@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediCare - Your Health, Our Priority</title>
-    <!-- Favicon (optional - replace with your actual favicon.ico) -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- Font Awesome for Icons (Essential for your design and JS logic) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrojR7E4/QjA2E6tM9J/3S+6+E6gQ5/F9i+E6z5f+C+J0Q/V4G2M3f/t2U2/z9/k9+P+D+A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Your main CSS file -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- Header Section (Common to both portals) -->
     <header class="header">
         <div class="container nav-wrapper">
             <a href="#" class="logo" onclick="showView('patient-portal-content'); return false;">
@@ -23,10 +19,8 @@
                 <h1>MediCare</h1>
             </a>
             <nav class="desktop-nav">
-                <!-- Navigation to switch between portals -->
                 <a href="#hero" class="nav-link" onclick="showView('patient-portal-content')">Patient Portal</a>
                 <a href="#" class="nav-link" onclick="showView('doctor-portal-content')">Doctor Portal</a>
-                <!-- Other patient-view specific navigation, now within the patient portal content -->
                 <a href="#services" class="nav-link" onclick="showView('patient-portal-content')">Services</a>
                 <a href="#doctors" class="nav-link" onclick="showView('patient-portal-content')">Find Doctors</a>
                 <a href="#contact" class="nav-link" onclick="showView('patient-portal-content')">Contact</a>
@@ -42,13 +36,10 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-        <!-- Mobile Menu (Hidden by default, shown by JS) -->
         <div class="mobile-menu" id="mobileMenu">
             <nav class="mobile-nav">
-                <!-- Mobile Navigation to switch between portals -->
                 <a href="#hero" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu(); return false;">Patient Portal</a>
                 <a href="#" class="nav-link" onclick="showView('doctor-portal-content'); closeMobileMenu(); return false;">Doctor Portal</a>
-                <!-- Other patient-view specific mobile navigation -->
                 <a href="#services" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Services</a>
                 <a href="#doctors" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Find Doctors</a>
                 <a href="#contact" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Contact</a>
@@ -64,9 +55,7 @@
     </header>
 
     <main>
-        <!-- Patient Portal Content Section -->
         <div id="patient-portal-content" class="portal-content active-portal">
-            <!-- Hero Section -->
             <section class="hero" id="hero">
                 <div class="container hero-content">
                     <div class="hero-text">
@@ -112,7 +101,6 @@
                 </div>
             </section>
 
-            <!-- Services Section -->
             <section class="services" id="services">
                 <div class="container">
                     <div class="section-header">
@@ -120,12 +108,10 @@
                         <p>We offer a wide range of medical services, ensuring comprehensive care for all your health needs with a focus on cutting-edge treatments and compassionate support.</p>
                     </div>
                     <div class="services-grid" id="servicesGrid">
-                        <!-- Service cards will be dynamically loaded here by JavaScript -->
-                    </div>
+                        </div>
                 </div>
             </section>
 
-            <!-- Doctors Section (Patient Facing) -->
             <section class="doctors" id="doctors">
                 <div class="container">
                     <div class="section-header">
@@ -133,31 +119,25 @@
                         <p>Our team of highly qualified specialists are dedicated to providing you with the best possible care, bringing years of experience and expertise.</p>
                     </div>
                     <div class="doctors-grid" id="doctorsGrid">
-                        <!-- Doctor cards for patients will be dynamically loaded here by JavaScript -->
-                    </div>
+                        </div>
                 </div>
             </section>
 
-            <!-- About Section -->
             <section class="services" id="about">
                 <div class="container section-header">
                     <h2>About Us</h2>
                     <p>Learn more about our mission, vision, and the values that drive our commitment to exceptional healthcare. We are dedicated to serving our community with integrity and excellence.</p>
-                    <!-- Add more detailed about us content here if needed -->
-                </div>
+                    </div>
             </section>
 
-            <!-- Contact Section -->
             <section class="doctors" id="contact">
                 <div class="container section-header">
                     <h2>Contact Us</h2>
                     <p>Have questions or need assistance? Reach out to us through our contact form or find our location and emergency contact details below.</p>
-                    <!-- Add contact form, map, and other contact details here -->
-                </div>
+                    </div>
             </section>
         </div>
 
-        <!-- Doctor Portal Content Section -->
         <div id="doctor-portal-content" class="portal-content">
             <section class="doctors" id="doctorsPortal">
                 <div class="container">
@@ -167,17 +147,13 @@
                         <p>More content and features for the Doctor Portal will be added here later.</p>
                     </div>
                     <div class="doctors-grid" id="doctorsViewGrid">
-                        <!-- Doctor cards for doctors' view will be dynamically loaded here by JavaScript -->
+                        </div>
                     </div>
-                    <!-- Add more doctor portal specific content here, e.g., a dashboard or management tools -->
-                </div>
             </section>
-            <!-- You can add more sections here specifically for the doctor portal if needed -->
-        </div>
+            </div>
 
     </main>
 
-    <!-- Footer (Common to both portals) -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -250,7 +226,6 @@
         </div>
     </footer>
 
-    <!-- Appointment Booking Modal (Common to both portals, floats above content) -->
     <div id="bookingModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -277,5 +252,101 @@
                 </div>
             </div>
             <form id="bookingForm" class="booking-form">
-                <!-- Step 1: Patient Information -->
                 <div id="step1" class="form-step active">
+                    <div class="step-header">
+                        <h3>Your Information</h3>
+                        <p>Please provide your personal details for the appointment.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" name="address">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step2" class="form-step">
+                    <div class="step-header">
+                        <h3>Appointment Details</h3>
+                        <p>Select your desired service, doctor, date, and time.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="service">Service</label>
+                            <select id="service" name="service" required>
+                                <option value="">Select a Service</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Ophthalmology">Ophthalmology</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="General Medicine">General Medicine</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="doctor">Preferred Doctor</label>
+                            <select id="doctor" name="doctor" required>
+                                <option value="">Any Doctor</option>
+                                <option value="Dr. Sarah Johnson">Dr. Sarah Johnson (Cardiology)</option>
+                                <option value="Dr. Michael Chen">Dr. Michael Chen (Neurology)</option>
+                                <option value="Dr. Emily Rodriguez">Dr. Emily Rodriguez (Pediatrics)</option>
+                                <option value="Dr. James Wilson">Dr. James Wilson (Orthopedics)</option>
+                                <option value="Dr. Lisa Thompson">Dr. Lisa Thompson (Ophthalmology)</option>
+                                <option value="Dr. Robert Kumar">Dr. Robert Kumar (General Medicine)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentDate">Appointment Date</label>
+                            <input type="date" id="appointmentDate" name="appointmentDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentTime">Appointment Time</label>
+                            <input type="time" id="appointmentTime" name="appointmentTime" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="notes">Additional Notes (Optional)</label>
+                            <textarea id="notes" name="notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step3" class="form-step">
+                    <div class="step-header">
+                        <h3>Confirm Your Appointment</h3>
+                        <p>Please review your details before confirming your booking.</p>
+                    </div>
+                    <div class="appointment-summary">
+                        <h4>Appointment Summary</h4>
+                        <div id="summaryContent" class="summary-content">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="backBtn" class="btn btn-outline" style="display: none;" onclick="previousStep()">Back</button>
+                    <button type="button" id="nextBtn" class="btn btn-primary" onclick="nextStep()">Next</button>
+                    <button type="submit" id="submitBtn" class="btn btn-primary" style="display: none;">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -210,7 +210,7 @@ p {
     width: 100%;
 }
 
-/* Portal Content Sections (Updated Class Names) */
+/* Portal Content Sections */
 .portal-content {
     display: none; /* Hidden by default */
 }
@@ -666,7 +666,7 @@ p {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-}
+C}
 
 .copyright {
     color: #9ca3af;
