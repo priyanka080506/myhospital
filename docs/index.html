@@ -14,16 +14,15 @@
 
     <header class="header">
         <div class="container nav-wrapper">
-            <a href="#" class="logo" onclick="showView('patient-portal-content'); return false;">
+            <a href="#" class="logo" onclick="window.location.reload(); return false;">
                 <i class="fas fa-plus-circle logo-icon"></i>
                 <h1>MediCare</h1>
             </a>
             <nav class="desktop-nav">
-                <a href="#hero" class="nav-link" onclick="showView('patient-portal-content')">Patient Portal</a>
-                <a href="#" class="nav-link" onclick="showView('doctor-portal-content')">Doctor Portal</a>
-                <a href="#services" class="nav-link" onclick="showView('patient-portal-content')">Services</a>
-                <a href="#doctors" class="nav-link" onclick="showView('patient-portal-content')">Find Doctors</a>
-                <a href="#contact" class="nav-link" onclick="showView('patient-portal-content')">Contact</a>
+                <a href="#hero" class="nav-link" onclick="showView('patient-portal-content');">Home</a>
+                <a href="#services" class="nav-link" onclick="showView('patient-portal-content');">Services</a>
+                <a href="#doctors" class="nav-link" onclick="showView('patient-portal-content');">Find Doctors</a>
+                <a href="#contact" class="nav-link" onclick="showView('patient-portal-content');">Contact</a>
             </nav>
             <div class="header-actions">
                 <div class="phone-info">
@@ -38,8 +37,7 @@
         </div>
         <div class="mobile-menu" id="mobileMenu">
             <nav class="mobile-nav">
-                <a href="#hero" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu(); return false;">Patient Portal</a>
-                <a href="#" class="nav-link" onclick="showView('doctor-portal-content'); closeMobileMenu(); return false;">Doctor Portal</a>
+                <a href="#hero" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Home</a>
                 <a href="#services" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Services</a>
                 <a href="#doctors" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Find Doctors</a>
                 <a href="#contact" class="nav-link" onclick="showView('patient-portal-content'); closeMobileMenu();">Contact</a>
@@ -62,8 +60,8 @@
                         <h1 class="hero-title">Your Health, Our Priority. Dedicated Care for a Healthier You.</h1>
                         <p class="hero-description">Experience world-class healthcare with our expert doctors and state-of-the-art facilities. Your well-being is at the heart of everything we do.</p>
                         <div class="hero-buttons">
-                            <button class="btn btn-primary btn-large" onclick="openBookingModal()">Book Appointment</button>
-                            <a href="#services" class="btn btn-outline btn-large">Our Services</a>
+                            <a href="index2.html" class="btn btn-primary btn-large">Patient</a>
+                            <button class="btn btn-outline btn-large" onclick="showView('doctor-portal-content')">Doctor</button>
                         </div>
                         <div class="hero-stats">
                             <div class="stat">
@@ -158,7 +156,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section about">
-                    <a href="#" class="logo footer-logo" onclick="showView('patient-portal-content'); return false;">
+                    <a href="#" class="logo footer-logo" onclick="window.location.reload(); return false;">
                         <i class="fas fa-plus-circle logo-icon"></i>
                         <h1>MediCare</h1>
                     </a>

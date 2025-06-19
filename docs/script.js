@@ -276,23 +276,14 @@ function initializeSmoothScrolling() {
         anchor.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default jump behavior
             const targetId = this.getAttribute('href');
-            // If the target is just a hash (e.g., #hero, #services), and it's within the currently active portal
-            // then perform smooth scroll. Otherwise, treat it as a portal switch.
-            const currentActivePortal = document.querySelector('.portal-content.active-portal');
-            const targetElement = document.querySelector(targetId);
+            // Check if the link is intended to switch the main portal view
+            // In this setup, header navigation links lead to patient portal sections,
+            // while hero buttons toggle between patient/doctor portals.
+            const isPatientSectionLink = targetId === '#hero' || targetId === '#services' || targetId === '#doctors' || targetId === '#about' || targetId === '#contact';
 
-            if (targetElement && currentActivePortal && currentActivePortal.contains(targetElement)) {
-                const headerHeight = document.querySelector('.header').offsetHeight; // Get fixed header height
-                const targetPosition = targetElement.offsetTop - headerHeight; // Adjust scroll position
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth' // Smooth scroll animation
-                });
-            } else if (targetId === '#hero' || targetId === '#services' || targetId === '#doctors' || targetId === '#about' || targetId === '#contact') {
-                // If it's a patient portal specific anchor but we're not on the patient portal,
-                // switch to patient portal and then scroll.
-                showView('patient-portal-content');
+            // If it's a patient section link, ensure patient portal is active, then scroll
+            if (isPatientSectionLink) {
+                showView('patient-portal-content'); // Always switch to patient portal
                 // A small delay to allow the view switch to complete before scrolling
                 setTimeout(() => {
                      const updatedTargetElement = document.querySelector(targetId);
@@ -306,9 +297,27 @@ function initializeSmoothScrolling() {
                      }
                 }, 100); // Adjust delay as needed
             }
+            // If it's not a patient section link (e.g., could be a new internal link added later not handled by showView),
+            // then the `showView` function above would handle portal switching.
+            // For general smooth scrolling *within the active portal*, the below logic applies if `showView` didn't already trigger it.
+            else {
+                const targetElement = document.querySelector(targetId);
+                const currentActivePortal = document.querySelector('.portal-content.active-portal');
+
+                if (targetElement && currentActivePortal && currentActivePortal.contains(targetElement)) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - headerHeight;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
         });
     });
 }
+
 
 // Open the appointment booking modal
 function openBookingModal() {
