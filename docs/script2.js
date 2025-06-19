@@ -1,531 +1,382 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCare - Patient & Doctor Portals</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="container nav-wrapper">
-            <div class="logo">
-                <i class="fas fa-hand-holding-medical logo-icon"></i>
-                <h1>MediCare</h1>
-            </div>
-            <nav class="desktop-nav">
-                <!-- Navigation links to switch between Patient and Doctor views -->
-                <a href="#" class="nav-link" onclick="showView('patient-view'); return false;">Patient Portal</a>
-                <a href="#" class="nav-link" onclick="showView('doctor-view'); return false;">Doctor Portal</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#doctors" class="nav-link">Find Doctors</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </nav>
-            <div class="header-actions">
-                <!-- Phone information remains -->
-                <div class="phone-info">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>+1 (123) 456-7890</span>
+// Authentication state
+let currentUser = null;
+
+// DOM elements
+const authSection = document.getElementById('authSection');
+const mainDashboard = document.getElementById('mainDashboard');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const loginFormElement = document.getElementById('loginFormElement');
+const registerFormElement = document.getElementById('registerFormElement');
+const showRegisterBtn = document.getElementById('showRegister');
+const showLoginBtn = document.getElementById('showLogin');
+const logoutButton = document.getElementById('logoutButton');
+const patientNameElement = document.getElementById('patientName');
+
+// Authentication event listeners
+showRegisterBtn.addEventListener('click', () => {
+    loginForm.classList.remove('active');
+    registerForm.classList.add('active');
+});
+
+showLoginBtn.addEventListener('click', () => {
+    registerForm.classList.remove('active');
+    loginForm.classList.add('active');
+});
+
+loginFormElement.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Simple validation (in real app, this would connect to backend)
+    if (email && password) {
+        // Simulate successful login
+        currentUser = {
+            name: 'John Smith',
+            email: email,
+            id: 'PT-2024-001'
+        };
+        showDashboard();
+    } else {
+        alert('Please enter valid credentials');
+    }
+});
+
+registerFormElement.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const phone = document.getElementById('registerPhone').value;
+    const dob = document.getElementById('registerDob').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    // Validate form
+    if (!name || !email || !phone || !dob || !password || !confirmPassword) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return;
+    }
+    
+    // Simulate successful registration
+    currentUser = {
+        name: name,
+        email: email,
+        id: 'PT-2024-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0')
+    };
+    showDashboard();
+});
+
+logoutButton.addEventListener('click', () => {
+    currentUser = null;
+    showAuth();
+    // Clear forms
+    loginFormElement.reset();
+    registerFormElement.reset();
+});
+
+function showAuth() {
+    authSection.style.display = 'flex';
+    mainDashboard.style.display = 'none';
+}
+
+function showDashboard() {
+    authSection.style.display = 'none';
+    mainDashboard.style.display = 'block';
+    
+    // Update patient name if user is logged in
+    if (currentUser) {
+        patientNameElement.textContent = currentUser.name;
+    }
+    
+    // Initialize dashboard content
+    initializeDashboard();
+}
+
+function initializeDashboard() {
+    // Mock data for appointments
+    const appointments = [
+        {
+            id: 1,
+            date: "2024-06-15",
+            time: "09:30 AM",
+            doctor: "Dr. Sarah Johnson",
+            department: "Cardiology",
+            type: "Follow-up",
+            status: "completed",
+            diagnosis: "Hypertension monitoring",
+            notes: "Blood pressure stable, continue current medication"
+        },
+        {
+            id: 2,
+            date: "2024-05-20",
+            time: "02:15 PM",
+            doctor: "Dr. Michael Chen",
+            department: "Internal Medicine", 
+            type: "Consultation",
+            status: "completed",
+            diagnosis: "Annual health checkup",
+            notes: "All vitals normal, recommended lifestyle changes"
+        },
+        {
+            id: 3,
+            date: "2024-04-10",
+            time: "11:00 AM",
+            doctor: "Dr. Emily Rodriguez",
+            department: "Dermatology",
+            type: "Treatment",
+            status: "completed",
+            diagnosis: "Skin condition treatment",
+            notes: "Prescribed topical medication, follow-up in 3 months"
+        },
+        {
+            id: 4,
+            date: "2024-03-25",
+            time: "03:45 PM",
+            doctor: "Dr. James Wilson",
+            department: "Orthopedics",
+            type: "Consultation",
+            status: "completed",
+            diagnosis: "Knee pain assessment",
+            notes: "Recommended physical therapy and follow-up"
+        }
+    ];
+
+    // Mock data for reports
+    const reports = [
+        {
+            id: 1,
+            title: "Blood Test Results",
+            date: "2024-06-15",
+            type: "Laboratory",
+            doctor: "Dr. Sarah Johnson",
+            status: "final",
+            summary: "Complete blood count and lipid panel within normal ranges"
+        },
+        {
+            id: 2,
+            title: "Chest X-Ray",
+            date: "2024-05-20",
+            type: "Radiology",
+            doctor: "Dr. Michael Chen",
+            status: "final",
+            summary: "No abnormalities detected, clear lung fields"
+        },
+        {
+            id: 3,
+            title: "ECG Report",
+            date: "2024-05-20",
+            type: "Cardiology",
+            doctor: "Dr. Sarah Johnson",
+            status: "final",
+            summary: "Normal sinus rhythm, no signs of arrhythmia"
+        },
+        {
+            id: 4,
+            title: "MRI Scan - Knee",
+            date: "2024-03-25",
+            type: "Radiology",
+            doctor: "Dr. James Wilson",
+            status: "final",
+            summary: "Mild cartilage wear, no structural damage"
+        }
+    ];
+
+    // Render appointments and reports
+    renderAppointments(appointments);
+    renderReports(reports);
+    
+    // Set up search functionality
+    setupSearch(appointments, reports);
+    
+    // Set up tab functionality
+    setupTabs();
+}
+
+// ... keep existing code (renderAppointments, renderReports, setupSearch, setupTabs functions)
+
+function renderAppointments(appointments) {
+    const appointmentsList = document.getElementById('appointmentsList');
+    const appointmentCount = document.getElementById('appointmentCount');
+    
+    appointmentCount.textContent = `${appointments.length} appointments`;
+    
+    appointmentsList.innerHTML = appointments.map(appointment => `
+        <div class="card">
+            <div class="appointment-header">
+                <div>
+                    <div class="appointment-date">
+                        <i class="fas fa-calendar"></i>
+                        <span class="date">${formatDate(appointment.date)}</span>
+                    </div>
+                    <div class="appointment-time">
+                        <i class="fas fa-clock"></i>
+                        <span>${appointment.time}</span>
+                    </div>
+                </div>
+                <div class="appointment-badges">
+                    <span class="status-badge ${appointment.status}">${appointment.status}</span>
+                    <span class="type-badge ${appointment.type.toLowerCase().replace('-', '')}">${appointment.type}</span>
                 </div>
             </div>
-            <!-- Mobile menu button -->
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
+            
+            <div class="appointment-details">
+                <div class="detail-item">
+                    <i class="fas fa-user-md"></i>
+                    <div>
+                        <span class="label">${appointment.doctor}</span>
+                        <div class="value">${appointment.department}</div>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-stethoscope"></i>
+                    <div>
+                        <span class="label">Diagnosis</span>
+                        <div class="value">${appointment.diagnosis}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="appointment-notes">
+                <div class="notes-header">
+                    <i class="fas fa-file-text"></i>
+                    <span class="notes-title">Notes:</span>
+                </div>
+                <div class="notes-content">${appointment.notes}</div>
+            </div>
+            
+            <button class="view-button">
+                <i class="fas fa-eye"></i>
+                View Details
             </button>
         </div>
-        <!-- Mobile Menu (initially hidden) -->
-        <div class="mobile-menu" id="mobileMenu">
-            <nav class="mobile-nav">
-                <!-- Mobile navigation links to switch between Patient and Doctor views -->
-                <a href="#" class="nav-link" onclick="showView('patient-view'); closeMobileMenu(); return false;">Patient Portal</a>
-                <a href="#" class="nav-link" onclick="showView('doctor-view'); closeMobileMenu(); return false;">Doctor Portal</a>
-                <a href="#services" class="nav-link" onclick="closeMobileMenu()">Services</a>
-                <a href="#doctors" class="nav-link" onclick="closeMobileMenu()">Find Doctors</a>
-                <a href="#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
-            </nav>
-            <div class="mobile-actions">
-                <div class="phone-info">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>+1 (123) 456-7890</span>
-                </div>
-            </div>
-        </div>
-    </header>
+    `).join('');
+}
 
-    <main>
-        <!-- Patient View - This section contains content for patients -->
-        <div id="patient-view" class="view-section active-view">
-            <!-- Authentication Section (Patient Portal HTML content goes here) -->
-            <div id="authSection" class="auth-container">
-                <div class="auth-card">
-                    <div class="auth-header">
-                        <i class="fas fa-user-md"></i>
-                        <h1>Patient Portal</h1>
-                        <p>Access your medical records and appointments</p>
-                    </div>
-
-                    <!-- Login Form -->
-                    <div id="loginForm" class="auth-form active">
-                        <h2>Login to Your Account</h2>
-                        <form id="loginFormElement">
-                            <div class="form-group">
-                                <label for="loginEmail">Email Address</label>
-                                <input type="email" id="loginEmail" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="loginPassword">Password</label>
-                                <input type="password" id="loginPassword" required>
-                            </div>
-                            <button type="submit" class="auth-button">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Login
-                            </button>
-                        </form>
-                        <div class="auth-switch">
-                            <p>Don't have an account? <button id="showRegister" class="link-button">Create Account</button></p>
-                        </div>
-                    </div>
-
-                    <!-- Registration Form -->
-                    <div id="registerForm" class="auth-form">
-                        <h2>Create New Account</h2>
-                        <form id="registerFormElement">
-                            <div class="form-group">
-                                <label for="registerName">Full Name</label>
-                                <input type="text" id="registerName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerEmail">Email Address</label>
-                                <input type="email" id="registerEmail" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerPhone">Phone Number</label>
-                                <input type="tel" id="registerPhone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerDob">Date of Birth</label>
-                                <input type="date" id="registerDob" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerPassword">Password</label>
-                                <input type="password" id="registerPassword" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" id="confirmPassword" required>
-                            </div>
-                            <button type="submit" class="auth-button">
-                                <i class="fas fa-user-plus"></i>
-                                Create Account
-                            </button>
-                        </form>
-                        <div class="auth-switch">
-                            <p>Already have an account? <button id="showLogin" class="link-button">Login</button></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Dashboard (Hidden by default) -->
-            <div id="mainDashboard" class="container" style="display: none;">
-                <!-- Patient Header -->
-                <div class="patient-header">
-                    <div class="patient-info">
-                        <div class="avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="patient-details">
-                            <h1 id="patientName">John Smith</h1>
-                            <p class="patient-id">Patient ID: #PT-2024-001</p>
-                            <div class="patient-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>DOB: March 15, 1985</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-phone"></i>
-                                    <span>+1 (555) 123-4567</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>john.smith@email.com</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>New York, NY</span>
-                                </div>
-                            </div>
-                            <div class="badges">
-                                <span class="badge active">Active Patient</span>
-                                <span class="badge insurance">Insurance: Blue Cross</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="logout-section">
-                        <button id="logoutButton" class="logout-button">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Logout
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="search-section">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Search appointments, doctors, or reports...">
-                    </div>
-                </div>
-
-                <!-- Tabs -->
-                <div class="tabs">
-                    <button class="tab-button active" data-tab="appointments">
-                        <i class="fas fa-calendar"></i>
-                        Appointments
-                    </button>
-                    <button class="tab-button" data-tab="reports">
-                        <i class="fas fa-file-text"></i>
-                        Reports
-                    </button>
-                </div>
-
-                <!-- Tab Content -->
-                <div class="tab-content">
-                    <!-- Appointments Tab -->
-                    <div id="appointments" class="tab-panel active">
-                        <div class="section-header">
-                            <h2>Previous Appointments</h2>
-                            <span class="count-badge" id="appointmentCount">4 appointments</span>
-                        </div>
-                        <div id="appointmentsList" class="appointments-list"></div>
-                    </div>
-
-                    <!-- Reports Tab -->
-                    <div id="reports" class="tab-panel">
-                        <div class="section-header">
-                            <h2>Medical Reports</h2>
-                            <span class="count-badge" id="reportsCount">4 reports</span>
-                        </div>
-                        <div id="reportsList" class="reports-list"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Section for Patients (Remaining content from original index.html) -->
-            <section class="hero">
-                <div class="container hero-content">
+function renderReports(reports) {
+    const reportsList = document.getElementById('reportsList');
+    const reportsCount = document.getElementById('reportsCount');
+    
+    reportsCount.textContent = `${reports.length} reports`;
+    
+    reportsList.innerHTML = reports.map(report => `
+        <div class="card">
+            <div class="report-header">
+                <div class="report-title-section">
+                    <div class="report-icon">${getReportIcon(report.type)}</div>
                     <div>
-                        <h1 class="hero-title">Your Health, Our Priority. <span class="text-primary">Effortless Care.</span></h1>
-                        <p class="hero-description">Find and book appointments with expert doctors in various specialties. Your journey to better health starts here.</p>
-                        <div class="hero-buttons">
-                            <!-- Buttons for switching portals - these will use showView('patient-view') etc. -->
-                            <button class="btn btn-primary btn-large" onclick="openBookingModal()">Book an Appointment</button>
-                            <button class="btn btn-outline btn-large" onclick="showView('doctor-view');">Doctor Portal</button>
-                        </div>
-                        <div class="hero-stats">
-                            <div class="stat">
-                                <div class="stat-number">50+</div>
-                                <div class="stat-label">Expert Doctors</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-number">10+</div>
-                                <div class="stat-label">Specialties</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-number">15K+</div>
-                                <div class="stat-label">Happy Patients</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-number">24/7</div>
-                                <div class="stat-label">Support</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hero-features">
-                        <div class="feature-card">
-                            <div class="feature-icon"><i class="fas fa-user-md"></i></div>
-                            <h3>Expert Doctors</h3>
-                            <p>Access a network of highly qualified and experienced medical professionals.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
-                            <h3>Easy Booking</h3>
-                            <p>Schedule your appointments quickly and conveniently online.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon"><i class="fas fa-hands-helping"></i></div>
-                            <h3>24/7 Support</h3>
-                            <p>Our dedicated support team is always ready to assist you.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                            <h3>Secure & Private</h3>
-                            <p>Your health data is protected with the highest security standards.</p>
+                        <div class="report-title">${report.title}</div>
+                        <div class="report-date">
+                            <i class="fas fa-calendar"></i>
+                            <span>${formatDate(report.date)}</span>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <!-- Services Section -->
-            <section class="services" id="services">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Our Medical Services</h2>
-                        <p>We offer a wide range of medical services to cater to your diverse healthcare needs, ensuring top-notch care.</p>
-                    </div>
-                    <div class="services-grid" id="servicesGrid">
-                        <!-- Services will be dynamically loaded here by JavaScript -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Doctors Section (for patients to view doctors) -->
-            <section class="doctors" id="doctors">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Meet Our Specialist Doctors</h2>
-                        <p>Our team of dedicated doctors are experts in their fields, committed to providing you with the best possible care.</p>
-                    </div>
-                    <div class="doctors-grid" id="doctorsGrid">
-                        <!-- Doctors will be dynamically loaded here by JavaScript -->
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Doctor View - This section contains content for doctors -->
-        <div id="doctor-view" class="view-section">
-            <section class="hero" style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); padding-top: 120px;">
-                <div class="container hero-content" style="text-align: center; display: block;">
-                    <h1 class="hero-title" style="font-size: 3rem;">Welcome, Doctors!</h1>
-                    <p class="hero-description">Manage your schedule, view patient records, and streamline your practice with the MediCare Doctor Portal.</p>
-                    <div class="hero-buttons" style="justify-content: center;">
-                        <button class="btn btn-primary btn-large">Manage Schedule</button>
-                        <button class="btn btn-outline btn-large">View Patient List</button>
-                    </div>
-                </div>
-            </section>
-            <!-- A simplified doctors listing for the doctor view, perhaps showing all doctors or specific information -->
-            <section class="doctors" style="background: white;">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Doctor Directory</h2>
-                        <p>Explore the profiles of your colleagues and the specialties within MediCare.</p>
-                    </div>
-                    <div class="doctors-grid" id="doctorsViewGrid">
-                           <!-- Doctors will be dynamically loaded here by JavaScript, potentially with different actions -->
-                    </div>
-                </div>
-            </section>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer" id="contact">
-        <div class="container footer-content">
-            <div class="footer-section">
-                <div class="footer-logo">
-                    <i class="fas fa-hand-holding-medical logo-icon"></i>
-                    <h1>MediCare</h1>
-                </div>
-                <p>Providing compassionate and comprehensive healthcare solutions for a healthier community.</p>
-                <div class="social-links">
-                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+                <span class="report-type-badge ${report.type.toLowerCase()}">${report.type}</span>
             </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#doctors">Find Doctors</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">FAQs</a></li>
-                </ul>
+            
+            <div class="report-doctor">
+                <i class="fas fa-user-md"></i>
+                <span>By ${report.doctor}</span>
             </div>
-            <div class="footer-section">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Support Center</a></li>
-                    <li><a href="#">Site Map</a></li>
-                </ul>
+            
+            <div class="report-summary">
+                <p>${report.summary}</p>
             </div>
-            <div class="footer-section">
-                <h4>Contact Info</h4>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>123 Health Ave, Wellness City, State 98765</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone-alt"></i>
-                        <div>
-                            <span>+1 (123) 456-7890</span>
-                            <span class="emergency">Emergency: +1 (987) 654-3210</span>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>info@medicare.com</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-clock"></i>
-                        <div>
-                            <span class="hours">Mon - Fri: 9:00 AM - 6:00 PM</span>
-                            <span class="hours">Sat: 10:00 AM - 4:00 PM</span>
-                            <span class="hours">Sun: Closed</span>
-                        </div>
-                    </div>
+            
+            <div class="report-footer">
+                <span class="final-badge">✓ ${report.status}</span>
+                <div class="report-actions">
+                    <button class="action-button view">
+                        <i class="fas fa-eye"></i>
+                        View
+                    </button>
+                    <button class="action-button download">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <div class="container footer-bottom-content">
-                <p class="copyright">&copy; 2023 MediCare. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="#">Sitemap</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    `).join('');
+}
 
-    <!-- Booking Modal (remains for appointment booking function) -->
-    <div class="modal-overlay" id="bookingModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fas fa-calendar-alt"></i>
-                    <h2>Book Your Appointment</h2>
-                </div>
-                <button class="modal-close" onclick="closeBookingModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-steps">
-                    <div class="progress-step active" id="progressStep1">1</div>
-                    <div class="progress-line" id="progressLine1"></div>
-                    <div class="progress-step" id="progressStep2">2</div>
-                    <div class="progress-line" id="progressLine2"></div>
-                    <div class="progress-step" id="progressStep3">3</div>
-                </div>
-                <div class="progress-labels">
-                    <span>Your Details</span>
-                    <span>Appointment Info</span>
-                    <span>Confirm Booking</span>
-                </div>
-            </div>
-            <form id="bookingForm" class="booking-form">
-                <!-- Step 1: Patient Details -->
-                <div class="form-step active" id="step1">
-                    <div class="step-header">
-                        <h3>Personal Information</h3>
-                        <p>Please provide your basic details.</p>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" name="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="address">Address</label>
-                            <textarea id="address" name="address" rows="2"></textarea>
-                        </div>
-                    </div>
-                </div>
+function setupSearch(appointments, reports) {
+    const searchInput = document.getElementById('searchInput');
+    const originalAppointments = [...appointments];
+    const originalReports = [...reports];
+    
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        const filteredAppointments = originalAppointments.filter(appointment =>
+            appointment.doctor.toLowerCase().includes(searchTerm) ||
+            appointment.department.toLowerCase().includes(searchTerm) ||
+            appointment.diagnosis.toLowerCase().includes(searchTerm)
+        );
+        
+        const filteredReports = originalReports.filter(report =>
+            report.title.toLowerCase().includes(searchTerm) ||
+            report.type.toLowerCase().includes(searchTerm) ||
+            report.doctor.toLowerCase().includes(searchTerm)
+        );
+        
+        renderAppointments(filteredAppointments);
+        renderReports(filteredReports);
+    });
+}
 
-                <!-- Step 2: Appointment Details -->
-                <div class="form-step" id="step2">
-                    <div class="step-header">
-                        <h3>Appointment Details</h3>
-                        <p>Choose your desired service, doctor, date, and time.</p>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="service">Select Service</label>
-                            <select id="service" name="service" required>
-                                <option value="">-- Choose Service --</option>
-                                <option value="Cardiology">Cardiology</option>
-                                <option value="Neurology">Neurology</option>
-                                <option value="Orthopedics">Orthopedics</option>
-                                <option value="Ophthalmology">Ophthalmology</option>
-                                <option value="Pediatrics">Pediatrics</option>
-                                <option value="General Medicine">General Medicine</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="doctor">Select Doctor</label>
-                            <select id="doctor" name="doctor" required>
-                                <option value="">-- Choose Doctor --</option>
-                                <option value="Dr. Sarah Johnson">Dr. Sarah Johnson (Cardiology)</option>
-                                <option value="Dr. Michael Chen">Dr. Michael Chen (Neurology)</option>
-                                <option value="Dr. Emily Rodriguez">Dr. Emily Rodriguez (Pediatrics)</option>
-                                <option value="Dr. James Wilson">Dr. James Wilson (Orthopedics)</option>
-                                <option value="Dr. Lisa Thompson">Dr. Lisa Thompson (Ophthalmology)</option>
-                                <option value="Dr. Robert Kumar">Dr. Robert Kumar (General Medicine)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="appointmentDate">Appointment Date</label>
-                            <input type="date" id="appointmentDate" name="appointmentDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="appointmentTime">Appointment Time</label>
-                            <input type="time" id="appointmentTime" name="appointmentTime" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="message">Reason for Appointment (Optional)</label>
-                            <textarea id="message" name="message" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div>
+function setupTabs() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and panels
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanels.forEach(panel => panel.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding panel
+            button.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
+}
 
-                <!-- Step 3: Confirmation -->
-                <div class="form-step" id="step3">
-                    <div class="step-header">
-                        <h3>Confirm Your Booking</h3>
-                        <p>Please review your appointment details before confirming.</p>
-                    </div>
-                    <div class="appointment-summary">
-                        <h4>Your Appointment Summary</h4>
-                        <div class="summary-content" id="summaryContent">
-                            <!-- Summary details will be populated by JavaScript -->
-                        </div>
-                    </div>
-                </div>
+function formatDate(dateString) {
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+}
 
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="backBtn" onclick="previousStep()">Back</button>
-                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Confirm Booking</button>
-                </div>
-            </form>
-        </div>
-    </div>
+function getReportIcon(type) {
+    switch (type) {
+        case 'Laboratory': return '🧪';
+        case 'Radiology': return '📷';
+        case 'Cardiology': return '❤️';
+        default: return '📄';
+    }
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    // Show authentication by default
+    showAuth();
+});

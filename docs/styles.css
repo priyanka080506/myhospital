@@ -118,6 +118,7 @@ p {
     display: flex;
     align-items: center;
     gap: 12px;
+    text-decoration: none; /* Added for logo link */
 }
 
 .logo-icon {
@@ -183,6 +184,10 @@ p {
     display: none;
     padding: 1rem 0;
     border-top: 1px solid var(--border-color);
+}
+
+.mobile-menu.active { /* This class is toggled by JS */
+    display: block;
 }
 
 .mobile-nav {
@@ -942,11 +947,11 @@ p {
         gap: 3rem;
         text-align: center;
     }
-    
+
     .hero-features {
         grid-template-columns: 1fr 1fr;
     }
-    
+
     .services-grid,
     .doctors-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -958,64 +963,64 @@ p {
     .header-actions {
         display: none;
     }
-    
+
     .mobile-menu-btn {
         display: block;
     }
-    
+
     .mobile-menu.active {
         display: block;
     }
-    
+
     .hero-title {
         font-size: 2.5rem;
     }
-    
+
     .hero-buttons {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .hero-buttons .btn {
         width: 100%;
         max-width: 300px;
     }
-    
+
     .hero-features {
         grid-template-columns: 1fr;
     }
-    
+
     .hero-stats {
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
     }
-    
+
     .section-header h2 {
         font-size: 2rem;
     }
-    
+
     .services-grid,
     .doctors-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .form-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .footer-bottom-content {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .progress-labels {
         font-size: 0.75rem;
     }
-    
+
     .form-actions {
         flex-direction: column-reverse;
     }
-    
+
     .form-actions .btn {
         width: 100%;
     }
@@ -1025,29 +1030,29 @@ p {
     .container {
         padding: 0 15px;
     }
-    
+
     .hero {
         padding: 100px 0 60px;
     }
-    
+
     .hero-title {
         font-size: 2rem;
     }
-    
+
     .hero-description {
         font-size: 1rem;
     }
-    
+
     .modal {
         margin: 0.5rem;
         max-height: 95vh;
     }
-    
+
     .modal-header,
     .booking-form {
         padding: 1rem;
     }
-    
+
     .progress-bar {
         padding: 1rem;
     }

@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSmoothScrolling();
     setMinDate();
     // Ensure the patient view is active by default on page load
-    showView('patient-view'); 
+    showView('patient-view');
 });
 
 // Function to switch between patient and doctor views
@@ -137,14 +137,14 @@ function showView(viewId) {
 // Dynamically populate the services section
 function initializeServices() {
     const servicesGrid = document.getElementById('servicesGrid');
-    
+
     // Clear any existing content to prevent duplication if called multiple times
-    servicesGrid.innerHTML = ''; 
+    servicesGrid.innerHTML = '';
 
     servicesData.forEach(service => {
         const serviceCard = document.createElement('div');
         serviceCard.className = 'service-card';
-        
+
         serviceCard.innerHTML = `
             <div class="service-icon">
                 <i class="${service.icon}"></i>
@@ -155,7 +155,7 @@ function initializeServices() {
                 ${service.features.map(feature => `<li>${feature}</li>`).join('')}
             </ul>
         `;
-        
+
         servicesGrid.appendChild(serviceCard);
     });
 }
@@ -164,20 +164,20 @@ function initializeServices() {
 function initializeDoctors(targetView) {
     // Determine which doctor grid to populate based on the targetView parameter
     const doctorsGrid = document.getElementById(targetView === 'patients' ? 'doctorsGrid' : 'doctorsViewGrid');
-    
+
     // Clear any existing content to prevent duplication
     doctorsGrid.innerHTML = '';
 
     doctorsData.forEach(doctor => {
         const doctorCard = document.createElement('div');
         doctorCard.className = 'doctor-card';
-        
+
         const stars = generateStars(doctor.rating);
-        
+
         // Customize the button on the doctor card based on the active view
         // Patients view: "Book Appointment" button that opens the modal
         // Doctors view: "View Profile" button (placeholder for doctor-specific action)
-        const buttonHtml = targetView === 'patients' ? 
+        const buttonHtml = targetView === 'patients' ?
             `<button class="btn btn-primary" onclick="openBookingModal()">Book Appointment</button>` :
             `<button class="btn btn-outline">View Profile</button>`; // Or other doctor-specific action
 
@@ -215,7 +215,7 @@ function initializeDoctors(targetView) {
                 ${buttonHtml}
             </div>
         `;
-        
+
         doctorsGrid.appendChild(doctorCard);
     });
 }
@@ -238,9 +238,9 @@ function generateStars(rating) {
 function toggleMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const menuBtn = document.querySelector('.mobile-menu-btn i');
-    
+
     mobileMenu.classList.toggle('active'); // Toggle 'active' class for visibility
-    
+
     // Change menu icon based on its state
     if (mobileMenu.classList.contains('active')) {
         menuBtn.className = 'fas fa-times'; // Change to 'X' icon
@@ -253,7 +253,7 @@ function toggleMobileMenu() {
 function closeMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const menuBtn = document.querySelector('.mobile-menu-btn i');
-    
+
     mobileMenu.classList.remove('active'); // Remove 'active' class to hide
     menuBtn.className = 'fas fa-bars'; // Ensure hamburger icon is displayed
 }
@@ -267,7 +267,7 @@ function initializeSmoothScrolling() {
             if (target) {
                 const headerHeight = document.querySelector('.header').offsetHeight; // Get fixed header height
                 const targetPosition = target.offsetTop - headerHeight; // Adjust scroll position
-                
+
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth' // Smooth scroll animation
@@ -289,7 +289,7 @@ function closeBookingModal() {
     const modal = document.getElementById('bookingModal');
     modal.classList.remove('active'); // Hide modal
     document.body.style.overflow = 'auto'; // Allow background scrolling
-    
+
     resetForm(); // Reset form state when modal closes
 }
 
@@ -304,7 +304,7 @@ document.getElementById('bookingModal').addEventListener('click', function(e) {
 function initializeForm() {
     const form = document.getElementById('bookingForm');
     form.addEventListener('submit', handleFormSubmit); // Handle form submission
-    
+
     // Add input event listeners for real-time validation feedback
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
@@ -345,22 +345,22 @@ function updateStep() {
     document.querySelectorAll('.form-step').forEach((step, index) => {
         step.classList.toggle('active', index + 1 === currentStep);
     });
-    
+
     // Update progress steps (circles)
     document.querySelectorAll('.progress-step').forEach((step, index) => {
         step.classList.toggle('active', index + 1 <= currentStep);
     });
-    
+
     // Update progress lines between steps
     document.querySelectorAll('.progress-line').forEach((line, index) => {
         line.classList.toggle('active', index + 1 < currentStep);
     });
-    
+
     // Update button visibility
     const backBtn = document.getElementById('backBtn');
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
-    
+
     backBtn.style.display = currentStep > 1 ? 'block' : 'none'; // Show 'Back' button from step 2
     nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none'; // Show 'Next' button until last step
     submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none'; // Show 'Submit' button on last step
@@ -371,9 +371,9 @@ function validateCurrentStep() {
     const currentStepElement = document.getElementById(`step${currentStep}`);
     // Select all required inputs and selects within the current active step
     const requiredInputs = currentStepElement.querySelectorAll('input[required], select[required]');
-    
+
     let isValid = true;
-    
+
     requiredInputs.forEach(input => {
         if (!input.value.trim()) { // Check if input value is empty or just whitespace
             input.style.borderColor = '#ef4444'; // Highlight invalid fields
@@ -382,13 +382,13 @@ function validateCurrentStep() {
             input.style.borderColor = '#e2e8f0'; // Reset border for valid fields
         }
     });
-    
+
     if (!isValid) {
         // Display a generic alert for missing fields
         // In a production app, more specific error messages would be better
-        alert('Please fill in all required fields.'); 
+        alert('Please fill in all required fields.');
     }
-    
+
     return isValid;
 }
 
@@ -396,7 +396,7 @@ function validateCurrentStep() {
 function updateSummary() {
     const formData = new FormData(document.getElementById('bookingForm')); // Get form data
     const summaryContent = document.getElementById('summaryContent');
-    
+
     // Extract values from form data
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
@@ -404,7 +404,7 @@ function updateSummary() {
     const doctor = formData.get('doctor');
     const appointmentDate = formData.get('appointmentDate');
     const appointmentTime = formData.get('appointmentTime');
-    
+
     // Generate HTML for the summary
     summaryContent.innerHTML = `
         <div class="summary-item">
@@ -440,7 +440,7 @@ function formatDate(dateString) {
 // Handle form submission
 function handleFormSubmit(e) {
     e.preventDefault(); // Prevent default form submission behavior
-    
+
     if (validateCurrentStep()) {
         // Simulate form submission success
         alert('Appointment booked successfully! We will contact you shortly to confirm.');
@@ -453,7 +453,7 @@ function resetForm() {
     currentStep = 1; // Reset to first step
     document.getElementById('bookingForm').reset(); // Clear form fields
     updateStep(); // Update UI to reflect step 1
-    
+
     // Reset border colors for all input fields
     document.querySelectorAll('input, select, textarea').forEach(input => {
         input.style.borderColor = '#e2e8f0';
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
         img.addEventListener('load', function() {
             this.style.opacity = '1'; // Fade in the image when loaded
         });
-        
+
         // Set initial opacity to 0 and add transition for the fade-in effect
         img.style.opacity = '0';
         img.style.transition = 'opacity 0.3s ease';
