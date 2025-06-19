@@ -210,12 +210,12 @@ p {
     width: 100%;
 }
 
-/* View Sections */
-.view-section {
+/* Portal Content Sections (Updated Class Names) */
+.portal-content {
     display: none; /* Hidden by default */
 }
 
-.view-section.active-view {
+.portal-content.active-portal {
     display: block; /* Shown when active */
 }
 

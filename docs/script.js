@@ -114,22 +114,26 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
     initializeSmoothScrolling();
     setMinDate();
-    // Ensure the patient view is active by default on page load
-    showView('patient-view');
+    // Ensure the patient portal content is active by default on page load
+    showView('patient-portal-content');
 });
 
-// Function to switch between patient and doctor views
+// Function to switch between patient and doctor portal content sections
 function showView(viewId) {
-    // Hide all view sections first
-    document.querySelectorAll('.view-section').forEach(view => {
-        view.classList.remove('active-view');
+    // Hide all portal content sections first
+    document.querySelectorAll('.portal-content').forEach(view => {
+        view.classList.remove('active-portal');
+        view.style.display = 'none'; // Explicitly hide
     });
     // Show the requested view
-    document.getElementById(viewId).classList.add('active-view');
+    const targetView = document.getElementById(viewId);
+    if (targetView) {
+        targetView.classList.add('active-portal');
+        targetView.style.display = 'block'; // Or 'flex' depending on its default styling
 
-    // Scroll to the top of the newly activated view for better UX
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
+        // Scroll to the top of the newly activated view for better UX
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     // Close mobile menu if it was open
     closeMobileMenu();
 }
@@ -139,25 +143,27 @@ function initializeServices() {
     const servicesGrid = document.getElementById('servicesGrid');
 
     // Clear any existing content to prevent duplication if called multiple times
-    servicesGrid.innerHTML = '';
+    if (servicesGrid) { // Added check for element existence
+        servicesGrid.innerHTML = '';
 
-    servicesData.forEach(service => {
-        const serviceCard = document.createElement('div');
-        serviceCard.className = 'service-card';
+        servicesData.forEach(service => {
+            const serviceCard = document.createElement('div');
+            serviceCard.className = 'service-card';
 
-        serviceCard.innerHTML = `
-            <div class="service-icon">
-                <i class="${service.icon}"></i>
-            </div>
-            <h3>${service.title}</h3>
-            <p>${service.description}</p>
-            <ul class="service-features">
-                ${service.features.map(feature => `<li>${feature}</li>`).join('')}
-            </ul>
-        `;
+            serviceCard.innerHTML = `
+                <div class="service-icon">
+                    <i class="${service.icon}"></i>
+                </div>
+                <h3>${service.title}</h3>
+                <p>${service.description}</p>
+                <ul class="service-features">
+                    ${service.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+            `;
 
-        servicesGrid.appendChild(serviceCard);
-    });
+            servicesGrid.appendChild(serviceCard);
+        });
+    }
 }
 
 // Dynamically populate the doctors sections based on the target view
@@ -166,58 +172,60 @@ function initializeDoctors(targetView) {
     const doctorsGrid = document.getElementById(targetView === 'patients' ? 'doctorsGrid' : 'doctorsViewGrid');
 
     // Clear any existing content to prevent duplication
-    doctorsGrid.innerHTML = '';
+    if (doctorsGrid) { // Added check for element existence
+        doctorsGrid.innerHTML = '';
 
-    doctorsData.forEach(doctor => {
-        const doctorCard = document.createElement('div');
-        doctorCard.className = 'doctor-card';
+        doctorsData.forEach(doctor => {
+            const doctorCard = document.createElement('div');
+            doctorCard.className = 'doctor-card';
 
-        const stars = generateStars(doctor.rating);
+            const stars = generateStars(doctor.rating);
 
-        // Customize the button on the doctor card based on the active view
-        // Patients view: "Book Appointment" button that opens the modal
-        // Doctors view: "View Profile" button (placeholder for doctor-specific action)
-        const buttonHtml = targetView === 'patients' ?
-            `<button class="btn btn-primary" onclick="openBookingModal()">Book Appointment</button>` :
-            `<button class="btn btn-outline">View Profile</button>`; // Or other doctor-specific action
+            // Customize the button on the doctor card based on the active view
+            // Patients view: "Book Appointment" button that opens the modal
+            // Doctors view: "View Profile" button (placeholder for doctor-specific action)
+            const buttonHtml = targetView === 'patients' ?
+                `<button class="btn btn-primary" onclick="openBookingModal()">Book Appointment</button>` :
+                `<button class="btn btn-outline">View Profile</button>`; // Or other doctor-specific action
 
-        doctorCard.innerHTML = `
-            <div class="doctor-image">
-                <img src="${doctor.image}" alt="${doctor.name}">
-                <div class="doctor-rating">
-                    <i class="fas fa-star star"></i>
-                    <span>${doctor.rating}</span>
-                </div>
-            </div>
-            <div class="doctor-info">
-                <h3 class="doctor-name">${doctor.name}</h3>
-                <p class="doctor-specialty">${doctor.specialty}</p>
-                <div class="doctor-details">
-                    <div class="doctor-detail">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>${doctor.education}</span>
-                    </div>
-                    <div class="doctor-detail">
-                        <i class="fas fa-award"></i>
-                        <span>${doctor.experience} Experience</span>
-                    </div>
-                    <div class="doctor-detail">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Available: ${doctor.availability}</span>
+            doctorCard.innerHTML = `
+                <div class="doctor-image">
+                    <img src="${doctor.image}" alt="${doctor.name}">
+                    <div class="doctor-rating">
+                        <i class="fas fa-star star"></i>
+                        <span>${doctor.rating}</span>
                     </div>
                 </div>
-                <div class="doctor-reviews">
-                    <div class="stars">
-                        ${stars}
+                <div class="doctor-info">
+                    <h3 class="doctor-name">${doctor.name}</h3>
+                    <p class="doctor-specialty">${doctor.specialty}</p>
+                    <div class="doctor-details">
+                        <div class="doctor-detail">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>${doctor.education}</span>
+                        </div>
+                        <div class="doctor-detail">
+                            <i class="fas fa-award"></i>
+                            <span>${doctor.experience} Experience</span>
+                        </div>
+                        <div class="doctor-detail">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Available: ${doctor.availability}</span>
+                        </div>
                     </div>
-                    <span class="review-count">(${doctor.reviews} reviews)</span>
+                    <div class="doctor-reviews">
+                        <div class="stars">
+                            ${stars}
+                        </div>
+                        <span class="review-count">(${doctor.reviews} reviews)</span>
+                    </div>
+                    ${buttonHtml}
                 </div>
-                ${buttonHtml}
-            </div>
-        `;
+            `;
 
-        doctorsGrid.appendChild(doctorCard);
-    });
+            doctorsGrid.appendChild(doctorCard);
+        });
+    }
 }
 
 // Helper function to generate star rating HTML for doctor cards
@@ -239,13 +247,15 @@ function toggleMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const menuBtn = document.querySelector('.mobile-menu-btn i');
 
-    mobileMenu.classList.toggle('active'); // Toggle 'active' class for visibility
+    if (mobileMenu && menuBtn) { // Added checks for existence
+        mobileMenu.classList.toggle('active'); // Toggle 'active' class for visibility
 
-    // Change menu icon based on its state
-    if (mobileMenu.classList.contains('active')) {
-        menuBtn.className = 'fas fa-times'; // Change to 'X' icon
-    } else {
-        menuBtn.className = 'fas fa-bars'; // Change back to hamburger icon
+        // Change menu icon based on its state
+        if (mobileMenu.classList.contains('active')) {
+            menuBtn.className = 'fas fa-times'; // Change to 'X' icon
+        } else {
+            menuBtn.className = 'fas fa-bars'; // Change back to hamburger icon
+        }
     }
 }
 
@@ -254,8 +264,10 @@ function closeMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const menuBtn = document.querySelector('.mobile-menu-btn i');
 
-    mobileMenu.classList.remove('active'); // Remove 'active' class to hide
-    menuBtn.className = 'fas fa-bars'; // Ensure hamburger icon is displayed
+    if (mobileMenu && menuBtn) { // Added checks for existence
+        mobileMenu.classList.remove('active'); // Remove 'active' class to hide
+        menuBtn.className = 'fas fa-bars'; // Ensure hamburger icon is displayed
+    }
 }
 
 // Initialize smooth scrolling for all internal anchor links
@@ -263,15 +275,36 @@ function initializeSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default jump behavior
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
+            const targetId = this.getAttribute('href');
+            // If the target is just a hash (e.g., #hero, #services), and it's within the currently active portal
+            // then perform smooth scroll. Otherwise, treat it as a portal switch.
+            const currentActivePortal = document.querySelector('.portal-content.active-portal');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement && currentActivePortal && currentActivePortal.contains(targetElement)) {
                 const headerHeight = document.querySelector('.header').offsetHeight; // Get fixed header height
-                const targetPosition = target.offsetTop - headerHeight; // Adjust scroll position
+                const targetPosition = targetElement.offsetTop - headerHeight; // Adjust scroll position
 
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth' // Smooth scroll animation
                 });
+            } else if (targetId === '#hero' || targetId === '#services' || targetId === '#doctors' || targetId === '#about' || targetId === '#contact') {
+                // If it's a patient portal specific anchor but we're not on the patient portal,
+                // switch to patient portal and then scroll.
+                showView('patient-portal-content');
+                // A small delay to allow the view switch to complete before scrolling
+                setTimeout(() => {
+                     const updatedTargetElement = document.querySelector(targetId);
+                     if(updatedTargetElement) {
+                         const headerHeight = document.querySelector('.header').offsetHeight;
+                         const targetPosition = updatedTargetElement.offsetTop - headerHeight;
+                         window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                     }
+                }, 100); // Adjust delay as needed
             }
         });
     });
@@ -280,42 +313,53 @@ function initializeSmoothScrolling() {
 // Open the appointment booking modal
 function openBookingModal() {
     const modal = document.getElementById('bookingModal');
-    modal.classList.add('active'); // Show modal
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    if (modal) { // Added check for existence
+        modal.classList.add('active'); // Show modal
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
 }
 
 // Close the appointment booking modal
 function closeBookingModal() {
     const modal = document.getElementById('bookingModal');
-    modal.classList.remove('active'); // Hide modal
-    document.body.style.overflow = 'auto'; // Allow background scrolling
-
-    resetForm(); // Reset form state when modal closes
+    if (modal) { // Added check for existence
+        modal.classList.remove('active'); // Hide modal
+        document.body.style.overflow = 'auto'; // Allow background scrolling
+        resetForm(); // Reset form state when modal closes
+    }
 }
 
 // Close modal when clicking on the overlay itself
-document.getElementById('bookingModal').addEventListener('click', function(e) {
-    if (e.target === this) { // Check if the click target is the overlay itself
-        closeBookingModal();
-    }
-});
+const bookingModalElement = document.getElementById('bookingModal');
+if (bookingModalElement) { // Added check for existence
+    bookingModalElement.addEventListener('click', function(e) {
+        if (e.target === this) { // Check if the click target is the overlay itself
+            closeBookingModal();
+        }
+    });
+}
 
 // Initialize form submission and input validation listeners
 function initializeForm() {
     const form = document.getElementById('bookingForm');
-    form.addEventListener('submit', handleFormSubmit); // Handle form submission
+    if (form) { // Added check for existence
+        form.addEventListener('submit', handleFormSubmit); // Handle form submission
 
-    // Add input event listeners for real-time validation feedback
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        input.addEventListener('input', validateCurrentStep);
-    });
+        // Add input event listeners for real-time validation feedback
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', validateCurrentStep);
+        });
+    }
 }
 
 // Set the minimum date for the appointment date input to today
 function setMinDate() {
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    document.getElementById('appointmentDate').setAttribute('min', today);
+    const appointmentDateInput = document.getElementById('appointmentDate');
+    if (appointmentDateInput) { // Added check for existence
+        const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        appointmentDateInput.setAttribute('min', today);
+    }
 }
 
 // Navigate to the next step in the multi-step form
@@ -361,14 +405,16 @@ function updateStep() {
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
 
-    backBtn.style.display = currentStep > 1 ? 'block' : 'none'; // Show 'Back' button from step 2
-    nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none'; // Show 'Next' button until last step
-    submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none'; // Show 'Submit' button on last step
+    if (backBtn) backBtn.style.display = currentStep > 1 ? 'block' : 'none'; // Show 'Back' button from step 2
+    if (nextBtn) nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none'; // Show 'Next' button until last step
+    if (submitBtn) submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none'; // Show 'Submit' button on last step
 }
 
 // Validate required fields in the current form step
 function validateCurrentStep() {
     const currentStepElement = document.getElementById(`step${currentStep}`);
+    if (!currentStepElement) return true; // If element doesn't exist, assume valid for safety
+
     // Select all required inputs and selects within the current active step
     const requiredInputs = currentStepElement.querySelectorAll('input[required], select[required]');
 
@@ -386,7 +432,7 @@ function validateCurrentStep() {
     if (!isValid) {
         // Display a generic alert for missing fields
         // In a production app, more specific error messages would be better
-        alert('Please fill in all required fields.');
+        alert('Please fill in all required fields for this step.');
     }
 
     return isValid;
@@ -394,8 +440,12 @@ function validateCurrentStep() {
 
 // Populate the appointment summary on the final step
 function updateSummary() {
-    const formData = new FormData(document.getElementById('bookingForm')); // Get form data
-    const summaryContent = document.getElementById('summaryContent');
+    const bookingFormElement = document.getElementById('bookingForm');
+    const summaryContentElement = document.getElementById('summaryContent');
+
+    if (!bookingFormElement || !summaryContentElement) return; // Exit if elements don't exist
+
+    const formData = new FormData(bookingFormElement); // Get form data
 
     // Extract values from form data
     const firstName = formData.get('firstName');
@@ -406,7 +456,7 @@ function updateSummary() {
     const appointmentTime = formData.get('appointmentTime');
 
     // Generate HTML for the summary
-    summaryContent.innerHTML = `
+    summaryContentElement.innerHTML = `
         <div class="summary-item">
             <span class="summary-label">Patient:</span>
             <span class="summary-value">${firstName} ${lastName}</span>
@@ -451,26 +501,31 @@ function handleFormSubmit(e) {
 // Reset the form and its UI state
 function resetForm() {
     currentStep = 1; // Reset to first step
-    document.getElementById('bookingForm').reset(); // Clear form fields
-    updateStep(); // Update UI to reflect step 1
+    const bookingFormElement = document.getElementById('bookingForm');
+    if (bookingFormElement) { // Added check for existence
+        bookingFormElement.reset(); // Clear form fields
+        updateStep(); // Update UI to reflect step 1
 
-    // Reset border colors for all input fields
-    document.querySelectorAll('input, select, textarea').forEach(input => {
-        input.style.borderColor = '#e2e8f0';
-    });
+        // Reset border colors for all input fields
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.style.borderColor = '#e2e8f0';
+        });
+    }
 }
 
 // Add a scroll effect to the header for a subtle visual change
 window.addEventListener('scroll', function() {
     const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        // Apply a slightly transparent background and blur when scrolled down
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.backdropFilter = 'blur(10px)';
-    } else {
-        // Revert to solid white background when at the top
-        header.style.background = 'white';
-        header.style.backdropFilter = 'none';
+    if (header) { // Added check for header existence
+        if (window.scrollY > 100) {
+            // Apply a slightly transparent background and blur when scrolled down
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.backdropFilter = 'blur(10px)';
+        } else {
+            // Revert to solid white background when at the top
+            header.style.background = 'white';
+            header.style.backdropFilter = 'none';
+        }
     }
 });
 
@@ -487,3 +542,12 @@ document.addEventListener('DOMContentLoaded', function() {
         img.style.transition = 'opacity 0.3s ease';
     });
 });
+
+// Make functions globally accessible (as they are called via onclick in HTML)
+window.showView = showView;
+window.toggleMobileMenu = toggleMobileMenu;
+window.closeMobileMenu = closeMobileMenu;
+window.openBookingModal = openBookingModal;
+window.closeBookingModal = closeBookingModal;
+window.nextStep = nextStep;
+window.previousStep = previousStep;
