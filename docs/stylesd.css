@@ -5,8 +5,8 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacMacFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: skyblue; /* Changed from linear-gradient to skyblue */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: skyblue; /* As per your previous request */
     min-height: 100vh;
     color: #1f2937;
 }
@@ -39,21 +39,21 @@ body {
 .avatar {
     width: 80px;
     height: 80px;
-    background: #059669;
+    background: #007bff; /* Changed from green */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 32px;
-    border: 4px solid #d1fae5;
+    border: 4px solid #cce5ff; /* Light blue border */
 }
 
 .doctor-details h1 {
     font-size: 28px;
     font-weight: bold;
+    color: #007bff; /* Changed from green */
     margin-bottom: 4px;
-    color: #059669;
 }
 
 .doctor-specialty {
@@ -78,7 +78,7 @@ body {
 }
 
 .meta-item i {
-    color: #059669;
+    color: #007bff; /* Changed from green */
     width: 16px;
 }
 
@@ -96,14 +96,14 @@ body {
 }
 
 .badge.active {
-    background: #d1fae5;
-    color: #065f46;
+    background: #e0f1ff; /* Light blue */
+    color: #0056b3; /* Darker blue */
 }
 
 .badge.verified {
-    background: #dbeafe;
-    color: #1e40af;
-    border: 1px solid #93c5fd;
+    background: #dbeafe; /* Existing blue - keep */
+    color: #1e40af; /* Existing blue - keep */
+    border: 1px solid #93c5fd; /* Existing blue - keep */
 }
 
 /* Stats Grid */
@@ -128,18 +128,18 @@ body {
 
 .stat-card:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #10b981;
+    border-color: #007bff; /* Changed from green */
 }
 
 .stat-icon {
     width: 60px;
     height: 60px;
-    background: #ecfdf5;
+    background: #e0f1ff; /* Light blue */
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #059669;
+    color: #007bff; /* Changed from green */
     font-size: 24px;
 }
 
@@ -184,8 +184,8 @@ body {
 
 .search-box input:focus {
     outline: none;
-    border-color: #059669;
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    border-color: #007bff; /* Changed from green */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* Changed from green */
 }
 
 /* Tabs */
@@ -215,8 +215,8 @@ body {
 }
 
 .tab-button.active {
-    background: #ecfdf5;
-    color: #059669;
+    background: #e0f1ff; /* Light blue */
+    color: #007bff; /* Changed from green */
 }
 
 .tab-button:hover:not(.active) {
@@ -245,8 +245,8 @@ body {
 }
 
 .count-badge {
-    background: #ecfdf5;
-    color: #059669;
+    background: #e0f1ff; /* Light blue */
+    color: #007bff; /* Changed from green */
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 12px;
@@ -266,7 +266,7 @@ body {
 
 .card:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #10b981;
+    border-color: #007bff; /* Changed from green */
 }
 
 /* Schedule Cards */
@@ -285,14 +285,14 @@ body {
 }
 
 .appointment-time i {
-    color: #059669;
+    color: #007bff; /* Changed from green */
     font-size: 18px;
 }
 
 .appointment-time .time {
     font-size: 18px;
     font-weight: 600;
-    color: #059669;
+    color: #007bff; /* Changed from green */
 }
 
 .appointment-duration {
@@ -316,13 +316,13 @@ body {
 }
 
 .status-badge.confirmed {
-    background: #d1fae5;
-    color: #065f46;
+    background: #e0f1ff; /* Light blue */
+    color: #0056b3; /* Darker blue */
 }
 
 .status-badge.pending {
-    background: #fef3c7;
-    color: #92400e;
+    background: #fef3c7; /* Existing yellow - keep */
+    color: #92400e; /* Existing orange - keep */
 }
 
 .type-badge {
@@ -334,21 +334,21 @@ body {
 }
 
 .type-badge.followup {
-    background: #fed7aa;
-    color: #c2410c;
-    border-color: #fdba74;
+    background: #fed7aa; /* Existing orange - keep */
+    color: #c2410c; /* Existing orange - keep */
+    border-color: #fdba74; /* Existing orange - keep */
 }
 
 .type-badge.consultation {
-    background: #dbeafe;
-    color: #1d4ed8;
-    border-color: #93c5fd;
+    background: #dbeafe; /* Existing blue - keep */
+    color: #1d4ed8; /* Existing blue - keep */
+    border-color: #93c5fd; /* Existing blue - keep */
 }
 
 .type-badge.checkup {
-    background: #e9d5ff;
-    color: #7c3aed;
-    border-color: #c4b5fd;
+    background: #e9d5ff; /* Existing purple - keep */
+    color: #7c3aed; /* Existing purple - keep */
+    border-color: #c4b5fd; /* Existing purple - keep */
 }
 
 .patient-info {
@@ -365,7 +365,7 @@ body {
 }
 
 .patient-detail i {
-    color: #059669;
+    color: #007bff; /* Changed from green */
     width: 16px;
 }
 
@@ -380,7 +380,7 @@ body {
 }
 
 .appointment-notes {
-    background: #f0fdf4;
+    background: #e0f1ff; /* Light blue */
     padding: 16px;
     border-radius: 8px;
     margin-bottom: 16px;
@@ -431,7 +431,7 @@ body {
 .patient-avatar {
     width: 48px;
     height: 48px;
-    background: #059669;
+    background: #007bff; /* Changed from green */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -459,18 +459,18 @@ body {
 }
 
 .urgency-badge.high {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #fee2e2; /* Existing red - keep */
+    color: #991b1b; /* Existing red - keep */
 }
 
 .urgency-badge.medium {
-    background: #fef3c7;
-    color: #92400e;
+    background: #fef3c7; /* Existing yellow - keep */
+    color: #92400e; /* Existing orange - keep */
 }
 
 .urgency-badge.low {
-    background: #d1fae5;
-    color: #065f46;
+    background: #e0f1ff; /* Light blue */
+    color: #0056b3; /* Darker blue */
 }
 
 .report-summary {
@@ -506,18 +506,18 @@ body {
 }
 
 .action-button.primary {
-    background: #059669;
+    background: #007bff; /* Changed from green */
     color: white;
-    border-color: #059669;
+    border-color: #007bff; /* Changed from green */
 }
 
 .action-button.primary:hover {
-    background: #047857;
+    background: #0056b3; /* Changed from green */
 }
 
 .action-button:hover {
-    background: #f0fdf4;
-    border-color: #10b981;
+    background: #e0f1ff; /* Light blue */
+    border-color: #007bff; /* Changed from green */
 }
 
 /* Authentication Styles */
@@ -526,11 +526,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* This background is for the authentication container specifically, 
-       if you want it to also be skyblue, change it here too. 
-       If you want the entire page's background (controlled by `body`) to show, 
-       you might remove this background or make it transparent. */
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+    /* You can set this to skyblue or leave it as a gradient for a different feel on the auth page.
+       If you want the entire page to be skyblue, consider removing this background. */
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Changed from green gradient */
     padding: 20px;
 }
 
@@ -550,7 +548,7 @@ body {
 
 .auth-header i {
     font-size: 48px;
-    color: #059669;
+    color: #007bff; /* Changed from green */
     margin-bottom: 16px;
 }
 
@@ -608,13 +606,13 @@ body {
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #059669;
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    border-color: #007bff; /* Changed from green */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* Changed from green */
 }
 
 .auth-button {
     width: 100%;
-    background: #059669;
+    background: #007bff; /* Changed from green */
     color: white;
     border: none;
     padding: 14px 20px;
@@ -631,7 +629,7 @@ body {
 }
 
 .auth-button:hover {
-    background: #047857;
+    background: #0056b3; /* Changed from green */
     transform: translateY(-1px);
 }
 
@@ -650,7 +648,7 @@ body {
 .link-button {
     background: none;
     border: none;
-    color: #059669;
+    color: #007bff; /* Changed from green */
     cursor: pointer;
     font-weight: 600;
     text-decoration: underline;
@@ -658,7 +656,7 @@ body {
 }
 
 .link-button:hover {
-    color: #047857;
+    color: #0056b3; /* Changed from green */
 }
 
 .logout-section {
@@ -666,7 +664,7 @@ body {
 }
 
 .logout-button {
-    background: #ef4444;
+    background: #ef4444; /* Keep red for logout */
     color: white;
     border: none;
     padding: 8px 16px;
@@ -680,7 +678,7 @@ body {
 }
 
 .logout-button:hover {
-    background: #dc2626;
+    background: #dc2626; /* Keep red for logout */
 }
 
 /* Responsive Design */
@@ -688,52 +686,52 @@ body {
     .container {
         padding: 16px;
     }
-    
+
     .doctor-info {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .doctor-meta {
         grid-template-columns: 1fr;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .patient-info {
         grid-template-columns: 1fr;
     }
-    
+
     .patients-list {
         grid-template-columns: 1fr;
     }
-    
+
     .schedule-header,
     .patient-header {
         flex-direction: column;
         gap: 12px;
     }
-    
+
     .auth-container {
         padding: 16px;
     }
-    
+
     .auth-card {
         padding: 24px;
     }
-    
+
     .doctor-header {
         flex-direction: column;
         gap: 16px;
     }
-    
+
     .logout-section {
         margin-left: 0;
         align-self: flex-end;
     }
-    
+
     .action-buttons {
         flex-direction: column;
     }
