@@ -8,7 +8,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Authentication Section -->
     <div id="authSection" class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
@@ -17,7 +16,6 @@
                 <p>Access your medical records and appointments</p>
             </div>
 
-            <!-- Login Form -->
             <div id="loginForm" class="auth-form active">
                 <h2>Login to Your Account</h2>
                 <form id="loginFormElement">
@@ -39,7 +37,6 @@
                 </div>
             </div>
 
-            <!-- Registration Form -->
             <div id="registerForm" class="auth-form">
                 <h2>Create New Account</h2>
                 <form id="registerFormElement">
@@ -79,9 +76,7 @@
         </div>
     </div>
 
-    <!-- Main Dashboard (Hidden by default) -->
     <div id="mainDashboard" class="container" style="display: none;">
-        <!-- Patient Header -->
         <div class="patient-header">
             <div class="patient-info">
                 <div class="avatar">
@@ -93,12 +88,10 @@
                     <div class="patient-meta">
                         <div class="meta-item">
                             <i class="fas fa-calendar"></i>
-                            <span>DOB: September 14, 2005</span>
-                        </div>
+                            <span>DOB: September 14, 2005</span> </div>
                         <div class="meta-item">
                             <i class="fas fa-phone"></i>
-                            <span>+91 94493 32309</span>
-                        </div>
+                            <span>+91 94493 32309</span> </div>
                         <div class="meta-item">
                             <i class="fas fa-envelope"></i>
                             <span>madhu@email.com</span>
@@ -122,7 +115,6 @@
             </div>
         </div>
 
-        <!-- Search Bar -->
         <div class="search-section">
             <div class="search-box">
                 <i class="fas fa-search"></i>
@@ -130,7 +122,6 @@
             </div>
         </div>
 
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab-button active" data-tab="appointments">
                 <i class="fas fa-calendar"></i>
@@ -142,9 +133,7 @@
             </button>
         </div>
 
-        <!-- Tab Content -->
         <div class="tab-content">
-            <!-- Appointments Tab -->
             <div id="appointments" class="tab-panel active">
                 <div class="section-header">
                     <h2>Previous Appointments</h2>
@@ -153,7 +142,6 @@
                 <div id="appointmentsList" class="appointments-list"></div>
             </div>
 
-            <!-- Reports Tab -->
             <div id="reports" class="tab-panel">
                 <div class="section-header">
                     <h2>Medical Reports</h2>
