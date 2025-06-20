@@ -1,4 +1,3 @@
-
 // Authentication state
 let currentUser = null;
 
@@ -203,8 +202,6 @@ function initializeDashboard() {
     // Set up tab functionality
     setupTabs();
 }
-
-// ... keep existing code (renderAppointments, renderReports, setupSearch, setupTabs functions)
 
 function renderAppointments(appointments) {
     const appointmentsList = document.getElementById('appointmentsList');
