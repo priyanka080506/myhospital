@@ -1,28 +1,6 @@
 // Authentication state
 let currentDoctor = null;
 
-// Mock data for doctor's working locations
-// In a real application, this would come from a backend database
-let doctorLocations = [
-    {
-        id: 1,
-        name: "City General Hospital",
-        address: "123 Health Ave, Bengaluru, 560001",
-        timings: [
-            "Monday - Friday: 09:00 AM - 01:00 PM",
-            "Saturday: 10:00 AM - 12:00 PM"
-        ]
-    },
-    {
-        id: 2,
-        name: "CareWell Clinic",
-        address: "456 Clinic Rd, Jayanagar, Bengaluru, 560041",
-        timings: [
-            "Monday - Friday: 02:00 PM - 06:00 PM"
-        ]
-    }
-];
-
 // DOM elements
 const authSection = document.getElementById('authSection');
 const mainDashboard = document.getElementById('mainDashboard');
@@ -36,11 +14,6 @@ const logoutButton = document.getElementById('logoutButton');
 const doctorNameElement = document.getElementById('doctorName');
 const doctorSpecialtyElement = document.getElementById('doctorSpecialty');
 const doctorEmailElement = document.getElementById('doctorEmail');
-
-// New DOM elements for locations section
-const addLocationButton = document.querySelector('.working-locations-section .action-button.primary');
-const locationsListContainer = document.querySelector('.locations-list'); // The container for location cards
-
 
 // Authentication event listeners
 showRegisterBtn.addEventListener('click', () => {
@@ -318,9 +291,6 @@ function initializeDashboard() {
     renderSchedule(todaysSchedule);
     renderPatientReports(patientReports);
     
-    // Render working locations
-    renderLocations(doctorLocations); // <-- New call
-
     // Set up search functionality
     setupSearch(todaysSchedule, patientReports);
     
@@ -330,101 +300,6 @@ function initializeDashboard() {
     // Update stats
     updateStats(todaysSchedule, patientReports);
 }
-
-// --- New Functions for Locations Management ---
-
-function renderLocations(locations) {
-    locationsListContainer.innerHTML = ''; // Clear existing content
-
-    if (locations.length === 0) {
-        locationsListContainer.innerHTML = '<p class="no-data-message">No working locations added yet. Click "Add New Location" to get started!</p>';
-        return;
-    }
-
-    locations.forEach(location => {
-        const timingsHtml = location.timings.map(time => `
-            <li><i class="fas fa-calendar-day"></i> ${time}</li>
-        `).join('');
-
-        const locationCardHtml = `
-            <div class="location-card" data-id="${location.id}">
-                <div class="location-header">
-                    <h3>${location.name}</h3>
-                    <div class="location-actions">
-                        <button class="action-button edit-location-btn" data-id="${location.id}"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="action-button logout-button delete-location-btn" data-id="${location.id}"><i class="fas fa-trash-alt"></i> Delete</button>
-                    </div>
-                </div>
-                <p class="location-address"><i class="fas fa-map-marker-alt"></i> ${location.address}</p>
-                <h4>Timings:</h4>
-                <ul class="timings-list">
-                    ${timingsHtml}
-                </ul>
-            </div>
-        `;
-        locationsListContainer.insertAdjacentHTML('beforeend', locationCardHtml);
-    });
-
-    // Attach event listeners for edit and delete buttons after rendering
-    attachLocationButtonListeners();
-}
-
-function attachLocationButtonListeners() {
-    document.querySelectorAll('.edit-location-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const locationId = parseInt(e.currentTarget.dataset.id);
-            handleEditLocation(locationId);
-        });
-    });
-
-    document.querySelectorAll('.delete-location-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const locationId = parseInt(e.currentTarget.dataset.id);
-            handleDeleteLocation(locationId);
-        });
-    });
-}
-
-function handleAddLocation() {
-    // In a real app, this would open a modal/form for input
-    // For now, let's add a dummy location
-    const newLocation = {
-        id: doctorLocations.length > 0 ? Math.max(...doctorLocations.map(loc => loc.id)) + 1 : 1,
-        name: `New Clinic ${Date.now().toString().slice(-4)}`, // Unique name
-        address: "New Street, Bengaluru, India",
-        timings: [
-            "Monday - Wednesday: 09:00 AM - 12:00 PM",
-            "Thursday: 01:00 PM - 05:00 PM"
-        ]
-    };
-    doctorLocations.push(newLocation);
-    renderLocations(doctorLocations);
-    alert(`Added new location: ${newLocation.name}`);
-}
-
-function handleEditLocation(id) {
-    // In a real app, you'd fetch the location by ID, populate a form,
-    // allow editing, and then update the data and re-render.
-    const locationToEdit = doctorLocations.find(loc => loc.id === id);
-    if (locationToEdit) {
-        alert(`Editing location: ${locationToEdit.name}\n(ID: ${id}) - In a real app, this would open an edit form.`);
-        // Example: Change one timing to show an effect
-        if (locationToEdit.timings.length > 0) {
-            locationToEdit.timings[0] = "Daily: 09:00 AM - 05:00 PM (Updated)";
-        }
-        renderLocations(doctorLocations); // Re-render to show changes
-    }
-}
-
-function handleDeleteLocation(id) {
-    if (confirm('Are you sure you want to delete this location?')) {
-        doctorLocations = doctorLocations.filter(loc => loc.id !== id);
-        renderLocations(doctorLocations);
-        alert('Location deleted successfully!');
-    }
-}
-
-// --- Existing Functions (unchanged for Schedule/Reports/Search/Tabs/Stats) ---
 
 function renderSchedule(schedule) {
     const scheduleList = document.getElementById('scheduleList');
@@ -573,7 +448,6 @@ function setupSearch(schedule, reports) {
         
         renderSchedule(filteredSchedule);
         renderPatientReports(filteredReports);
-        // No search for locations implemented here, but could be added similarly
     });
 }
 
@@ -616,7 +490,4 @@ function formatDate(dateString) {
 document.addEventListener('DOMContentLoaded', () => {
     // Show authentication by default
     showAuth();
-
-    // Attach event listener for Add New Location button
-    addLocationButton.addEventListener('click', handleAddLocation);
 });
