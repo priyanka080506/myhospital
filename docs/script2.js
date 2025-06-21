@@ -33,7 +33,7 @@ loginFormElement.addEventListener('submit', (e) => {
     if (email && password) {
         // Simulate successful login
         currentUser = {
-            name: 'John Smith',
+            name: 'Madhushree',
             email: email,
             id: 'PT-2024-001'
         };
@@ -110,7 +110,7 @@ function initializeDashboard() {
             id: 1,
             date: "2024-06-15",
             time: "09:30 AM",
-            doctor: "Dr. Sarah Johnson",
+            doctor: "Dr. Smitha",
             department: "Cardiology",
             type: "Follow-up",
             status: "completed",
@@ -121,7 +121,7 @@ function initializeDashboard() {
             id: 2,
             date: "2024-05-20",
             time: "02:15 PM",
-            doctor: "Dr. Michael Chen",
+            doctor: "Dr. Virat",
             department: "Internal Medicine", 
             type: "Consultation",
             status: "completed",
@@ -132,7 +132,7 @@ function initializeDashboard() {
             id: 3,
             date: "2024-04-10",
             time: "11:00 AM",
-            doctor: "Dr. Emily Rodriguez",
+            doctor: "Dr. Mithali",
             department: "Dermatology",
             type: "Treatment",
             status: "completed",
@@ -143,7 +143,7 @@ function initializeDashboard() {
             id: 4,
             date: "2024-03-25",
             time: "03:45 PM",
-            doctor: "Dr. James Wilson",
+            doctor: "Dr. Hazelwood",
             department: "Orthopedics",
             type: "Consultation",
             status: "completed",
@@ -159,7 +159,7 @@ function initializeDashboard() {
             title: "Blood Test Results",
             date: "2024-06-15",
             type: "Laboratory",
-            doctor: "Dr. Sarah Johnson",
+            doctor: "Dr. Smitha",
             status: "final",
             summary: "Complete blood count and lipid panel within normal ranges"
         },
@@ -168,7 +168,7 @@ function initializeDashboard() {
             title: "Chest X-Ray",
             date: "2024-05-20",
             type: "Radiology",
-            doctor: "Dr. Michael Chen",
+            doctor: "Dr. Virat",
             status: "final",
             summary: "No abnormalities detected, clear lung fields"
         },
@@ -177,7 +177,7 @@ function initializeDashboard() {
             title: "ECG Report",
             date: "2024-05-20",
             type: "Cardiology",
-            doctor: "Dr. Sarah Johnson",
+            doctor: "Dr. Mithali",
             status: "final",
             summary: "Normal sinus rhythm, no signs of arrhythmia"
         },
@@ -186,7 +186,7 @@ function initializeDashboard() {
             title: "MRI Scan - Knee",
             date: "2024-03-25",
             type: "Radiology",
-            doctor: "Dr. James Wilson",
+            doctor: "Dr. Hazelwood",
             status: "final",
             summary: "Mild cartilage wear, no structural damage"
         }
