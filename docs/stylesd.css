@@ -6,7 +6,7 @@
 
 body {
     font-family: -apple-system, BlinkMacMacFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: skyblue; /* Changed from linear-gradient to skyblue */
+    background-color: rgb(204, 232, 243); /* Changed from linear-gradient to skyblue */
     min-height: 100vh;
     color: #1f2937;
 }

@@ -35,7 +35,7 @@ loginFormElement.addEventListener('submit', (e) => {
     if (email && password) {
         // Simulate successful login
         currentDoctor = {
-            name: 'Dr. Sarah Johnson',
+            name: 'Dr. Smitha',
             email: email,
             specialty: 'Cardiology',
             license: 'MD-2024-001'
@@ -117,7 +117,7 @@ function initializeDashboard() {
             id: 1,
             time: "09:00 AM",
             duration: "30 min",
-            patient: "John Smith",
+            patient: "Mega",
             patientId: "PT-2024-001",
             type: "Follow-up",
             status: "confirmed",
@@ -128,7 +128,7 @@ function initializeDashboard() {
             id: 2,
             time: "09:30 AM",
             duration: "45 min",
-            patient: "Maria Garcia",
+            patient: "Punith",
             patientId: "PT-2024-047",
             type: "Consultation",
             status: "confirmed",
@@ -139,7 +139,7 @@ function initializeDashboard() {
             id: 3,
             time: "10:15 AM",
             duration: "30 min",
-            patient: "Robert Johnson",
+            patient: "Rahul",
             patientId: "PT-2024-089",
             type: "Follow-up",
             status: "confirmed",
@@ -150,7 +150,7 @@ function initializeDashboard() {
             id: 4,
             time: "11:00 AM",
             duration: "30 min",
-            patient: "Lisa Chen",
+            patient: "Perry",
             patientId: "PT-2024-156",
             type: "Checkup",
             status: "pending",
@@ -161,7 +161,7 @@ function initializeDashboard() {
             id: 5,
             time: "02:00 PM",
             duration: "45 min",
-            patient: "David Wilson",
+            patient: "Smrithi",
             patientId: "PT-2024-203",
             type: "Consultation",
             status: "confirmed",
@@ -172,7 +172,7 @@ function initializeDashboard() {
             id: 6,
             time: "02:45 PM",
             duration: "30 min",
-            patient: "Emma Davis",
+            patient: "rajath",
             patientId: "PT-2024-178",
             type: "Follow-up",
             status: "confirmed",
@@ -183,7 +183,7 @@ function initializeDashboard() {
             id: 7,
             time: "03:30 PM",
             duration: "30 min",
-            patient: "Michael Brown",
+            patient: "Jithesh",
             patientId: "PT-2024-234",
             type: "Follow-up",
             status: "confirmed",
@@ -194,7 +194,7 @@ function initializeDashboard() {
             id: 8,
             time: "04:15 PM",
             duration: "45 min",
-            patient: "Sarah Thompson",
+            patient: "Swasthik",
             patientId: "PT-2024-267",
             type: "Consultation",
             status: "pending",
@@ -207,7 +207,7 @@ function initializeDashboard() {
     const patientReports = [
         {
             id: 1,
-            patient: "John Smith",
+            patient: "Mega",
             patientId: "PT-2024-001",
             lastVisit: "2024-06-15",
             condition: "Hypertension",
@@ -217,7 +217,7 @@ function initializeDashboard() {
         },
         {
             id: 2,
-            patient: "Maria Garcia",
+            patient: "Punith",
             patientId: "PT-2024-047",
             lastVisit: "2024-06-18",
             condition: "Chest Pain",
@@ -227,7 +227,7 @@ function initializeDashboard() {
         },
         {
             id: 3,
-            patient: "Robert Johnson",
+            patient: "Rahul",
             patientId: "PT-2024-089",
             lastVisit: "2024-06-12",
             condition: "Post Cardiac Surgery",
@@ -237,7 +237,7 @@ function initializeDashboard() {
         },
         {
             id: 4,
-            patient: "Lisa Chen",
+            patient: "Perry",
             patientId: "PT-2024-156",
             lastVisit: "2024-06-10",
             condition: "Preventive Care",
@@ -247,7 +247,7 @@ function initializeDashboard() {
         },
         {
             id: 5,
-            patient: "David Wilson",
+            patient: "Smrithi",
             patientId: "PT-2024-203",
             lastVisit: "2024-06-16",
             condition: "Arrhythmia",
@@ -257,7 +257,7 @@ function initializeDashboard() {
         },
         {
             id: 6,
-            patient: "Emma Davis",
+            patient: "Rajath",
             patientId: "PT-2024-178",
             lastVisit: "2024-06-14",
             condition: "Hypertension",
@@ -267,7 +267,7 @@ function initializeDashboard() {
         },
         {
             id: 7,
-            patient: "Michael Brown",
+            patient: "Jithesh",
             patientId: "PT-2024-234",
             lastVisit: "2024-06-13",
             condition: "High Cholesterol",
@@ -277,7 +277,7 @@ function initializeDashboard() {
         },
         {
             id: 8,
-            patient: "Sarah Thompson",
+            patient: "Swasthik",
             patientId: "PT-2024-267",
             lastVisit: "2024-06-17",
             condition: "Heart Murmur",
