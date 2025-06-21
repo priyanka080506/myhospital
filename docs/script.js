@@ -45,7 +45,7 @@ const servicesData = [
 // Doctors data
 const doctorsData = [
     {
-        name: 'Dr. Sarah Johnson',
+        name: 'Dr. Smitha',
         specialty: 'Cardiology',
         experience: '15+ Years',
         rating: 4.9,
@@ -55,17 +55,17 @@ const doctorsData = [
         availability: 'Mon, Wed, Fri'
     },
     {
-        name: 'Dr. Michael Chen',
+        name: 'Dr. Virat',
         specialty: 'Neurology',
-        experience: '12+ Years',
+        experience: '18 Years',
         rating: 4.8,
-        reviews: 98,
+        reviews: 269,
         image: 'https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?auto=compress&cs=tinysrgb&w=400',
-        education: 'Johns Hopkins University',
+        education: 'Madras Medical College',
         availability: 'Tue, Thu, Sat'
     },
     {
-        name: 'Dr. Emily Rodriguez',
+        name: 'Dr. Mithali',
         specialty: 'Pediatrics',
         experience: '10+ Years',
         rating: 4.9,
@@ -75,7 +75,7 @@ const doctorsData = [
         availability: 'Mon, Tue, Thu'
     },
     {
-        name: 'Dr. James Wilson',
+        name: 'Dr. Hazelwood',
         specialty: 'Orthopedics',
         experience: '18+ Years',
         rating: 4.7,
@@ -85,7 +85,7 @@ const doctorsData = [
         availability: 'Wed, Fri, Sat'
     },
     {
-        name: 'Dr. Lisa Thompson',
+        name: 'Dr. Krunal',
         specialty: 'Ophthalmology',
         experience: '14+ Years',
         rating: 4.8,
@@ -95,7 +95,7 @@ const doctorsData = [
         availability: 'Mon, Wed, Fri'
     },
     {
-        name: 'Dr. Robert Kumar',
+        name: 'Dr. Thripati',
         specialty: 'General Medicine',
         experience: '20+ Years',
         rating: 4.9,
