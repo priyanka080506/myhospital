@@ -24,9 +24,9 @@ const servicesData = [
     },
     {
         icon: 'fas fa-eye',
-        title: 'Ophthalmology',
-        description: 'Complete eye care services from routine exams to advanced surgical procedures.',
-        features: ['Eye Exams', 'LASIK Surgery', 'Retinal Care']
+        title: 'Surgeon',
+        description: 'Wide range of surgical operations, using various techniques and tools, to address a variety of conditions.',
+        features: ['3D Visualization', 'Rehabilation', 'Triage Tool']
     },
     {
         icon: 'fas fa-baby',
@@ -36,72 +36,72 @@ const servicesData = [
     },
     {
         icon: 'fas fa-stethoscope',
-        title: 'General Medicine',
-        description: 'Primary care services for adults including preventive care and chronic disease management.',
-        features: ['Annual Checkups', 'Chronic Care', 'Health Screenings']
+        title: 'Dermatology',
+        description: 'Expert treatment of skin, hair and nail conditions, including cosmetics concerns.',
+        features: ['Teledermatology', 'Digital grafing', 'Comparision Imaging']
     }
 ];
 
 // Doctors data
 const doctorsData = [
     {
-        name: 'Dr. Smitha',
+        name: 'Dr. Raksha',
         specialty: 'Cardiology',
-        experience: '15+ Years',
+        experience: '4+ Years',
         rating: 4.9,
         reviews: 127,
-        image: 'https://images.pexels.com/photos/5407206/pexels-photo-5407206.jpeg?auto=compress&cs=tinysrgb&w=400',
+        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Raksha.jpg.jpeg',
         education: 'Harvard Medical School',
         availability: 'Mon, Wed, Fri'
     },
     {
-        name: 'Dr. Virat',
+        name: 'Dr. Brunda S',
         specialty: 'Neurology',
-        experience: '18 Years',
+        experience: '10+ Years',
         rating: 4.8,
         reviews: 269,
-        image: 'https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?auto=compress&cs=tinysrgb&w=400',
+        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Brunda.jpg.jpeg',
         education: 'Madras Medical College',
         availability: 'Tue, Thu, Sat'
     },
     {
-        name: 'Dr. Mithali',
+        name: 'Dr. Aishwarya D S',
         specialty: 'Pediatrics',
-        experience: '10+ Years',
+        experience: '4+ Years',
         rating: 4.9,
         reviews: 156,
-        image: 'https://images.pexels.com/photos/5407205/pexels-photo-5407205.jpeg?auto=compress&cs=tinysrgb&w=400',
-        education: 'Stanford University',
+        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Aishwarya.jpg.jpeg',
+        education: 'St. Johns Medical college',
         availability: 'Mon, Tue, Thu'
     },
     {
-        name: 'Dr. Hazelwood',
+        name: 'Dr. Sruthi N',
         specialty: 'Orthopedics',
-        experience: '18+ Years',
+        experience: '9+ Years',
         rating: 4.7,
         reviews: 89,
-        image: 'https://images.pexels.com/photos/6749777/pexels-photo-6749777.jpeg?auto=compress&cs=tinysrgb&w=400',
-        education: 'Yale School of Medicine',
+        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Shruthi.jpg.jpeg',
+        education: 'JSS Medical College Mysore',
         availability: 'Wed, Fri, Sat'
     },
     {
-        name: 'Dr. Krunal',
-        specialty: 'Ophthalmology',
-        experience: '14+ Years',
+        name: 'Dr. Vijay',
+        specialty: 'Surgeon',
+        experience: '3+ Years',
         rating: 4.8,
         reviews: 112,
-        image: 'https://images.pexels.com/photos/5407204/pexels-photo-5407204.jpeg?auto=compress&cs=tinysrgb&w=400',
-        education: 'Mayo Clinic School of Medicine',
+        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Vijay.jpg.jpeg',
+        education: 'Stanley Medical College',
         availability: 'Mon, Wed, Fri'
     },
     {
-        name: 'Dr. Thripati',
-        specialty: 'General Medicine',
-        experience: '20+ Years',
+        name: 'Dr. Amaresh A M',
+        specialty: 'Dermatology',
+        experience: '10+ Years',
         rating: 4.9,
         reviews: 203,
-        image: 'https://images.pexels.com/photos/6749773/pexels-photo-6749773.jpeg?auto=compress&cs=tinysrgb&w=400',
-        education: 'University of Pennsylvania',
+        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Amaresh.jpg.jpeg',
+        education: 'Christian Medical College Vellore',
         availability: 'Tue, Thu, Fri'
     }
 ];

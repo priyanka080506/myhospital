@@ -36,18 +36,53 @@ body {
     flex: 1;
 }
 
+/* START: Updated Avatar Styles for Doctor Photo */
 .avatar {
     width: 80px;
     height: 80px;
-    background: #0268f7;
+    background: #0268f7; /* Keep background for initial load/fallback */
+    border-radius: 50%;
+    display: flex; /* Changed to flex for centering content */
+    align-items: center;
+    justify-content: center;
+    color: white; /* For the fallback icon/text */
+    font-size: 32px; /* For the fallback icon */
+    border: 4px solid #d1fae5;
+    position: relative; /* Added for overlay positioning */
+    overflow: hidden; /* Ensures image stays within bounds */
+}
+
+.avatar img {
+    width: 100%; /* Make image fill the avatar div */
+    height: 100%;
+    border-radius: 50%; /* Make image round */
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    display: block; /* Remove extra space below image */
+}
+
+.change-photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 32px;
-    border: 4px solid #d1fae5;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
 }
+
+.avatar:hover .change-photo-overlay {
+    opacity: 1; /* Show on hover */
+}
+/* END: Updated Avatar Styles for Doctor Photo */
+
 
 .doctor-details h1 {
     font-size: 28px;
@@ -526,11 +561,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* This background is for the authentication container specifically, 
-       if you want it to also be skyblue, change it here too. 
-       If you want the entire page's background (controlled by `body`) to show, 
-       you might remove this background or make it transparent. */
-    background: linear-gradient(135deg, #0275f0 0%, #0689ec 100%); 
+    background: linear-gradient(135deg, #0275f0 0%, #0689ec 100%);
     padding: 20px;
 }
 
@@ -683,58 +714,143 @@ body {
     background: #dc2626;
 }
 
+/* Styles for Working Places & Timings */
+#workingPlacesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.working-place-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.working-place-input {
+    flex: 2;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.working-timing-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.add-more-button {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.add-more-button:hover {
+    background-color: #4cae4c;
+}
+
+.remove-input-button {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 5px;
+    vertical-align: middle;
+    transition: color 0.2s ease;
+}
+
+.remove-input-button:hover {
+    color: #c82333;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
         padding: 16px;
     }
-    
+
     .doctor-info {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .doctor-meta {
         grid-template-columns: 1fr;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .patient-info {
         grid-template-columns: 1fr;
     }
-    
+
     .patients-list {
         grid-template-columns: 1fr;
     }
-    
+
     .schedule-header,
     .patient-header {
         flex-direction: column;
         gap: 12px;
     }
-    
+
     .auth-container {
         padding: 16px;
     }
-    
+
     .auth-card {
         padding: 24px;
     }
-    
+
     .doctor-header {
         flex-direction: column;
         gap: 16px;
     }
-    
+
     .logout-section {
         margin-left: 0;
         align-self: flex-end;
     }
-    
+
     .action-buttons {
         flex-direction: column;
+    }
+
+    /* Adjustments for Working Places & Timings on smaller screens */
+    .working-place-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .working-place-input,
+    .working-timing-input {
+        width: 100%;
+        flex: none;
+    }
+
+    .remove-input-button {
+        align-self: flex-end;
+        margin-top: 5px;
     }
 }
