@@ -50,7 +50,7 @@ const doctorsData = [
         experience: '4+ Years',
         rating: 4.9,
         reviews: 127,
-        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Raksha.jpg.jpeg',
+        image: 'Raksha.jpg.jpeg',
         education: 'Harvard Medical School',
         availability: 'Mon, Wed, Fri'
     },
@@ -60,7 +60,7 @@ const doctorsData = [
         experience: '10+ Years',
         rating: 4.8,
         reviews: 269,
-        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Brunda.jpg.jpeg',
+        image: 'Brunda.jpg.jpeg',
         education: 'Madras Medical College',
         availability: 'Tue, Thu, Sat'
     },
@@ -70,7 +70,7 @@ const doctorsData = [
         experience: '4+ Years',
         rating: 4.9,
         reviews: 156,
-        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Aishwarya.jpg.jpeg',
+        image: 'Aishwarya.jpg.jpeg',
         education: 'St. Johns Medical college',
         availability: 'Mon, Tue, Thu'
     },
@@ -80,7 +80,7 @@ const doctorsData = [
         experience: '9+ Years',
         rating: 4.7,
         reviews: 89,
-        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Shruthi.jpg.jpeg',
+        image: 'Shruthi.jpg.jpeg',
         education: 'JSS Medical College Mysore',
         availability: 'Wed, Fri, Sat'
     },
@@ -90,7 +90,7 @@ const doctorsData = [
         experience: '3+ Years',
         rating: 4.8,
         reviews: 112,
-        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Vijay.jpg.jpeg',
+        image: 'Vijay.jpg.jpeg',
         education: 'Stanley Medical College',
         availability: 'Mon, Wed, Fri'
     },
@@ -100,7 +100,7 @@ const doctorsData = [
         experience: '10+ Years',
         rating: 4.9,
         reviews: 203,
-        image: 'c:\Users\PRIYANKA\OneDrive\Desktop\myhospital\docs\Amaresh.jpg.jpeg',
+        image: 'Amaresh.jpg.jpeg',
         education: 'Christian Medical College Vellore',
         availability: 'Tue, Thu, Fri'
     }
