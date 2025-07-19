@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Portal - HealthCare</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/portal.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Doctor Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="auth-switch">Don't have an account? <a href="#" id="showRegister">Register here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Doctor Registration</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regName">Full Name:</label>
+                    <input type="text" id="regName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPhone">Phone:</label>
+                    <input type="tel" id="regPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="regSpecialty">Specialty:</label>
+                    <select id="regSpecialty" name="specialty" required>
+                        <option value="">Select Specialty</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Endocrinology">Endocrinology</option>
+                        <option value="Family Medicine">Family Medicine</option>
+                        <option value="Internal Medicine">Internal Medicine</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Psychiatry">Psychiatry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regExperience">Years of Experience:</label>
+                    <input type="number" id="regExperience" name="experience" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="regQualification">Qualification:</label>
+                    <input type="text" id="regQualification" name="qualification" required>
+                </div>
+                <div class="form-group">
+                    <label for="regBio">Bio:</label>
+                    <textarea id="regBio" name="bio" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="regConsultationFee">Consultation Fee ($):</label>
+                    <input type="number" id="regConsultationFee" name="consultationFee" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Working Places:</label>
+                    <div id="workingPlaces">
+                        <div class="working-place">
+                            <input type="text" name="workingPlaceName" placeholder="Hospital/Clinic Name" required>
+                            <input type="text" name="workingPlaceAddress" placeholder="Address" required>
+                            <input type="tel" name="workingPlacePhone" placeholder="Phone" required>
+                        </div>
+                    </div>
+                    <button type="button" id="addWorkingPlace" class="btn btn-secondary">Add Another Place</button>
+                </div>
+                <div class="form-group">
+                    <label>Working Hours:</label>
+                    <div id="workingHours">
+                        <div class="working-hour">
+                            <select name="workingDay" required>
+                                <option value="">Select Day</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                            <input type="time" name="startTime" required>
+                            <input type="time" name="endTime" required>
+                            <label><input type="checkbox" name="isAvailable" checked> Available</label>
+                        </div>
+                    </div>
+                    <button type="button" id="addWorkingHour" class="btn btn-secondary">Add Another Day</button>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p class="auth-switch">Already have an account? <a href="#" id="showLogin">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="doctorDashboard" class="dashboard" style="display: none;">
+        <header class="dashboard-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-user-md"></i>
+                        <h1>Doctor Portal</h1>
+                    </div>
+                    <div class="user-info">
+                        <span id="userName">Welcome, Doctor</span>
+                        <button id="logoutBtn" class="btn btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-container">
+            <nav class="sidebar">
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link active" data-section="schedules">
+                        <i class="fas fa-calendar-alt"></i> Schedules
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-section="reports">
+                        <i class="fas fa-file-medical"></i> Reports
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-section="profile">
+                        <i class="fas fa-user"></i> My Profile
+                    </a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <div id="schedules" class="content-section active">
+                    <div class="section-header">
+                        <h2><i class="fas fa-calendar-alt"></i> Appointment Schedules</h2>
+                    </div>
+                    <div id="schedulesList" class="schedules-list">
+                        <!-- Schedules will be loaded here -->
+                    </div>
+                </div>
+
+                <div id="reports" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-file-medical"></i> Patient Reports</h2>
+                        <button id="addReportBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Report
+                        </button>
+                    </div>
+                    <div id="reportsList" class="reports-list">
+                        <!-- Reports will be loaded here -->
+                    </div>
+                </div>
+
+                <div id="profile" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-user"></i> My Profile</h2>
+                        <button id="editProfileBtn" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                    <div id="profileInfo" class="profile-info">
+                        <!-- Profile information will be loaded here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="addReportModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Patient Report</h2>
+            <form id="addReportForm">
+                <div class="form-group">
+                    <label for="patientSelect">Patient:</label>
+                    <select id="patientSelect" name="patientId" required>
+                        <option value="">Select Patient</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reportTitle">Title:</label>
+                    <input type="text" id="reportTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="reportDescription">Description:</label>
+                    <textarea id="reportDescription" name="description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reportDiagnosis">Diagnosis:</label>
+                    <textarea id="reportDiagnosis" name="diagnosis" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reportPrescription">Prescription:</label>
+                    <textarea id="reportPrescription" name="prescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="testResults">Test Results:</label>
+                    <textarea id="testResults" name="testResults" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="followUpDate">Follow-up Date:</label>
+                    <input type="date" id="followUpDate" name="followUpDate">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Report</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="viewReportModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Patient Report Details</h2>
+            <div id="reportDetails">
+                <!-- Report details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editName">Full Name:</label>
+                    <input type="text" id="editName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone:</label>
+                    <input type="tel" id="editPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="editSpecialty">Specialty:</label>
+                    <select id="editSpecialty" name="specialty" required>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Endocrinology">Endocrinology</option>
+                        <option value="Family Medicine">Family Medicine</option>
+                        <option value="Internal Medicine">Internal Medicine</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Psychiatry">Psychiatry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editExperience">Years of Experience:</label>
+                    <input type="number" id="editExperience" name="experience" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="editQualification">Qualification:</label>
+                    <input type="text" id="editQualification" name="qualification" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBio">Bio:</label>
+                    <textarea id="editBio" name="bio" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editConsultationFee">Consultation Fee ($):</label>
+                    <input type="number" id="editConsultationFee" name="consultationFee" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/doctor.js"></script>
+</body>
+</html>
