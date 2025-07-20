@@ -4,159 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Portal - HealthCare</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="portal.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div id="loginModal" class="modal">
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" style="display: flex;">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Patient Login</h2>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
-                <p class="auth-switch">Don't have an account? <a href="#" id="showRegister">Register here</a></p>
+                <p class="auth-switch">Don't have an account? <a href="#" id="showRegister">Register</a></p>
             </form>
         </div>
     </div>
 
+    <!-- Register Modal -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Patient Registration</h2>
             <form id="registerForm">
-                <div class="form-group">
-                    <label for="regName">Full Name:</label>
-                    <input type="text" id="regName" name="name" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Phone</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="regEmail">Email:</label>
-                    <input type="email" id="regEmail" name="email" required>
+                    <label for="regDob">Date of Birth</label>
+                    <input type="date" id="regDob" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regBloodGroup">Blood Group</label>
+                        <select id="regBloodGroup" required>
+                            <option value="">Select</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regWeight">Weight (kg)</label>
+                        <input type="number" id="regWeight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regHeight">Height (cm)</label>
+                        <input type="number" id="regHeight" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="regPassword">Password:</label>
-                    <input type="password" id="regPassword" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="regPhone">Phone:</label>
-                    <input type="tel" id="regPhone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="regDob">Date of Birth:</label>
-                    <input type="date" id="regDob" name="dateOfBirth" required>
-                </div>
-                <div class="form-group">
-                    <label for="regGender">Gender:</label>
-                    <select id="regGender" name="gender" required>
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="regAddress">Address:</label>
-                    <textarea id="regAddress" name="address" required></textarea>
+                    <label for="regPhoto">Profile Photo</label>
+                    <input type="file" id="regPhoto" accept="image/*">
                 </div>
                 <button type="submit" class="btn btn-primary">Register</button>
-                <p class="auth-switch">Already have an account? <a href="#" id="showLogin">Login here</a></p>
+                <p class="auth-switch">Already have an account? <a href="#" id="showLogin">Login</a></p>
             </form>
         </div>
     </div>
 
+    <!-- Patient Dashboard -->
     <div id="patientDashboard" class="dashboard" style="display: none;">
-        <header class="dashboard-header">
+        <div class="dashboard-header">
             <div class="container">
-                <div class="header-content">
-                    <div class="logo">
-                        <i class="fas fa-heartbeat"></i>
-                        <h1>Patient Portal</h1>
-                    </div>
-                    <div class="user-info">
-                        <span id="userName">Welcome, Patient</span>
-                        <button id="logoutBtn" class="btn btn-secondary">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </div>
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <h1>Patient Portal</h1>
+                </div>
+                <div class="user-info">
+                    <img id="userAvatar" src="" alt="Profile" class="avatar">
+                    <span id="userName"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
                 </div>
             </div>
-        </header>
+        </div>
 
         <div class="dashboard-container">
-            <nav class="sidebar">
+            <div class="sidebar">
                 <ul class="nav-menu">
-                    <li><a href="#" class="nav-link active" data-section="search-doctors">
-                        <i class="fas fa-search"></i> Search Doctors
-                    </a></li>
-                    <li><a href="#" class="nav-link active" data-section="appointments">
-                        <i class="fas fa-calendar-check"></i> Previous Appointments
-                    </a></li>
-                    <li><a href="#" class="nav-link" data-section="reports">
-                        <i class="fas fa-file-medical"></i> Reports
-                    </a></li>
-                    <li><a href="#" class="nav-link" data-section="book-appointment">
-                        <i class="fas fa-plus"></i> Book Appointment
-                    </a></li>
-                    <li><a href="#" class="nav-link" data-section="profile">
-                        <i class="fas fa-user"></i> My Profile
-                    </a></li>
+                    <li><a href="#" class="nav-link active" data-section="appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                    <li><a href="#" class="nav-link" data-section="reports"><i class="fas fa-file-medical"></i> Medical Reports</a></li>
+                    <li><a href="#" class="nav-link" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
                 </ul>
-            </nav>
+            </div>
 
-            <main class="main-content">
-                <div id="search-doctors" class="content-section active">
-                    <div class="section-header">
-                        <h2><i class="fas fa-search"></i> Search Doctors</h2>
-                    </div>
-                    <div class="search-filters">
-                        <div class="filter-row">
-                            <div class="form-group">
-                                <label for="searchName">Search by Name:</label>
-                                <input type="text" id="searchName" placeholder="Enter doctor's name">
-                            </div>
-                            <div class="form-group">
-                                <label for="searchSpecialty">Specialty:</label>
-                                <select id="searchSpecialty">
-                                    <option value="">All Specialties</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="filter-row">
-                            <div class="form-group">
-                                <label for="minFee">Min Fee ($):</label>
-                                <input type="number" id="minFee" placeholder="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="maxFee">Max Fee ($):</label>
-                                <input type="number" id="maxFee" placeholder="1000">
-                            </div>
-                            <button id="searchBtn" class="btn btn-primary">
-                                <i class="fas fa-search"></i> Search
-                            </button>
-                        </div>
-                    </div>
-                    <div id="searchResults" class="search-results">
-                        <!-- Search results will be displayed here -->
-                    </div>
-                </div>
-
+            <div class="main-content">
+                <!-- Appointments Section -->
                 <div id="appointments" class="content-section active">
                     <div class="section-header">
-                        <h2><i class="fas fa-calendar-check"></i> Previous Appointments</h2>
+                        <h2><i class="fas fa-calendar-check"></i> My Appointments</h2>
+                        <button id="bookAppointmentBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Book Appointment
+                        </button>
                     </div>
-                    <div id="appointmentsList" class="appointments-list">
-                        <!-- Appointments will be loaded here -->
+                    <div class="appointments-list" id="appointmentsList">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <h3>No appointments scheduled</h3>
+                            <p>Your upcoming appointments will appear here</p>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Reports Section -->
                 <div id="reports" class="content-section">
                     <div class="section-header">
                         <h2><i class="fas fa-file-medical"></i> Medical Reports</h2>
@@ -164,127 +144,169 @@
                             <i class="fas fa-plus"></i> Add Report
                         </button>
                     </div>
-                    <div id="reportsList" class="reports-list">
-                        <!-- Reports will be loaded here -->
+                    <div class="reports-list" id="reportsList">
+                        <div class="empty-state">
+                            <i class="fas fa-file-medical"></i>
+                            <h3>No medical reports</h3>
+                            <p>Your medical reports will appear here</p>
+                        </div>
                     </div>
                 </div>
 
-                <div id="book-appointment" class="content-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-plus"></i> Book New Appointment</h2>
-                    </div>
-                    <div class="appointment-booking">
-                        <form id="appointmentForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="specialty">Specialty:</label>
-                                    <select id="specialty" name="specialty" required>
-                                        <option value="">Select Specialty</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="doctor">Doctor:</label>
-                                    <select id="doctor" name="doctor" required>
-                                        <option value="">Select Doctor</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="appointmentDate">Date:</label>
-                                    <input type="date" id="appointmentDate" name="date" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="appointmentTime">Time:</label>
-                                    <select id="appointmentTime" name="time" required>
-                                        <option value="">Select Time</option>
-                                        <option value="09:00">09:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="14:00">02:00 PM</option>
-                                        <option value="15:00">03:00 PM</option>
-                                        <option value="16:00">04:00 PM</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="symptoms">Symptoms/Reason:</label>
-                                <textarea id="symptoms" name="symptoms" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Book Appointment</button>
-                        </form>
-                    </div>
-                </div>
-
+                <!-- Profile Section -->
                 <div id="profile" class="content-section">
                     <div class="section-header">
                         <h2><i class="fas fa-user"></i> My Profile</h2>
-                        <button id="editProfileBtn" class="btn btn-primary">
-                            <i class="fas fa-edit"></i> Edit Profile
-                        </button>
+                        <button id="editProfileBtn" class="btn btn-primary">Edit Profile</button>
                     </div>
-                    <div id="profileInfo" class="profile-info">
-                        <!-- Profile information will be loaded here -->
+                    <div class="profile-info" id="profileInfo">
+                        <div class="profile-header">
+                            <img id="profileAvatar" src="" alt="Profile" class="profile-image">
+                            <h3 id="profileName"></h3>
+                        </div>
+                        <div class="profile-grid">
+                            <div class="profile-item">
+                                <label>Email:</label>
+                                <span id="profileEmail"></span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Phone:</label>
+                                <span id="profilePhone"></span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Date of Birth:</label>
+                                <span id="profileDob"></span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Blood Group:</label>
+                                <span id="profileBloodGroup"></span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Weight:</label>
+                                <span id="profileWeight"></span> kg
+                            </div>
+                            <div class="profile-item">
+                                <label>Height:</label>
+                                <span id="profileHeight"></span> cm
+                            </div>
+                            <div class="profile-item">
+                                <label>BMI:</label>
+                                <span id="profileBMI"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     </div>
 
+    <!-- Book Appointment Modal -->
+    <div id="bookAppointmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Book New Appointment</h2>
+            <form id="bookAppointmentForm">
+                <div class="form-group">
+                    <label for="appointmentDoctor">Select Doctor</label>
+                    <select id="appointmentDoctor" required>
+                        <option value="">Select Doctor</option>
+                        <!-- Populated via JS -->
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appointmentDate">Date</label>
+                        <input type="date" id="appointmentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentTime">Time</label>
+                        <select id="appointmentTime" required>
+                            <option value="">Select Time</option>
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentReason">Reason</label>
+                    <textarea id="appointmentReason" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Book Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Report Modal -->
     <div id="addReportModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add Medical Report</h2>
             <form id="addReportForm">
                 <div class="form-group">
-                    <label for="reportTitle">Title:</label>
-                    <input type="text" id="reportTitle" name="title" required>
+                    <label for="reportTitle">Report Title</label>
+                    <input type="text" id="reportTitle" required>
                 </div>
                 <div class="form-group">
-                    <label for="reportDescription">Description:</label>
-                    <textarea id="reportDescription" name="description" rows="4" required></textarea>
+                    <label for="reportDate">Date</label>
+                    <input type="date" id="reportDate" required>
                 </div>
                 <div class="form-group">
-                    <label for="reportDiagnosis">Diagnosis:</label>
-                    <textarea id="reportDiagnosis" name="diagnosis" rows="3" required></textarea>
+                    <label for="reportDescription">Description</label>
+                    <textarea id="reportDescription" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="reportPrescription">Prescription:</label>
-                    <textarea id="reportPrescription" name="prescription" rows="3"></textarea>
+                    <label for="reportScan">Upload Scan (PDF/Image)</label>
+                    <input type="file" id="reportScan" accept=".pdf,.jpg,.jpeg,.png">
                 </div>
                 <button type="submit" class="btn btn-primary">Add Report</button>
             </form>
         </div>
     </div>
 
+    <!-- View Report Modal -->
     <div id="viewReportModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Medical Report Details</h2>
-            <div id="reportDetails">
-                <!-- Report details will be loaded here -->
-            </div>
+            <div id="reportDetails"></div>
         </div>
     </div>
 
+    <!-- Edit Profile Modal -->
     <div id="editProfileModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Edit Profile</h2>
             <form id="editProfileForm">
-                <div class="form-group">
-                    <label for="editName">Full Name:</label>
-                    <input type="text" id="editName" name="name" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editName">Full Name</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">Phone</label>
+                        <input type="tel" id="editPhone" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editBloodGroup">Blood Group</label>
+                        <select id="editBloodGroup" required>
+                            <!-- Options populated via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editWeight">Weight (kg)</label>
+                        <input type="number" id="editWeight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editHeight">Height (cm)</label>
+                        <input type="number" id="editHeight" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="editPhone">Phone:</label>
-                    <input type="tel" id="editPhone" name="phone" required>
+                    <label for="editPhoto">Update Profile Photo</label>
+                    <input type="file" id="editPhoto" accept="image/*">
                 </div>
-                <div class="form-group">
-                    <label for="editAddress">Address:</label>
-                    <textarea id="editAddress" name="address" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
         </div>
     </div>

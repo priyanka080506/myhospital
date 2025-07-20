@@ -1,595 +1,493 @@
 class DoctorPortal {
     constructor() {
-        this.token = localStorage.getItem('doctorToken');
-        this.user = JSON.parse(localStorage.getItem('doctorUser') || '{}');
-        this.apiUrl = '/api';
+        this.mockDatabase = {
+            doctors: JSON.parse(localStorage.getItem('mockDoctors')) || [],
+            patients: JSON.parse(localStorage.getItem('mockPatients')) || [],
+            appointments: JSON.parse(localStorage.getItem('mockAppointments')) || [],
+            reports: JSON.parse(localStorage.getItem('mockReports')) || []
+        };
         
+        this.currentDoctor = JSON.parse(localStorage.getItem('currentDoctor')) || null;
         this.init();
     }
-    
+
     init() {
-        if (this.token) {
+        if (this.currentDoctor) {
             this.showDashboard();
-            this.loadUserData();
+            this.loadDoctorData();
         } else {
             this.showLoginModal();
         }
-        
         this.setupEventListeners();
     }
-    
+
     setupEventListeners() {
-        // Modal controls
-        document.querySelectorAll('.close').forEach(close => {
-            close.addEventListener('click', () => this.hideModals());
-        });
-        
-        // Auth form switching
-        document.getElementById('showRegister').addEventListener('click', (e) => {
-            e.preventDefault();
-            this.showRegisterModal();
-        });
-        
-        document.getElementById('showLogin').addEventListener('click', (e) => {
-            e.preventDefault();
-            this.showLoginModal();
-        });
-        
-        // Form submissions
+        // Auth forms
         document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
         document.getElementById('registerForm').addEventListener('submit', (e) => this.handleRegister(e));
-        document.getElementById('addReportForm').addEventListener('submit', (e) => this.handleAddReport(e));
         
         // Navigation
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => this.handleNavigation(e));
         });
         
+        // Modals
+        document.getElementById('createReportBtn').addEventListener('click', () => this.showCreateReportModal());
+        document.getElementById('editProfileBtn').addEventListener('click', () => this.showEditProfileModal());
+        
+        // Working places
+        document.getElementById('addWorkingPlaceBtn').addEventListener('click', () => this.addWorkingPlace());
+        document.getElementById('addEditWorkingPlaceBtn').addEventListener('click', () => this.addEditWorkingPlace());
+        
+        // Form submissions
+        document.getElementById('createReportForm').addEventListener('submit', (e) => this.handleCreateReport(e));
+        document.getElementById('editProfileForm').addEventListener('submit', (e) => this.handleEditProfile(e));
+        
+        // Auth switching
+        document.getElementById('showRegister').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showRegisterModal();
+        });
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showLoginModal();
+        });
+        
         // Logout
         document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
         
-        // Add report button
-        document.getElementById('addReportBtn').addEventListener('click', () => this.showAddReportModal());
-        
-        // Profile editing
-        document.getElementById('editProfileBtn').addEventListener('click', () => this.showEditProfileModal());
-        document.getElementById('editProfileForm').addEventListener('submit', (e) => this.handleEditProfile(e));
-        
-        // Working place and hour management
-        document.getElementById('addWorkingPlace').addEventListener('click', () => this.addWorkingPlaceField());
-        document.getElementById('addWorkingHour').addEventListener('click', () => this.addWorkingHourField());
-    }
-    
-    async makeRequest(url, options = {}) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(this.token && { 'Authorization': `Bearer ${this.token}` })
-            },
-            ...options
-        };
-        
-        try {
-            const response = await fetch(this.apiUrl + url, config);
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Request failed');
-            }
-            
-            return data;
-        } catch (error) {
-            console.error('API Error:', error);
-            throw error;
-        }
-    }
-    
-    showLoginModal() {
-        this.hideModals();
-        document.getElementById('loginModal').classList.add('show');
-    }
-    
-    showRegisterModal() {
-        this.hideModals();
-        document.getElementById('registerModal').classList.add('show');
-    }
-    
-    showAddReportModal() {
-        this.loadPatients();
-        document.getElementById('addReportModal').classList.add('show');
-    }
-    
-    showEditProfileModal() {
-        this.loadProfileForEdit();
-        document.getElementById('editProfileModal').classList.add('show');
-    }
-    
-    hideModals() {
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.classList.remove('show');
+        // Close modals
+        document.querySelectorAll('.close').forEach(btn => {
+            btn.addEventListener('click', () => this.hideModals());
         });
     }
-    
+
+    // Authentication methods
+    handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const doctor = this.mockDatabase.doctors.find(d => d.email === email && d.password === password);
+        
+        if (doctor) {
+            this.currentDoctor = doctor;
+            localStorage.setItem('currentDoctor', JSON.stringify(doctor));
+            this.showDashboard();
+            this.loadDoctorData();
+            alert('Login successful!');
+        } else {
+            alert('Invalid credentials. Please try again.');
+        }
+    }
+
+    handleRegister(e) {
+        e.preventDefault();
+        const workingPlaces = this.collectWorkingPlaces('workingPlacesContainer');
+        
+        const newDoctor = {
+            id: 'doc_' + Date.now(),
+            name: document.getElementById('regName').value,
+            email: document.getElementById('regEmail').value,
+            password: document.getElementById('regPassword').value,
+            phone: document.getElementById('regPhone').value,
+            specialty: document.getElementById('regSpecialty').value,
+            qualification: document.getElementById('regQualification').value,
+            experience: document.getElementById('regExperience').value,
+            consultationFee: document.getElementById('regFee').value,
+            workingPlaces: workingPlaces,
+            image: this.getUploadedImage('regPhoto') || "https://randomuser.me/api/portraits/" + 
+                  (Math.random() > 0.5 ? "men" : "women") + 
+                  "/" + Math.floor(Math.random() * 100) + ".jpg",
+            availableSlots: ["09:00", "10:00", "11:00", "14:00", "15:00"]
+        };
+        
+        this.mockDatabase.doctors.push(newDoctor);
+        localStorage.setItem('mockDoctors', JSON.stringify(this.mockDatabase.doctors));
+        
+        this.currentDoctor = newDoctor;
+        localStorage.setItem('currentDoctor', JSON.stringify(newDoctor));
+        
+        alert('Registration successful!');
+        this.showDashboard();
+        this.loadDoctorData();
+    }
+
+    collectWorkingPlaces(containerId) {
+        const places = [];
+        const containers = document.querySelectorAll(`#${containerId} .working-place`);
+        
+        containers.forEach(container => {
+            const name = container.querySelector('.place-name').value;
+            const address = container.querySelector('.place-address').value;
+            const timings = container.querySelector('.place-timings').value;
+            
+            if (name && address && timings) {
+                places.push({
+                    name: name,
+                    address: address,
+                    timings: timings
+                });
+            }
+        });
+        
+        return places;
+    }
+
+    // Dashboard methods
     showDashboard() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('registerModal').style.display = 'none';
         document.getElementById('doctorDashboard').style.display = 'block';
-        this.hideModals();
-    }
-    
-    async handleLogin(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
         
-        try {
-            const data = await this.makeRequest('/auth/login', {
-                method: 'POST',
-                body: JSON.stringify({
-                    email: formData.get('email'),
-                    password: formData.get('password')
-                })
-            });
-            
-            if (data.user.role !== 'doctor') {
-                throw new Error('Invalid credentials for doctor portal');
-            }
-            
-            this.token = data.token;
-            this.user = data.user;
-            
-            localStorage.setItem('doctorToken', this.token);
-            localStorage.setItem('doctorUser', JSON.stringify(this.user));
-            
-            this.showDashboard();
-            this.loadUserData();
-            
-        } catch (error) {
-            alert(error.message);
-        }
+        // Update doctor info in header
+        document.getElementById('doctorName').textContent = `Dr. ${this.currentDoctor.name}`;
+        document.getElementById('doctorAvatar').src = this.currentDoctor.image;
     }
-    
-    addWorkingPlaceField() {
-        const container = document.getElementById('workingPlaces');
-        const div = document.createElement('div');
-        div.className = 'working-place';
-        div.innerHTML = `
-            <input type="text" name="workingPlaceName" placeholder="Hospital/Clinic Name" required>
-            <input type="text" name="workingPlaceAddress" placeholder="Address" required>
-            <input type="tel" name="workingPlacePhone" placeholder="Phone" required>
-            <button type="button" onclick="this.parentElement.remove()" class="btn btn-secondary">Remove</button>
-        `;
-        container.appendChild(div);
+
+    loadDoctorData() {
+        this.loadSchedules();
+        this.loadReports();
+        this.loadProfile();
     }
-    
-    addWorkingHourField() {
-        const container = document.getElementById('workingHours');
-        const div = document.createElement('div');
-        div.className = 'working-hour';
-        div.innerHTML = `
-            <select name="workingDay" required>
-                <option value="">Select Day</option>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-            </select>
-            <input type="time" name="startTime" required>
-            <input type="time" name="endTime" required>
-            <label><input type="checkbox" name="isAvailable" checked> Available</label>
-            <button type="button" onclick="this.parentElement.remove()" class="btn btn-secondary">Remove</button>
-        `;
-        container.appendChild(div);
-    }
-    
-    async handleRegister(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
+
+    loadSchedules() {
+        const doctorAppointments = this.mockDatabase.appointments.filter(
+            apt => apt.doctorId === this.currentDoctor.id
+        ).sort((a, b) => new Date(a.date) - new Date(b.date));
         
-        // Collect working places
-        const workingPlaces = [];
-        const placeNames = formData.getAll('workingPlaceName');
-        const placeAddresses = formData.getAll('workingPlaceAddress');
-        const placePhones = formData.getAll('workingPlacePhone');
-        
-        for (let i = 0; i < placeNames.length; i++) {
-            if (placeNames[i] && placeAddresses[i] && placePhones[i]) {
-                workingPlaces.push({
-                    name: placeNames[i],
-                    address: placeAddresses[i],
-                    phone: placePhones[i]
-                });
-            }
-        }
-        
-        // Collect working hours
-        const workingHours = [];
-        const days = formData.getAll('workingDay');
-        const startTimes = formData.getAll('startTime');
-        const endTimes = formData.getAll('endTime');
-        const availabilities = formData.getAll('isAvailable');
-        
-        for (let i = 0; i < days.length; i++) {
-            if (days[i] && startTimes[i] && endTimes[i]) {
-                workingHours.push({
-                    day: days[i],
-                    startTime: startTimes[i],
-                    endTime: endTimes[i],
-                    isAvailable: availabilities.includes('on')
-                });
-            }
-        }
-        
-        try {
-            const data = await this.makeRequest('/auth/register', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    password: formData.get('password'),
-                    phone: formData.get('phone'),
-                    specialty: formData.get('specialty'),
-                    experience: parseInt(formData.get('experience')),
-                    qualification: formData.get('qualification'),
-                    bio: formData.get('bio'),
-                    consultationFee: parseInt(formData.get('consultationFee')),
-                    workingPlaces,
-                    workingHours,
-                    role: 'doctor'
-                })
-            });
-            
-            this.token = data.token;
-            this.user = data.user;
-            
-            localStorage.setItem('doctorToken', this.token);
-            localStorage.setItem('doctorUser', JSON.stringify(this.user));
-            
-            this.showDashboard();
-            this.loadUserData();
-            
-        } catch (error) {
-            alert(error.message);
-        }
-    }
-    
-    async loadProfile() {
-        try {
-            const profile = await this.makeRequest(`/doctors/${this.user.id}`);
-            this.renderProfile(profile);
-        } catch (error) {
-            console.error('Error loading profile:', error);
-        }
-    }
-    
-    renderProfile(profile) {
-        const container = document.getElementById('profileInfo');
-        
-        container.innerHTML = `
-            <div class="profile-section">
-                <h3>Professional Information</h3>
-                <div class="profile-grid">
-                    <div class="profile-item">
-                        <label>Full Name:</label>
-                        <span>Dr. ${profile.name}</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Email:</label>
-                        <span>${profile.email}</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Phone:</label>
-                        <span>${profile.phone}</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Specialty:</label>
-                        <span>${profile.specialty}</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Experience:</label>
-                        <span>${profile.experience} years</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Qualification:</label>
-                        <span>${profile.qualification}</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Consultation Fee:</label>
-                        <span>$${profile.consultationFee}</span>
-                    </div>
-                    <div class="profile-item">
-                        <label>Bio:</label>
-                        <span>${profile.bio}</span>
-                    </div>
-                </div>
-            </div>
-            ${profile.workingPlaces && profile.workingPlaces.length > 0 ? `
-                <div class="profile-section">
-                    <h3>Working Places</h3>
-                    ${profile.workingPlaces.map(place => `
-                        <div class="place-item">
-                            <strong>${place.name}</strong><br>
-                            ${place.address}<br>
-                            Phone: ${place.phone}
-                        </div>
-                    `).join('')}
-                </div>
-            ` : ''}
-            ${profile.workingHours && profile.workingHours.length > 0 ? `
-                <div class="profile-section">
-                    <h3>Working Hours</h3>
-                    ${profile.workingHours.map(hour => `
-                        <div class="hour-item">
-                            ${hour.day}: ${hour.startTime} - ${hour.endTime} ${hour.isAvailable ? '(Available)' : '(Not Available)'}
-                        </div>
-                    `).join('')}
-                </div>
-            ` : ''}
-        `;
-    }
-    
-    async loadProfileForEdit() {
-        try {
-            const profile = await this.makeRequest(`/doctors/${this.user.id}`);
-            document.getElementById('editName').value = profile.name;
-            document.getElementById('editPhone').value = profile.phone;
-            document.getElementById('editSpecialty').value = profile.specialty;
-            document.getElementById('editExperience').value = profile.experience;
-            document.getElementById('editQualification').value = profile.qualification;
-            document.getElementById('editBio').value = profile.bio;
-            document.getElementById('editConsultationFee').value = profile.consultationFee;
-        } catch (error) {
-            console.error('Error loading profile for edit:', error);
-        }
-    }
-    
-    async handleEditProfile(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        
-        try {
-            await this.makeRequest('/doctors/profile', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    name: formData.get('name'),
-                    phone: formData.get('phone'),
-                    specialty: formData.get('specialty'),
-                    experience: parseInt(formData.get('experience')),
-                    qualification: formData.get('qualification'),
-                    bio: formData.get('bio'),
-                    consultationFee: parseInt(formData.get('consultationFee'))
-                })
-            });
-            
-            alert('Profile updated successfully!');
-            this.hideModals();
-            this.loadProfile();
-            
-        } catch (error) {
-            alert(error.message);
-        }
-    }
-    
-    async loadUserData() {
-        document.getElementById('userName').textContent = `Welcome, Dr. ${this.user.name}`;
-        
-        // Load initial data
-        await this.loadSchedules();
-        await this.loadReports();
-        await this.loadProfile();
-    }
-    
-    async loadSchedules() {
-        try {
-            const appointments = await this.makeRequest('/appointments');
-            this.renderSchedules(appointments);
-        } catch (error) {
-            console.error('Error loading schedules:', error);
-        }
-    }
-    
-    async loadReports() {
-        try {
-            const reports = await this.makeRequest('/reports');
-            this.renderReports(reports);
-        } catch (error) {
-            console.error('Error loading reports:', error);
-        }
-    }
-    
-    async loadPatients() {
-        try {
-            const patients = await this.makeRequest('/patients');
-            const patientSelect = document.getElementById('patientSelect');
-            
-            patientSelect.innerHTML = '<option value="">Select Patient</option>';
-            patients.forEach(patient => {
-                const option = document.createElement('option');
-                option.value = patient._id;
-                option.textContent = patient.name;
-                patientSelect.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error loading patients:', error);
-        }
-    }
-    
-    renderSchedules(appointments) {
         const container = document.getElementById('schedulesList');
-        
-        if (appointments.length === 0) {
+        if (doctorAppointments.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-calendar-times"></i>
                     <h3>No appointments scheduled</h3>
-                    <p>Your appointment schedule will appear here</p>
+                    <p>Your upcoming appointments will appear here</p>
                 </div>
             `;
             return;
         }
         
-        // Sort appointments by date and time
-        appointments.sort((a, b) => {
-            const dateA = new Date(a.date + ' ' + a.time);
-            const dateB = new Date(b.date + ' ' + b.time);
-            return dateA - dateB;
-        });
-        
-        container.innerHTML = appointments.map(appointment => `
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">${appointment.patient.name}</div>
-                        <div class="card-subtitle">${appointment.patient.email} | ${appointment.patient.phone}</div>
+        container.innerHTML = doctorAppointments.map(apt => {
+            const patient = this.mockDatabase.patients.find(p => p.id === apt.patientId);
+            return `
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Appointment with ${patient.name}</div>
+                            <div class="card-subtitle">${new Date(apt.date).toLocaleDateString()} at ${apt.time}</div>
+                        </div>
+                        <span class="status-badge status-${apt.status}">${apt.status}</span>
                     </div>
-                    <span class="status-badge status-${appointment.status}">
-                        ${appointment.status}
-                    </span>
-                </div>
-                <div class="card-content">
-                    <p><strong>Date:</strong> ${new Date(appointment.date).toLocaleDateString()}</p>
-                    <p><strong>Time:</strong> ${appointment.time}</p>
-                    <p><strong>Symptoms:</strong> ${appointment.symptoms}</p>
-                    ${appointment.notes ? `<p><strong>Notes:</strong> ${appointment.notes}</p>` : ''}
-                    ${appointment.prescription ? `<p><strong>Prescription:</strong> ${appointment.prescription}</p>` : ''}
-                </div>
-                <div class="card-actions">
-                    ${appointment.status === 'scheduled' ? `
-                        <button class="btn btn-primary" onclick="doctorPortal.completeAppointment('${appointment._id}')">
-                            Complete
+                    <div class="card-content">
+                        <p><strong>Reason:</strong> ${apt.reason}</p>
+                        ${apt.notes ? `<p><strong>Notes:</strong> ${apt.notes}</p>` : ''}
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary complete-appointment-btn" data-id="${apt.id}">
+                            Mark as Completed
                         </button>
-                        <button class="btn btn-secondary" onclick="doctorPortal.addPrescription('${appointment._id}')">
-                            Add Prescription
-                        </button>
-                    ` : ''}
+                    </div>
                 </div>
-            </div>
-        `).join('');
-    }
-    
-    renderReports(reports) {
-        const container = document.getElementById('reportsList');
+            `;
+        }).join('');
         
-        if (reports.length === 0) {
+        // Add event listeners to complete buttons
+        document.querySelectorAll('.complete-appointment-btn').forEach(btn => {
+            btn.addEventListener('click', () => this.completeAppointment(btn.dataset.id));
+        });
+    }
+
+    loadReports() {
+        const doctorReports = this.mockDatabase.reports.filter(
+            report => report.doctorId === this.currentDoctor.id
+        ).sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        const container = document.getElementById('reportsList');
+        if (doctorReports.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-file-medical"></i>
-                    <h3>No reports found</h3>
-                    <p>Patient reports you create will appear here</p>
+                    <h3>No patient reports</h3>
+                    <p>Reports you create will appear here</p>
                 </div>
             `;
             return;
         }
         
-        container.innerHTML = reports.map(report => `
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">${report.title}</div>
-                        <div class="card-subtitle">Patient: ${report.patient.name} - ${new Date(report.createdAt).toLocaleDateString()}</div>
+        container.innerHTML = doctorReports.map(report => {
+            const patient = this.mockDatabase.patients.find(p => p.id === report.patientId);
+            return `
+                <div class="report-card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${report.title}</div>
+                            <div class="card-subtitle">${patient.name} • ${new Date(report.date).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>${report.diagnosis.substring(0, 100)}...</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary view-report-btn" data-id="${report.id}">
+                            View Report
+                        </button>
                     </div>
                 </div>
-                <div class="card-content">
-                    <p><strong>Description:</strong> ${report.description}</p>
-                    <p><strong>Diagnosis:</strong> ${report.diagnosis}</p>
-                    ${report.prescription ? `<p><strong>Prescription:</strong> ${report.prescription}</p>` : ''}
-                    ${report.testResults ? `<p><strong>Test Results:</strong> ${report.testResults}</p>` : ''}
-                    ${report.followUpDate ? `<p><strong>Follow-up Date:</strong> ${new Date(report.followUpDate).toLocaleDateString()}</p>` : ''}
-                </div>
-                <div class="card-actions">
-                    <button class="btn btn-primary" onclick="doctorPortal.viewReport('${report._id}')">View Report</button>
-                </div>
+            `;
+        }).join('');
+        
+        // Add event listeners to view buttons
+        document.querySelectorAll('.view-report-btn').forEach(btn => {
+            btn.addEventListener('click', () => this.viewReport(btn.dataset.id));
+        });
+    }
+
+    loadProfile() {
+        const doctor = this.currentDoctor;
+        document.getElementById('profileDoctorName').textContent = `Dr. ${doctor.name}`;
+        document.getElementById('profileSpecialty').textContent = doctor.specialty;
+        document.getElementById('profileDoctorEmail').textContent = doctor.email;
+        document.getElementById('profileDoctorPhone').textContent = doctor.phone;
+        document.getElementById('profileQualification').textContent = doctor.qualification;
+        document.getElementById('profileExperience').textContent = doctor.experience;
+        document.getElementById('profileFee').textContent = `$${doctor.consultationFee}`;
+        document.getElementById('profileDoctorAvatar').src = doctor.image;
+        
+        // Load working places
+        const placesContainer = document.getElementById('workingPlacesList');
+        placesContainer.innerHTML = doctor.workingPlaces.map(place => `
+            <div class="working-place-item">
+                <h4>${place.name}</h4>
+                <p>${place.address}</p>
+                <p><strong>Timings:</strong> ${place.timings}</p>
             </div>
         `).join('');
     }
-    
-    async handleAddReport(e) {
+
+    // Report management
+    showCreateReportModal() {
+        const patientSelect = document.getElementById('reportPatient');
+        patientSelect.innerHTML = '<option value="">Select Patient</option>';
+        
+        this.mockDatabase.patients.forEach(patient => {
+            const option = document.createElement('option');
+            option.value = patient.id;
+            option.textContent = patient.name;
+            patientSelect.appendChild(option);
+        });
+        
+        document.getElementById('createReportModal').style.display = 'flex';
+    }
+
+    handleCreateReport(e) {
         e.preventDefault();
-        const formData = new FormData(e.target);
+        const fileInput = document.getElementById('reportScan');
+        let scanUrl = null;
         
-        try {
-            await this.makeRequest('/reports', {
-                method: 'POST',
-                body: JSON.stringify({
-                    patientId: formData.get('patientId'),
-                    title: formData.get('title'),
-                    description: formData.get('description'),
-                    diagnosis: formData.get('diagnosis'),
-                    prescription: formData.get('prescription'),
-                    testResults: formData.get('testResults'),
-                    followUpDate: formData.get('followUpDate')
-                })
-            });
-            
-            alert('Report added successfully!');
-            this.hideModals();
-            e.target.reset();
-            this.loadReports();
-            
-        } catch (error) {
-            alert(error.message);
+        if (fileInput.files.length > 0) {
+            scanUrl = URL.createObjectURL(fileInput.files[0]);
         }
+        
+        const newReport = {
+            id: 'rep_' + Date.now(),
+            title: document.getElementById('reportTitle').value,
+            date: document.getElementById('reportDate').value,
+            diagnosis: document.getElementById('reportDiagnosis').value,
+            prescription: document.getElementById('reportPrescription').value,
+            scanUrl: scanUrl,
+            patientId: document.getElementById('reportPatient').value,
+            patientName: document.getElementById('reportPatient').selectedOptions[0].text,
+            doctorId: this.currentDoctor.id,
+            doctorName: this.currentDoctor.name,
+            createdAt: new Date().toISOString()
+        };
+        
+        this.mockDatabase.reports.push(newReport);
+        localStorage.setItem('mockReports', JSON.stringify(this.mockDatabase.reports));
+        
+        alert('Report created successfully!');
+        this.hideModals();
+        document.getElementById('createReportForm').reset();
+        this.loadReports();
     }
-    
-    async viewReport(reportId) {
-        try {
-            const report = await this.makeRequest(`/reports/${reportId}`);
-            this.showReportDetails(report);
-        } catch (error) {
-            alert(error.message);
-        }
-    }
-    
-    showReportDetails(report) {
+
+    viewReport(reportId) {
+        const report = this.mockDatabase.reports.find(r => r.id === reportId);
+        const patient = this.mockDatabase.patients.find(p => p.id === report.patientId);
         const container = document.getElementById('reportDetails');
+        
         container.innerHTML = `
-            <p><strong>Title:</strong> ${report.title}</p>
-            <p><strong>Patient:</strong> ${report.patient.name}</p>
-            <p><strong>Date:</strong> ${new Date(report.createdAt).toLocaleDateString()}</p>
-            <p><strong>Description:</strong> ${report.description}</p>
-            <p><strong>Diagnosis:</strong> ${report.diagnosis}</p>
-            ${report.prescription ? `<p><strong>Prescription:</strong> ${report.prescription}</p>` : ''}
-            ${report.testResults ? `<p><strong>Test Results:</strong> ${report.testResults}</p>` : ''}
-            ${report.followUpDate ? `<p><strong>Follow-up Date:</strong> ${new Date(report.followUpDate).toLocaleDateString()}</p>` : ''}
+            <h3>${report.title}</h3>
+            <p><strong>Patient:</strong> ${patient.name}</p>
+            <p><strong>Date:</strong> ${new Date(report.date).toLocaleDateString()}</p>
+            <div class="report-section">
+                <h4>Diagnosis:</h4>
+                <p>${report.diagnosis}</p>
+            </div>
+            ${report.prescription ? `
+                <div class="report-section">
+                    <h4>Prescription:</h4>
+                    <p>${report.prescription}</p>
+                </div>
+            ` : ''}
+            ${report.scanUrl ? `
+                <div class="report-section">
+                    <h4>Attached Scan:</h4>
+                    ${report.scanUrl.endsWith('.pdf') ? 
+                        `<iframe src="${report.scanUrl}" style="width:100%; height:500px;"></iframe>` :
+                        `<img src="${report.scanUrl}" style="max-width:100%; max-height:500px;">`}
+                </div>
+            ` : ''}
         `;
-        document.getElementById('viewReportModal').classList.add('show');
-    }
-    
-    async completeAppointment(appointmentId) {
-        if (!confirm('Mark this appointment as completed?')) return;
         
-        try {
-            await this.makeRequest(`/appointments/${appointmentId}`, {
-                method: 'PATCH',
-                body: JSON.stringify({ status: 'completed' })
-            });
-            
+        document.getElementById('viewReportModal').style.display = 'flex';
+    }
+
+    // Appointment management
+    completeAppointment(appointmentId) {
+        const appointment = this.mockDatabase.appointments.find(a => a.id === appointmentId);
+        if (appointment) {
+            appointment.status = 'completed';
+            localStorage.setItem('mockAppointments', JSON.stringify(this.mockDatabase.appointments));
+            this.loadSchedules();
             alert('Appointment marked as completed!');
-            this.loadSchedules();
-            
-        } catch (error) {
-            alert(error.message);
         }
     }
-    
-    async addPrescription(appointmentId) {
-        const prescription = prompt('Enter prescription:');
-        if (!prescription) return;
+
+    // Working places management
+    addWorkingPlace() {
+        const container = document.getElementById('workingPlacesContainer');
+        const div = document.createElement('div');
+        div.className = 'working-place';
+        div.innerHTML = `
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" class="place-name" placeholder="Hospital/Clinic Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="place-address" placeholder="Address" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" class="place-timings" placeholder="Working Timings (e.g. Mon-Fri 9AM-5PM)" required>
+            </div>
+            <button type="button" class="btn btn-secondary remove-place-btn">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        `;
+        container.appendChild(div);
         
-        try {
-            await this.makeRequest(`/appointments/${appointmentId}`, {
-                method: 'PATCH',
-                body: JSON.stringify({ prescription })
-            });
-            
-            alert('Prescription added successfully!');
-            this.loadSchedules();
-            
-        } catch (error) {
-            alert(error.message);
-        }
+        div.querySelector('.remove-place-btn').addEventListener('click', () => div.remove());
     }
-    
+
+    addEditWorkingPlace() {
+        const container = document.getElementById('editWorkingPlacesContainer');
+        const div = document.createElement('div');
+        div.className = 'working-place';
+        div.innerHTML = `
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" class="place-name" placeholder="Hospital/Clinic Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="place-address" placeholder="Address" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" class="place-timings" placeholder="Working Timings (e.g. Mon-Fri 9AM-5PM)" required>
+            </div>
+            <button type="button" class="btn btn-secondary remove-place-btn">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        `;
+        container.appendChild(div);
+        
+        div.querySelector('.remove-place-btn').addEventListener('click', () => div.remove());
+    }
+
+    // Profile editing
+    showEditProfileModal() {
+        const doctor = this.currentDoctor;
+        document.getElementById('editName').value = doctor.name;
+        document.getElementById('editPhone').value = doctor.phone;
+        document.getElementById('editSpecialty').value = doctor.specialty;
+        document.getElementById('editQualification').value = doctor.qualification;
+        document.getElementById('editExperience').value = doctor.experience;
+        document.getElementById('editFee').value = doctor.consultationFee;
+        
+        // Load working places
+        const container = document.getElementById('editWorkingPlacesContainer');
+        container.innerHTML = '';
+        doctor.workingPlaces.forEach(place => {
+            const div = document.createElement('div');
+            div.className = 'working-place';
+            div.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="place-name" value="${place.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="place-address" value="${place.address}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="place-timings" value="${place.timings}" required>
+                </div>
+                <button type="button" class="btn btn-secondary remove-place-btn">
+                    <i class="fas fa-times"></i> Remove
+                </button>
+            `;
+            container.appendChild(div);
+            div.querySelector('.remove-place-btn').addEventListener('click', () => div.remove());
+        });
+        
+        document.getElementById('editProfileModal').style.display = 'flex';
+    }
+
+    handleEditProfile(e) {
+        e.preventDefault();
+        const workingPlaces = this.collectWorkingPlaces('editWorkingPlacesContainer');
+        
+        this.currentDoctor.name = document.getElementById('editName').value;
+        this.currentDoctor.phone = document.getElementById('editPhone').value;
+        this.currentDoctor.specialty = document.getElementById('editSpecialty').value;
+        this.currentDoctor.qualification = document.getElementById('editQualification').value;
+        this.currentDoctor.experience = document.getElementById('editExperience').value;
+        this.currentDoctor.consultationFee = document.getElementById('editFee').value;
+        this.currentDoctor.workingPlaces = workingPlaces;
+        
+        const newImage = this.getUploadedImage('editPhoto');
+        if (newImage) {
+            this.currentDoctor.image = newImage;
+        }
+        
+        // Update in mock database
+        const doctorIndex = this.mockDatabase.doctors.findIndex(d => d.id === this.currentDoctor.id);
+        this.mockDatabase.doctors[doctorIndex] = this.currentDoctor;
+        localStorage.setItem('mockDoctors', JSON.stringify(this.mockDatabase.doctors));
+        localStorage.setItem('currentDoctor', JSON.stringify(this.currentDoctor));
+        
+        alert('Profile updated successfully!');
+        this.hideModals();
+        this.loadProfile();
+    }
+
+    // Utility methods
+    getUploadedImage(inputId) {
+        const fileInput = document.getElementById(inputId);
+        if (fileInput.files.length > 0) {
+            return URL.createObjectURL(fileInput.files[0]);
+        }
+        return null;
+    }
+
+    hideModals() {
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.style.display = 'none';
+        });
+    }
+
     handleNavigation(e) {
         e.preventDefault();
         const section = e.target.dataset.section;
@@ -606,13 +504,12 @@ class DoctorPortal {
         });
         document.getElementById(section).classList.add('active');
     }
-    
+
     logout() {
-        localStorage.removeItem('doctorToken');
-        localStorage.removeItem('doctorUser');
+        localStorage.removeItem('currentDoctor');
         location.reload();
     }
 }
 
-// Initialize the doctor portal
+// Initialize the portal
 const doctorPortal = new DoctorPortal();
