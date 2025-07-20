@@ -1,164 +1,165 @@
-// Initialize mock database if not exists
-if (!localStorage.getItem('mockDatabase')) {
-    const mockDatabase = {
-        doctors: [
-            {
-                id: 'doc1',
-                name: "Dr. Sarah Johnson",
-                specialty: "Cardiology",
-                qualification: "MD Cardiology - Harvard Medical School",
-                institution: "City General Hospital",
-                experience: "15 years",
-                workingPlaces: [
-                    {
-                        name: "City General Hospital",
-                        address: "123 Medical St, Health City",
-                        timings: "Mon-Fri: 9AM-5PM"
-                    }
-                ],
-                image: "https://randomuser.me/api/portraits/women/65.jpg",
-                availableSlots: ["09:00", "10:00", "14:00"]
-            },
-            {
-                id: 'doc2',
-                name: "Dr. Michael Chen",
-                specialty: "Neurology",
-                qualification: "MD Neurology - Johns Hopkins University",
-                institution: "Metro Medical Center",
-                experience: "12 years",
-                workingPlaces: [
-                    {
-                        name: "Metro Medical Center",
-                        address: "456 Health Ave, Medtown",
-                        timings: "Tue-Sat: 10AM-6PM"
-                    }
-                ],
-                image: "https://randomuser.me/api/portraits/men/75.jpg",
-                availableSlots: ["10:00", "11:00", "15:00"]
-            }
-        ],
-        appointments: [],
-        facilities: [
-            {
-                name: "Advanced Operation Theaters",
-                icon: "fas fa-procedures",
-                description: "State-of-the-art surgical facilities with modern equipment"
-            },
-            {
-                name: "Digital Imaging",
-                icon: "fas fa-x-ray",
-                description: "High-resolution MRI, CT Scan and X-ray machines"
-            }
-        ]
-    };
-    localStorage.setItem('mockDatabase', JSON.stringify(mockDatabase));
-}
-
-// DOM Elements
-const bookingModal = document.getElementById('bookingModal');
-const appointmentForm = document.getElementById('appointmentForm');
-const doctorSelect = document.getElementById('doctorSelect');
-const doctorsList = document.getElementById('doctorsList');
-const facilitiesGrid = document.querySelector('.facility-grid');
-
-// Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    loadDoctors();
-    loadFacilities();
-    setupEventListeners();
-});
-
-function loadDoctors() {
-    const db = JSON.parse(localStorage.getItem('mockDatabase'));
-    doctorsList.innerHTML = db.doctors.map(doctor => `
-        <div class="doctor-card">
-            <div class="doctor-image">
-                <img src="${doctor.image}" alt="${doctor.name}">
-            </div>
-            <div class="doctor-info">
-                <h3>${doctor.name}</h3>
-                <p class="specialty">${doctor.specialty}</p>
-                <p class="qualification">${doctor.qualification}</p>
-                <p class="institution">${doctor.institution}</p>
-                <div class="working-info">
-                    <p><i class="fas fa-map-marker-alt"></i> ${doctor.workingPlaces[0].name}</p>
-                    <p><i class="fas fa-clock"></i> ${doctor.workingPlaces[0].timings}</p>
-                </div>
-                <button class="btn btn-primary book-btn" data-id="${doctor.id}">Book Appointment</button>
-            </div>
-        </div>
-    `).join('');
-
-    // Populate doctor dropdown
-    doctorSelect.innerHTML = '<option value="">Select Doctor</option>' + 
-        db.doctors.map(doctor => `
-            <option value="${doctor.id}">Dr. ${doctor.name} - ${doctor.specialty}</option>
-        `).join('');
-}
-
-function loadFacilities() {
-    const db = JSON.parse(localStorage.getItem('mockDatabase'));
-    facilitiesGrid.innerHTML = db.facilities.map(facility => `
-        <div class="facility-card">
-            <i class="${facility.icon}"></i>
-            <h3>${facility.name}</h3>
-            <p>${facility.description}</p>
-        </div>
-    `).join('');
-}
-
-function setupEventListeners() {
-    // Book appointment buttons
-    document.querySelectorAll('.book-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const doctorId = this.getAttribute('data-id');
-            document.getElementById('doctorSelect').value = doctorId;
-            bookingModal.style.display = 'flex';
+    // ===== SMOOTH SCROLLING =====
+    document.querySelectorAll('.nav-link').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            this.classList.add('active');
         });
     });
 
-    // Close modal
-    document.querySelector('.close').addEventListener('click', function() {
-        bookingModal.style.display = 'none';
+    // ===== MOBILE MENU TOGGLE =====
+    const mobileMenuToggle = document.createElement('button');
+    mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    mobileMenuToggle.classList.add('mobile-menu-toggle');
+    document.querySelector('.header .container').appendChild(mobileMenuToggle);
+    
+    mobileMenuToggle.addEventListener('click', function() {
+        document.querySelector('.nav-menu').classList.toggle('show');
+        this.innerHTML = document.querySelector('.nav-menu').classList.contains('show') ? 
+            '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
     });
 
-    // Appointment form submission
-    appointmentForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        bookAppointment();
+    // ===== CONTACT FORM HANDLING =====
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: this.querySelector('input[type="text"]').value,
+                email: this.querySelector('input[type="email"]').value,
+                message: this.querySelector('textarea').value
+            };
+            
+            // Validation
+            if (!formData.name || !formData.email || !formData.message) {
+                showAlert('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (!validateEmail(formData.email)) {
+                showAlert('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Simulate form submission
+            simulateFormSubmission(formData)
+                .then(response => {
+                    showAlert('Thank you for your message! We will contact you soon.', 'success');
+                    this.reset();
+                })
+                .catch(error => {
+                    showAlert('There was an error submitting your message. Please try again.', 'error');
+                });
+        });
+    }
+
+    // ===== PORTAL REDIRECTIONS =====
+    document.querySelectorAll('.portal-buttons .btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isPatientPortal = this.textContent.trim().includes('Patient');
+            const portalType = isPatientPortal ? 'patient' : 'doctor';
+            
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting...';
+            this.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                window.location.href = `/${portalType}`;
+            }, 1500);
+        });
     });
 
-    // Close modal when clicking outside
-    window.addEventListener('click', function(e) {
-        if (e.target === bookingModal) {
-            bookingModal.style.display = 'none';
+    // ===== ANIMATIONS ON SCROLL =====
+    function initScrollAnimations() {
+        const animatedElements = document.querySelectorAll(
+            '.service-card, .facility-card, .doctor-intro-card, .about-content, .contact-content'
+        );
+        
+        animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+
+        function checkAnimation() {
+            animatedElements.forEach(el => {
+                const elTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elTop < windowHeight - 100) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }
+            });
         }
-    });
-}
+        
+        window.addEventListener('load', checkAnimation);
+        window.addEventListener('scroll', checkAnimation);
+    }
+    initScrollAnimations();
 
-function bookAppointment() {
-    const db = JSON.parse(localStorage.getItem('mockDatabase'));
-    const formData = new FormData(appointmentForm);
-    
-    const newAppointment = {
-        id: 'appt_' + Date.now(),
-        patientName: formData.get('patientName'),
-        patientEmail: formData.get('patientEmail'),
-        patientPhone: formData.get('patientPhone'),
-        date: formData.get('appointmentDate'),
-        time: formData.get('appointmentTime'),
-        doctorId: formData.get('doctorSelect'),
-        status: 'pending',
-        createdAt: new Date().toISOString()
-    };
+    // ===== ACTIVE NAV LINK ON SCROLL =====
+    function updateActiveNav() {
+        const scrollPosition = window.scrollY + 100;
+        
+        document.querySelectorAll('section').forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }
+    window.addEventListener('scroll', updateActiveNav);
 
-    db.appointments.push(newAppointment);
-    localStorage.setItem('mockDatabase', JSON.stringify(db));
-    
-    // Show success message
-    alert('Appointment booked successfully! You will be informed shortly.');
-    
-    // Reset form and close modal
-    appointmentForm.reset();
-    bookingModal.style.display = 'none';
-}
+    // ===== HELPER FUNCTIONS =====
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.textContent = message;
+        
+        document.body.appendChild(alertDiv);
+        
+        setTimeout(() => {
+            alertDiv.classList.add('fade-out');
+            setTimeout(() => alertDiv.remove(), 500);
+        }, 3000);
+    }
+
+    function simulateFormSubmission(data) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Simulate 90% success rate
+                Math.random() > 0.1 ? resolve(data) : reject(new Error('Server error'));
+            }, 1000);
+        });
+    }
+});

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HealthCare - Doctor Appointment Booking</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header class="header">
@@ -17,60 +17,278 @@
             <nav class="nav-menu">
                 <a href="#home" class="nav-link">Home</a>
                 <a href="#services" class="nav-link">Services</a>
-                <a href="#doctors" class="nav-link">Doctors</a>
-                <a href="#facilities" class="nav-link">Facilities</a>
-                <div class="portal-buttons">
-                    <a href="patient.html" class="btn btn-primary">
-                        <i class="fas fa-user"></i> Patient Portal
-                    </a>
-                    <a href="doctor.html" class="btn btn-secondary">
-                        <i class="fas fa-user-md"></i> Doctor Portal
-                    </a>
-                </div>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- Existing sections (hero, services, about) -->
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Your Health, Our Priority</h2>
+                    <p>Book appointments with qualified doctors easily and manage your healthcare journey</p>
+                    <div class="portal-buttons">
+                        <a href="/patient" class="btn btn-primary">
+                            <i class="fas fa-user"></i>
+                            Patient Portal
+                        </a>
+                        <a href="/doctor" class="btn btn-secondary">
+                            <i class="fas fa-user-md"></i>
+                            Doctor Portal
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.pexels.com/photos/4173251/pexels-photo-4173251.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Healthcare">
+                </div>
+            </div>
+        </section>
 
-        <!-- Facilities Section -->
-        <section class="facilities">
+        <section id="services" class="services">
+            <div class="container">
+                <h2>Our Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Easy Appointment Booking</h3>
+                        <p>Schedule appointments with your preferred doctors at your convenience</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-file-medical"></i>
+                        <h3>Medical Reports</h3>
+                        <p>Access and manage your medical reports and health records securely</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-stethoscope"></i>
+                        <h3>Qualified Doctors</h3>
+                        <p>Connect with experienced and certified healthcare professionals</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Round-the-clock customer support for all your healthcare needs</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>About HealthCare</h2>
+                        <p>We are committed to providing accessible and quality healthcare services through our innovative digital platform. Our mission is to bridge the gap between patients and healthcare providers.</p>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Easy online appointment booking</li>
+                            <li><i class="fas fa-check"></i> Secure medical record management</li>
+                            <li><i class="fas fa-check"></i> Qualified healthcare professionals</li>
+                            <li><i class="fas fa-check"></i> 24/7 customer support</li>
+                        </ul>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://images.pexels.com/photos/4173239/pexels-photo-4173239.jpeg?auto=compress&cs=tinysrgb&w=600" alt="About Us">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        @@ .. @@
+         this.setupEventListeners();
+     }
+     
+     setupEventListeners() {
+         // Modal controls
+         document.querySelectorAll('.close').forEach(close => {
+            address: '123 Main St, City, State 12345',
+            bloodGroup: 'O+',
+            weight: 70.5,
+            height: 175,
+            profilePicture: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300'
+         });
+         
+        // Profile picture change
+        document.getElementById('changeProfilePicBtn').addEventListener('click', () => {
+            document.getElementById('profilePicInput').click();
+        });
+        
+        document.getElementById('profilePicInput').addEventListener('change', (e) => {
+            this.handleProfilePictureChange(e);
+        });
+        
+         // Auth form switching
+                localStorage.setItem('patientUser', JSON.stringify(this.user));
+                
+                this.showDashboard();
+                this.showSuccessMessage('Registration successful! Welcome to HealthCare.');
+                this.loadUserData();
+                
+            } catch (error) {
+        </section>
+
+        <section id="facilities" class="facilities">
             <div class="container">
                 <h2>Our Medical Facilities</h2>
-                <div class="facility-grid">
-                    <!-- Facility cards will be loaded via JS -->
+                <div class="facilities-grid">
+                    <div class="facility-card">
+                        <i class="fas fa-hospital"></i>
+                        <h3>24/7 Emergency Care</h3>
+                        <p>Round-the-clock emergency medical services with qualified emergency physicians</p>
+                    </div>
+                    <div class="facility-card">
+                        <i class="fas fa-x-ray"></i>
+                        <h3>Advanced Diagnostics</h3>
+                        <p>State-of-the-art diagnostic equipment including MRI, CT scan, and digital X-ray</p>
+                    </div>
+                    <div class="facility-card">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>Cardiac Care Unit</h3>
+                        <p>Specialized cardiac care with modern monitoring and treatment facilities</p>
+                    </div>
+                    <div class="facility-card">
+                        <i class="fas fa-baby"></i>
+                        <h3>Maternity Ward</h3>
+                        <p>Complete maternity care with NICU facilities for newborn intensive care</p>
+                    </div>
+                    <div class="facility-card">
+                        <i class="fas fa-pills"></i>
+                        <h3>Pharmacy</h3>
+                        <p>24/7 in-house pharmacy with all essential medications and prescriptions</p>
+                    </div>
+                    <div class="facility-card">
+                        <i class="fas fa-ambulance"></i>
+                        <h3>Ambulance Service</h3>
+                        <p>Emergency ambulance service with trained paramedics and life support equipment</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Doctors Section -->
-        <section class="doctors-intro">
+        <section id="doctors-intro" class="doctors-intro">
             <div class="container">
                 <h2>Meet Our Expert Doctors</h2>
-                <div class="doctor-search">
-                    <input type="text" id="doctorSearch" placeholder="Search doctors by name or specialty">
-                    <input type="number" id="budgetFilter" placeholder="Max consultation fee">
-                    <button id="searchBtn" class="btn btn-primary">Search</button>
-                </div>
-                <div class="doctor-grid" id="doctorsList">
-                    <!-- Doctors will be loaded via JS -->
+                <div class="doctors-grid">
+                    <div class="doctor-intro-card">
+                        <div class="doctor-image">
+                            <img src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Dr. Sarah Johnson">
+                        </div>
+                        <div class="doctor-intro-info">
+                            <h3>Dr. Sarah Johnson</h3>
+                            <p class="specialty">Cardiologist</p>
+                            <p class="qualification">MD Cardiology - Harvard Medical School</p>
+                            <p class="institution">Senior Consultant at City General Hospital</p>
+                            <div class="working-info">
+                                <p><i class="fas fa-map-marker-alt"></i> City General Hospital, Downtown</p>
+                                <p><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doctor-intro-card">
+                        <div class="doctor-image">
+                            <img src="https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Dr. Michael Chen">
+                        </div>
+                        <div class="doctor-intro-info">
+                            <h3>Dr. Michael Chen</h3>
+                            <p class="specialty">Neurologist</p>
+                            <p class="qualification">MD Neurology - Johns Hopkins University</p>
+                            <p class="institution">Head of Neurology at Metro Medical Center</p>
+                            <div class="working-info">
+                                <p><i class="fas fa-map-marker-alt"></i> Metro Medical Center, Uptown</p>
+                                <p><i class="fas fa-clock"></i> Tue-Sat: 10:00 AM - 6:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doctor-intro-card">
+                        <div class="doctor-image">
+                            <img src="https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Dr. Emily Rodriguez">
+                        </div>
+                        <div class="doctor-intro-info">
+                            <h3>Dr. Emily Rodriguez</h3>
+                            <p class="specialty">Pediatrician</p>
+                            <p class="qualification">MD Pediatrics - Stanford Medical School</p>
+                            <p class="institution">Chief Pediatrician at Children's Care Hospital</p>
+                            <div class="working-info">
+                                <p><i class="fas fa-map-marker-alt"></i> Children's Care Hospital, Westside</p>
+                                <p><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 4:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Booking Modal -->
-        <div id="bookingModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Book Appointment</h2>
-                <form id="appointmentForm">
-                    <!-- Form fields -->
-                    <button type="submit" class="btn btn-primary">Book Appointment</button>
-                </form>
+         <section id="about" class="about">
+            <div class="container">
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Address</h3>
+                                <p>123 Healthcare Street, Medical City, MC 12345</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Phone</h3>
+                                <p>+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>Email</h3>
+                                <p>info@healthcare.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>HealthCare</h3>
+                    <p>Your trusted partner in healthcare management</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 HealthCare. All rights reserved.</p>
             </div>
         </div>
-    </main>
+    </footer>
 
     <script src="main.js"></script>
 </body>
