@@ -13,12 +13,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     loadDashboardData();
-    loadUserProfile();
+    loadUserProfile();  // Moved this up since profile is now first
     populateDoctorDropdown();
     populatePatientSelect();
     initializeDateInputs();
     loadDoctorsForSearch();
 });
+
+// Load user profile - moved to top since profile section is first
+function loadUserProfile() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('welcome-message').textContent = 
+        `Welcome back, ${userData.firstName}! How are you feeling today?`;
+    
+    // Update profile section
+    document.getElementById('profile-name').textContent = 
+        `${userData.firstName} ${userData.lastName}`;
+    document.getElementById('profile-email').textContent = userData.email;
+    document.getElementById('profile-phone').textContent = userData.phone || '-';
+    document.getElementById('profile-dob').textContent = userData.dateOfBirth || '-';
+    document.getElementById('profile-gender').textContent = userData.gender || '-';
+    document.getElementById('profile-blood-group').textContent = userData.bloodGroup || '-';
+    document.getElementById('profile-weight').textContent = userData.weight || '-';
+    document.getElementById('profile-height').textContent = userData.height || '-';
+    document.getElementById('profile-address').textContent = userData.address || '-';
+    
+    // Calculate BMI
+    if (userData.weight && userData.height) {
+        const bmi = (userData.weight / Math.pow(userData.height / 100, 2)).toFixed(1);
+        document.getElementById('profile-bmi').textContent = bmi;
+    }
+    
+    // Update profile picture
+    if (userData.profilePicture) {
+        document.getElementById('profile-picture').src = userData.profilePicture;
+    }
+}
 
 // Load dashboard data
 function loadDashboardData() {
@@ -56,38 +88,6 @@ function updateDashboardStats() {
         recentActivity.innerHTML = recentAppointments.map(apt => 
             `<p><small>${apt.date} - ${apt.doctorName}</small></p>`
         ).join('');
-    }
-}
-
-// Load user profile
-function loadUserProfile() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('welcome-message').textContent = 
-        `Welcome back, ${userData.firstName}! How are you feeling today?`;
-    
-    // Update profile section
-    document.getElementById('profile-name').textContent = 
-        `${userData.firstName} ${userData.lastName}`;
-    document.getElementById('profile-email').textContent = userData.email;
-    document.getElementById('profile-phone').textContent = userData.phone || '-';
-    document.getElementById('profile-dob').textContent = userData.dateOfBirth || '-';
-    document.getElementById('profile-gender').textContent = userData.gender || '-';
-    document.getElementById('profile-blood-group').textContent = userData.bloodGroup || '-';
-    document.getElementById('profile-weight').textContent = userData.weight || '-';
-    document.getElementById('profile-height').textContent = userData.height || '-';
-    document.getElementById('profile-address').textContent = userData.address || '-';
-    
-    // Calculate BMI
-    if (userData.weight && userData.height) {
-        const bmi = (userData.weight / Math.pow(userData.height / 100, 2)).toFixed(1);
-        document.getElementById('profile-bmi').textContent = bmi;
-    }
-    
-    // Update profile picture
-    if (userData.profilePicture) {
-        document.getElementById('profile-picture').src = userData.profilePicture;
     }
 }
 
