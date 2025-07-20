@@ -10,7 +10,7 @@
 </head>
 <body>
     <!-- Login Modal -->
-    <div id="loginModal" class="modal" style="display: flex;">
+    <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Patient Login</h2>
@@ -94,7 +94,7 @@
     </div>
 
     <!-- Patient Dashboard -->
-    <div id="patientDashboard" class="dashboard" style="display: none;">
+    <div id="patientDashboard" class="dashboard">
         <div class="dashboard-header">
             <div class="container">
                 <div class="logo">
@@ -128,11 +128,7 @@
                         </button>
                     </div>
                     <div class="appointments-list" id="appointmentsList">
-                        <div class="empty-state">
-                            <i class="fas fa-calendar-times"></i>
-                            <h3>No appointments scheduled</h3>
-                            <p>Your upcoming appointments will appear here</p>
-                        </div>
+                        <!-- Filled dynamically by JavaScript -->
                     </div>
                 </div>
 
@@ -145,11 +141,7 @@
                         </button>
                     </div>
                     <div class="reports-list" id="reportsList">
-                        <div class="empty-state">
-                            <i class="fas fa-file-medical"></i>
-                            <h3>No medical reports</h3>
-                            <p>Your medical reports will appear here</p>
-                        </div>
+                        <!-- Filled dynamically by JavaScript -->
                     </div>
                 </div>
 
@@ -210,7 +202,9 @@
                     <label for="appointmentDoctor">Select Doctor</label>
                     <select id="appointmentDoctor" required>
                         <option value="">Select Doctor</option>
-                        <!-- Populated via JS -->
+                        <option value="Dr. Sarah Johnson">Dr. Sarah Johnson (Cardiology)</option>
+                        <option value="Dr. Michael Chen">Dr. Michael Chen (Dermatology)</option>
+                        <option value="Dr. Robert Williams">Dr. Robert Williams (Neurology)</option>
                     </select>
                 </div>
                 <div class="form-row">
@@ -222,7 +216,10 @@
                         <label for="appointmentTime">Time</label>
                         <select id="appointmentTime" required>
                             <option value="">Select Time</option>
-                            <!-- Populated via JS -->
+                            <option value="09:00 AM">09:00 AM</option>
+                            <option value="10:30 AM">10:30 AM</option>
+                            <option value="02:00 PM">02:00 PM</option>
+                            <option value="04:30 PM">04:30 PM</option>
                         </select>
                     </div>
                 </div>
@@ -262,14 +259,6 @@
         </div>
     </div>
 
-    <!-- View Report Modal -->
-    <div id="viewReportModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="reportDetails"></div>
-        </div>
-    </div>
-
     <!-- Edit Profile Modal -->
     <div id="editProfileModal" class="modal">
         <div class="modal-content">
@@ -290,7 +279,15 @@
                     <div class="form-group">
                         <label for="editBloodGroup">Blood Group</label>
                         <select id="editBloodGroup" required>
-                            <!-- Options populated via JS -->
+                            <option value="">Select</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
                         </select>
                     </div>
                     <div class="form-group">
