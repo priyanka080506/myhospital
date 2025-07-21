@@ -5,17 +5,17 @@ let users = {
     patients: [
         {
             id: 1,
-            email: 'manoj@gmail.com',
-            password: 'manoj@1234',
-            firstName: 'Manoj',
-            lastName: 'Gowda',
-            phone: '+91 8792-33893',
-            dateOfBirth: '2003-05-08',
+            email: 'patient@demo.com',
+            password: 'password',
+            firstName: 'John',
+            lastName: 'Doe',
+            phone: '+1-555-0123',
+            dateOfBirth: '1990-05-15',
             bloodGroup: 'A+',
             gender: 'male',
             weight: 75,
             height: 175,
-            address: '123 Chandra layout, Mysure',
+            address: '123 Main St, City, State 12345',
             profilePicture: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=300'
         },
         {
@@ -37,22 +37,22 @@ let users = {
     doctors: [
         {
             id: 1,
-            email: 'amog@gmail.com',
-            password: 'amog@1234',
-            firstName: 'Dr. Amog',
-            lastName: 'S',
-            phone: '+91 94493 32309',
+            email: 'doctor@demo.com',
+            password: 'password',
+            firstName: 'Dr. Sarah',
+            lastName: 'Johnson',
+            phone: '+1-555-0125',
             specialization: 'cardiology',
             degree: 'MBBS, MD',
-            institution: 'Harvard Medical University',
-            experience: 5,
-            consultationFee: 5,
-            workingPlace: 'Jaydeva hospital Mysure',
+            institution: 'Johns Hopkins University',
+            experience: 15,
+            consultationFee: 150,
+            workingPlace: 'City General Hospital',
             workingDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
             startTime: '09:00',
             endTime: '17:00',
             bio: 'Experienced cardiologist with a focus on preventive cardiology and heart disease management.',
-            profilePicture: 'Amog.jpg.jpeg'
+            profilePicture: 'https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=300'
         },
         {
             id: 2,
@@ -230,11 +230,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 experience: parseInt(formData.get('experience')),
                 consultationFee: parseInt(formData.get('consultationFee')),
                 workingPlace: formData.get('workingPlace'),
+                licenseId: formData.get('licenseId'),
                 workingDays: workingDays,
                 startTime: formData.get('startTime'),
                 endTime: formData.get('endTime'),
                 bio: formData.get('bio') || '',
-                profilePicture: 'Amog.jpg.jpeg'
+                profilePicture: 'https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=300'
             };
             
             // Check if email already exists

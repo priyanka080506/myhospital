@@ -24,13 +24,98 @@
 
     <main class="dashboard-content">
         <div class="container">
+            <!-- Overview Section -->
+            <div id="overview-section" class="section active">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Welcome, Doctor!</h3>
+                        <p id="welcome-message">Ready to help your patients today.</p>
+                        <button class="btn btn-primary" onclick="showSection('schedules')">View Appointments</button>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Today's Schedule</h3>
+                        <p><strong>Total Appointments:</strong> <span id="today-appointments">0</span></p>
+                        <p><strong>Completed:</strong> <span id="completed-appointments">0</span></p>
+                        <p><strong>Pending:</strong> <span id="pending-appointments">0</span></p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Patient Reports</h3>
+                        <p><strong>New Reports:</strong> <span id="new-reports">0</span></p>
+                        <p><strong>Total Reports:</strong> <span id="total-patient-reports">0</span></p>
+                        <button class="btn btn-secondary btn-small" onclick="showSection('reports')">View Reports</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedules Section -->
+            <div id="schedules-section" class="section">
+                <div class="dashboard-card">
+                    <h3>Appointment Schedule</h3>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <label for="schedule-date">Select Date:</label>
+                        <input type="date" id="schedule-date" onchange="loadScheduleForDate()">
+                    </div>
+                    
+                    <div id="schedule-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Patient</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-table-body">
+                                <!-- Schedule will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Reports Section -->
+            <div id="reports-section" class="section">
+                <div class="dashboard-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Patient Reports</h3>
+                        <button class="btn btn-primary" onclick="openAddPatientReportModal()">Add Report for Patient</button>
+                    </div>
+                    
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <input type="text" id="patient-search" placeholder="Search by patient name...">
+                            <button class="btn btn-primary" onclick="searchPatientReports()">Search</button>
+                        </div>
+                    </div>
+                    
+                    <div id="patient-reports-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Report Type</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patient-reports-table-body">
+                                <!-- Patient reports will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- Profile Section -->
             <div id="profile-section" class="section">
                 <div class="profile-section">
                     <div class="profile-header">
                         <img id="profile-picture" src="Amog.jpg.jpeg" alt="Profile Picture" class="profile-picture">
                         <div class="profile-info">
-                            <h2 id="profile-name">Dr. Amog</h2>
+                            <h2 id="profile-name">Dr Amog</h2>
                             <p id="profile-email">amog@gmail.com</p>
                             <p id="profile-specialization">Cardiology</p>
                             <button class="btn btn-secondary" onclick="openEditProfileModal()">Edit Profile</button>
@@ -41,30 +126,32 @@
                     <div class="dashboard-grid">
                         <div class="dashboard-card">
                             <h3>Professional Information</h3>
-                            <p><strong>Degree:</strong> <span id="profile-degree"> MBA</span></p>
-                            <p><strong>Institution:</strong> <span id="profile-institution">Harward Medical College</span></p>
-                            <p><strong>Experience:</strong> <span id="profile-experience">4</span> years</p>
-                            <p><strong>Consultation Fee:</strong> <span id="profile-fee">₹400</span></p>
+                            <p><strong>Degree:</strong> <span id="profile-degree">MBA</span></p>
+                            <p><strong>Institution:</strong> <span id="profile-institution">Harvard Medical University</span></p>
+                            <p><strong>Experience:</strong> <span id="profile-experience">3</span> years</p>
+                            <p><strong>Consultation Fee:</strong> $<span id="profile-fee">₹300</span></p>
                         </div>
                         
                         <div class="dashboard-card">
                             <h3>Working Details</h3>
-                            <p><strong>Working Place:</strong> <span id="profile-workplace">City Center Hospital, Banglore</span></p>
+                            <p><strong>Working Place:</strong> <span id="profile-workplace">Sparsh Hospital</span></p>
                             <p><strong>Working Days:</strong> <span id="profile-working-days">Mon,Wed,Thurs,Fri,Sat,Sun</span></p>
-                            <p><strong>Working Hours:</strong> <span id="profile-working-hours">6:00AM-5:00PM</span></p>
+                            <p><strong>Working Hours:</strong> <span id="profile-working-hours">7:00AM-5:00PM</span></p>
                         </div>
                         
                         <div class="dashboard-card">
                             <h3>Contact Information</h3>
-                            <p><strong>Phone:</strong> <span id="profile-phone">(+91) 9449332309</span></p>
+                            <p><strong>Phone:</strong> <span id="profile-phone">-</span></p>
                             <p><strong>Bio:</strong></p>
                             <p id="profile-bio">Saving lives through Medicine</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <!-- Add Patient Report Modal -->
+    <!-- Add Patient Report Modal -->
     <div id="add-patient-report-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeAddPatientReportModal()">&times;</span>
@@ -150,7 +237,7 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="edit-fee">Consultation Fee ($):</label>
+                        <label for="edit-fee">Consultation Fee (₹):</label>
                         <input type="number" id="edit-fee" min="0" required>
                     </div>
                     <div class="form-group">
@@ -182,92 +269,6 @@
         </div>
     </div>
 
-            <!-- Overview Section -->
-            <div id="overview-section" class="section active">
-                <div class="dashboard-grid">
-                    <div class="dashboard-card">
-                        <h3>Welcome, Doctor!</h3>
-                        <p id="welcome-message">Ready to help your patients today.</p>
-                        <button class="btn btn-primary" onclick="showSection('schedules')">View Appointments</button>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>Today's Schedule</h3>
-                        <p><strong>Total Appointments:</strong> <span id="today-appointments">0</span></p>
-                        <p><strong>Completed:</strong> <span id="completed-appointments">0</span></p>
-                        <p><strong>Pending:</strong> <span id="pending-appointments">0</span></p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>Patient Reports</h3>
-                        <p><strong>New Reports:</strong> <span id="new-reports">0</span></p>
-                        <p><strong>Total Reports:</strong> <span id="total-patient-reports">0</span></p>
-                        <button class="btn btn-secondary btn-small" onclick="showSection('reports')">View Reports</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Schedules Section -->
-            <div id="schedules-section" class="section">
-                <div class="dashboard-card">
-                    <h3>Appointment Schedule</h3>
-                    
-                    <div style="margin-bottom: 2rem;">
-                        <label for="schedule-date">Select Date:</label>
-                        <input type="date" id="schedule-date" onchange="loadScheduleForDate()">
-                    </div>
-                    
-                    <div id="schedule-list">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Patient</th>
-                                    <th>Reason</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="schedule-table-body">
-                                <!-- Schedule will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Patient Reports Section -->
-            <div id="reports-section" class="section">
-                <div class="dashboard-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                        <h3>Patient Reports</h3>
-                        <button class="btn btn-primary" onclick="openAddPatientReportModal()">Add Report for Patient</button>
-                    </div>
-                    
-                    <div class="search-container">
-                        <div class="search-bar">
-                            <input type="text" id="patient-search" placeholder="Search by patient name...">
-                            <button class="btn btn-primary" onclick="searchPatientReports()">Search</button>
-                        </div>
-                    </div>
-                    
-                    <div id="patient-reports-list">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Patient</th>
-                                    <th>Report Type</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="patient-reports-table-body">
-                                <!-- Patient reports will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
     <script src="doctor-dashboard.js"></script>
 </body>
 </html>
