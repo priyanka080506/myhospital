@@ -582,3 +582,125 @@ th {
     color: #e74c3c;
     font-weight: 600;
 }
+
+/* ================ */
+/* NEW ADDITIONS FOR REPORTS/APPOINTMENTS */
+/* ================ */
+
+/* Alert Messages */
+#message-container {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+#success-message, #error-message {
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-weight: 500;
+    display: none;
+    animation: slideIn 0.3s ease-out;
+    max-width: 80%;
+    text-align: center;
+}
+
+#success-message {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#error-message {
+    background-color: #f44336;
+    color: white;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhanced Status Badges */
+.status-scheduled {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #E3F2FD;
+    color: #1976D2;
+}
+
+.status-completed {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #E8F5E9;
+    color: #388E3C;
+}
+
+.status-cancelled {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #FFEBEE;
+    color: #D32F2F;
+}
+
+/* Table Hover Effects */
+#appointments-table-body tr,
+#reports-table-body tr {
+    transition: background-color 0.2s;
+}
+
+#appointments-table-body tr:hover,
+#reports-table-body tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Form Focus States */
+#booking-form input:focus,
+#booking-form select:focus,
+#booking-form textarea:focus,
+#add-report-form input:focus,
+#add-report-form select:focus,
+#add-report-form textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+/* File Upload Styling */
+#report-file {
+    padding: 8px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+#report-file:hover {
+    border-color: #667eea;
+    background-color: #f8f9fa;
+}
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+    #appointments-list table,
+    #reports-list table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    #appointments-table-body td:nth-child(3),
+    #appointments-table-body th:nth-child(3),
+    #reports-table-body td:nth-child(3),
+    #reports-table-body th:nth-child(3) {
+        display: none;
+    }
+}
+
+/* Button Active States */
+.btn-small:active {
+    transform: translateY(1px);
+}

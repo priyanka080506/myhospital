@@ -13,10 +13,113 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     loadDashboardData();
-    loadUserProfile();
+    loadUserProfile();  // Profile first
     populatePatientDropdown();
     initializeDateInputs();
     loadTodaySchedule();
+});
+
+// Load user profile (moved to top)
+function loadUserProfile() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('welcome-message').textContent = 
+        `Welcome, Dr. ${userData.lastName}! Ready to help your patients today.`;
+    
+    // Update profile section
+    document.getElementById('profile-name').textContent = 
+        `Dr. ${userData.firstName} ${userData.lastName}`;
+    document.getElementById('profile-email').textContent = userData.email;
+    document.getElementById('profile-specialization').textContent = 
+        userData.specialization.replace('-', ' ').toUpperCase();
+    document.getElementById('profile-phone').textContent = userData.phone || '-';
+    document.getElementById('profile-degree').textContent = userData.degree || '-';
+    document.getElementById('profile-institution').textContent = userData.institution || '-';
+    document.getElementById('profile-experience').textContent = userData.experience || '-';
+    document.getElementById('profile-fee').textContent = userData.consultationFee || '-';
+    document.getElementById('profile-workplace').textContent = userData.workingPlace || '-';
+    document.getElementById('profile-working-days').textContent = 
+        formatWorkingDays(userData.workingDays) || '-';
+    document.getElementById('profile-working-hours').textContent = 
+        `${userData.startTime} - ${userData.endTime}` || '-';
+    document.getElementById('profile-bio').textContent = userData.bio || '-';
+    document.getElementById('profile-license').textContent = userData.licenseId || '-';
+    
+    // Update profile picture
+    if (userData.profilePicture) {
+        document.getElementById('profile-picture').src = userData.profilePicture;
+    }
+}
+
+// Profile-related functions
+function openEditProfileModal() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('edit-first-name').value = userData.firstName;
+    document.getElementById('edit-last-name').value = userData.lastName;
+    document.getElementById('edit-phone').value = userData.phone || '';
+    document.getElementById('edit-fee').value = userData.consultationFee || '';
+    document.getElementById('edit-workplace').value = userData.workingPlace || '';
+    document.getElementById('edit-start-time').value = userData.startTime || '';
+    document.getElementById('edit-end-time').value = userData.endTime || '';
+    document.getElementById('edit-bio').value = userData.bio || '';
+    
+    document.getElementById('edit-profile-modal').style.display = 'block';
+}
+
+function closeEditProfileModal() {
+    document.getElementById('edit-profile-modal').style.display = 'none';
+}
+
+function changeProfilePicture() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                document.getElementById('profile-picture').src = imageUrl;
+                updateUserData({ profilePicture: imageUrl });
+                showSuccessMessage('Profile picture updated successfully!');
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    input.click();
+}
+
+// Edit profile form handler
+document.addEventListener('DOMContentLoaded', function() {
+    const editProfileForm = document.getElementById('edit-profile-form');
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const updateData = {
+                firstName: document.getElementById('edit-first-name').value,
+                lastName: document.getElementById('edit-last-name').value,
+                phone: document.getElementById('edit-phone').value,
+                consultationFee: parseInt(document.getElementById('edit-fee').value) || 0,
+                workingPlace: document.getElementById('edit-workplace').value,
+                startTime: document.getElementById('edit-start-time').value,
+                endTime: document.getElementById('edit-end-time').value,
+                bio: document.getElementById('edit-bio').value
+            };
+            
+            if (updateUserData(updateData)) {
+                closeEditProfileModal();
+                showSuccessMessage('Profile updated successfully!');
+                loadUserProfile();
+            } else {
+                alert('Failed to update profile!');
+            }
+        });
+    }
 });
 
 // Load dashboard data
@@ -70,39 +173,6 @@ function updateDashboardStats() {
         }).length;
     
     document.getElementById('total-patient-reports').textContent = patientReports.length;
-}
-
-// Load user profile
-function loadUserProfile() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('welcome-message').textContent = 
-        `Welcome, Dr. ${userData.lastName}! Ready to help your patients today.`;
-    
-    // Update profile section
-    document.getElementById('profile-name').textContent = 
-        `Dr. ${userData.firstName} ${userData.lastName}`;
-    document.getElementById('profile-email').textContent = userData.email;
-    document.getElementById('profile-specialization').textContent = 
-        userData.specialization.replace('-', ' ').toUpperCase();
-    document.getElementById('profile-phone').textContent = userData.phone || '-';
-    document.getElementById('profile-degree').textContent = userData.degree || '-';
-    document.getElementById('profile-institution').textContent = userData.institution || '-';
-    document.getElementById('profile-experience').textContent = userData.experience || '-';
-    document.getElementById('profile-fee').textContent = userData.consultationFee || '-';
-    document.getElementById('profile-workplace').textContent = userData.workingPlace || '-';
-    document.getElementById('profile-working-days').textContent = 
-        formatWorkingDays(userData.workingDays) || '-';
-    document.getElementById('profile-working-hours').textContent = 
-        `${userData.startTime} - ${userData.endTime}` || '-';
-    document.getElementById('profile-bio').textContent = userData.bio || '-';
-    document.getElementById('profile-license').textContent = userData.licenseId || '-';
-    
-    // Update profile picture
-    if (userData.profilePicture) {
-        document.getElementById('profile-picture').src = userData.profilePicture;
-    }
 }
 
 // Show/hide sections
@@ -313,26 +383,6 @@ function closeViewReportModal() {
     document.getElementById('view-report-modal').style.display = 'none';
 }
 
-function openEditProfileModal() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('edit-first-name').value = userData.firstName;
-    document.getElementById('edit-last-name').value = userData.lastName;
-    document.getElementById('edit-phone').value = userData.phone || '';
-    document.getElementById('edit-fee').value = userData.consultationFee || '';
-    document.getElementById('edit-workplace').value = userData.workingPlace || '';
-    document.getElementById('edit-start-time').value = userData.startTime || '';
-    document.getElementById('edit-end-time').value = userData.endTime || '';
-    document.getElementById('edit-bio').value = userData.bio || '';
-    
-    document.getElementById('edit-profile-modal').style.display = 'block';
-}
-
-function closeEditProfileModal() {
-    document.getElementById('edit-profile-modal').style.display = 'none';
-}
-
 // Add patient report
 document.addEventListener('DOMContentLoaded', function() {
     const addPatientReportForm = document.getElementById('add-patient-report-form');
@@ -384,35 +434,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Edit profile
-document.addEventListener('DOMContentLoaded', function() {
-    const editProfileForm = document.getElementById('edit-profile-form');
-    if (editProfileForm) {
-        editProfileForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const updateData = {
-                firstName: document.getElementById('edit-first-name').value,
-                lastName: document.getElementById('edit-last-name').value,
-                phone: document.getElementById('edit-phone').value,
-                consultationFee: parseInt(document.getElementById('edit-fee').value) || 0,
-                workingPlace: document.getElementById('edit-workplace').value,
-                startTime: document.getElementById('edit-start-time').value,
-                endTime: document.getElementById('edit-end-time').value,
-                bio: document.getElementById('edit-bio').value
-            };
-            
-            if (updateUserData(updateData)) {
-                closeEditProfileModal();
-                showSuccessMessage('Profile updated successfully!');
-                loadUserProfile();
-            } else {
-                alert('Failed to update profile!');
-            }
-        });
-    }
-});
-
 // View patient report
 function viewPatientReport(reportId) {
     const report = patientReports.find(r => r.id === reportId);
@@ -431,27 +452,6 @@ function viewPatientReport(reportId) {
         `;
         openViewReportModal();
     }
-}
-
-// Change profile picture
-function changeProfilePicture() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageUrl = e.target.result;
-                document.getElementById('profile-picture').src = imageUrl;
-                updateUserData({ profilePicture: imageUrl });
-                showSuccessMessage('Profile picture updated successfully!');
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    input.click();
 }
 
 // Show success message
