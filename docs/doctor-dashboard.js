@@ -343,6 +343,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const currentUser = getCurrentUser();
             const patientId = parseInt(document.getElementById('patient-select').value);
             const patient = patients.find(p => p.id === patientId);
+            
+            if (!patient) {
+                alert('Please select a patient');
+                return;
+            }
+            
             const fileInput = document.getElementById('patient-report-file');
             let fileName = '';
             
@@ -371,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function() {
             patientReports.push(reportData);
             
             closeAddPatientReportModal();
-            showSuccessMessage('Report added successfully to patient profile!');
+            showSuccessMessage('Report added successfully!');
             loadPatientReports();
             updateDashboardStats();
         });

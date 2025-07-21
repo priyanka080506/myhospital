@@ -132,7 +132,9 @@ function populateDoctorDropdown() {
     const doctorSelect = document.getElementById('doctor-select');
     if (doctorSelect) {
         doctorSelect.innerHTML = '<option value="">Choose a doctor</option>';
-        allDoctors.forEach(doctor => {
+        // Get all doctors from auth.js
+        const doctors = getAllDoctors();
+        doctors.forEach(doctor => {
             const option = document.createElement('option');
             option.value = doctor.id;
             option.textContent = `Dr. ${doctor.firstName} ${doctor.lastName} - ${doctor.specialization.replace('-', ' ')} (₹${doctor.consultationFee})`;
@@ -143,6 +145,7 @@ function populateDoctorDropdown() {
 
 // Load all doctors for search
 function loadAllDoctors() {
+    allDoctors = getAllDoctors();
     displayAllDoctors();
 }
 
@@ -390,7 +393,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const currentUser = getCurrentUser();
             const doctorId = parseInt(document.getElementById('doctor-select').value);
-            const doctor = allDoctors.find(d => d.id === doctorId);
+            const doctors = getAllDoctors();
+            const doctor = doctors.find(d => d.id === doctorId);
+            
+            if (!doctor) {
+                alert('Please select a doctor');
+                return;
+            }
             
             const appointmentData = {
                 id: Date.now(), // Unique ID
