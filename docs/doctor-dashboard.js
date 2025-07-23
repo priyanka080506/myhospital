@@ -40,7 +40,7 @@ const mockPatientReports = [
         type: 'consultation',
         date: '2025-01-15',
         notes: 'Patient shows good recovery progress',
-        fileName: 'consultation_notes.pdf'
+        fileName: 'bloodtest.jpeg'
     },
     {
         id: 4002,
