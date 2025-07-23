@@ -38,7 +38,7 @@ const mockReports = [
         doctor: 'Dr. Sarah Johnson',
         date: '2025-01-10',
         notes: 'All blood parameters are normal',
-        fileName: 'blood_test_report.pdf'
+        fileName: 'bloodtest.jpeg'
     },
     {
         id: 2002,
