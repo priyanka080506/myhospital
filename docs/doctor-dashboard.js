@@ -34,7 +34,7 @@ const mockPatientReports = [
     {
         id: 4001,
         patientId: 1,
-        patientName: 'John Doe',
+        patientName: 'Manoj',
         doctorId: 1,
         doctorName: 'Dr. Sarah Johnson',
         type: 'consultation',
