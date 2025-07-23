@@ -4,6 +4,57 @@ let doctorAppointments = [];
 let patientReports = [];
 let patients = [];
 
+// Mock data for testing
+const mockDoctorAppointments = [
+    {
+        id: 3001,
+        patientId: 1,
+        patientName: 'John Doe',
+        doctorId: 1,
+        doctorName: 'Dr. Sarah Johnson',
+        date: '2025-01-20',
+        time: '10:00',
+        reason: 'Regular checkup',
+        status: 'scheduled'
+    },
+    {
+        id: 3002,
+        patientId: 2,
+        patientName: 'Jane Smith',
+        doctorId: 1,
+        doctorName: 'Dr. Sarah Johnson',
+        date: '2025-01-20',
+        time: '11:00',
+        reason: 'Heart consultation',
+        status: 'scheduled'
+    }
+];
+
+const mockPatientReports = [
+    {
+        id: 4001,
+        patientId: 1,
+        patientName: 'John Doe',
+        doctorId: 1,
+        doctorName: 'Dr. Sarah Johnson',
+        type: 'consultation',
+        date: '2025-01-15',
+        notes: 'Patient shows good recovery progress',
+        fileName: 'consultation_notes.pdf'
+    },
+    {
+        id: 4002,
+        patientId: 2,
+        patientName: 'Jane Smith',
+        doctorId: 1,
+        doctorName: 'Dr. Sarah Johnson',
+        type: 'diagnosis',
+        date: '2025-01-12',
+        notes: 'Diagnosed with mild hypertension',
+        fileName: 'diagnosis_report.pdf'
+    }
+];
+
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
     const currentUser = getCurrentUser();
@@ -13,129 +64,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     loadDashboardData();
-    loadUserProfile();  // Profile first
+    loadUserProfile();
     populatePatientDropdown();
     initializeDateInputs();
     loadTodaySchedule();
 });
 
-// Load user profile (moved to top)
-function loadUserProfile() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('welcome-message').textContent = 
-        `Welcome, Dr. ${userData.lastName}! Ready to help your patients today.`;
-    
-    // Update profile section
-    document.getElementById('profile-name').textContent = 
-        `Dr. ${userData.firstName} ${userData.lastName}`;
-    document.getElementById('profile-email').textContent = userData.email;
-    document.getElementById('profile-specialization').textContent = 
-        userData.specialization.replace('-', ' ').toUpperCase();
-    document.getElementById('profile-phone').textContent = userData.phone || '-';
-    document.getElementById('profile-degree').textContent = userData.degree || '-';
-    document.getElementById('profile-institution').textContent = userData.institution || '-';
-    document.getElementById('profile-experience').textContent = userData.experience || '-';
-    document.getElementById('profile-fee').textContent = userData.consultationFee || '-';
-    document.getElementById('profile-workplace').textContent = userData.workingPlace || '-';
-    document.getElementById('profile-working-days').textContent = 
-        formatWorkingDays(userData.workingDays) || '-';
-    document.getElementById('profile-working-hours').textContent = 
-        `${userData.startTime} - ${userData.endTime}` || '-';
-    document.getElementById('profile-bio').textContent = userData.bio || '-';
-    document.getElementById('profile-license').textContent = userData.licenseId || '-';
-    
-    // Update profile picture
-    if (userData.profilePicture) {
-        document.getElementById('profile-picture').src = userData.profilePicture;
-    }
-}
-
-// Profile-related functions
-function openEditProfileModal() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('edit-first-name').value = userData.firstName;
-    document.getElementById('edit-last-name').value = userData.lastName;
-    document.getElementById('edit-phone').value = userData.phone || '';
-    document.getElementById('edit-fee').value = userData.consultationFee || '';
-    document.getElementById('edit-workplace').value = userData.workingPlace || '';
-    document.getElementById('edit-start-time').value = userData.startTime || '';
-    document.getElementById('edit-end-time').value = userData.endTime || '';
-    document.getElementById('edit-bio').value = userData.bio || '';
-    
-    document.getElementById('edit-profile-modal').style.display = 'block';
-}
-
-function closeEditProfileModal() {
-    document.getElementById('edit-profile-modal').style.display = 'none';
-}
-
-function changeProfilePicture() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageUrl = e.target.result;
-                document.getElementById('profile-picture').src = imageUrl;
-                updateUserData({ profilePicture: imageUrl });
-                showSuccessMessage('Profile picture updated successfully!');
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    input.click();
-}
-
-// Edit profile form handler
-document.addEventListener('DOMContentLoaded', function() {
-    const editProfileForm = document.getElementById('edit-profile-form');
-    if (editProfileForm) {
-        editProfileForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const updateData = {
-                firstName: document.getElementById('edit-first-name').value,
-                lastName: document.getElementById('edit-last-name').value,
-                phone: document.getElementById('edit-phone').value,
-                consultationFee: parseInt(document.getElementById('edit-fee').value) || 0,
-                workingPlace: document.getElementById('edit-workplace').value,
-                startTime: document.getElementById('edit-start-time').value,
-                endTime: document.getElementById('edit-end-time').value,
-                bio: document.getElementById('edit-bio').value
-            };
-            
-            if (updateUserData(updateData)) {
-                closeEditProfileModal();
-                showSuccessMessage('Profile updated successfully!');
-                loadUserProfile();
-            } else {
-                alert('Failed to update profile!');
-            }
-        });
-    }
-});
-
 // Load dashboard data
 function loadDashboardData() {
-    // Load appointments from localStorage
+    // Load appointments from localStorage or use mock data
     const storedAppointments = localStorage.getItem('patient_appointments');
     if (storedAppointments) {
         const allAppointments = JSON.parse(storedAppointments);
         const currentUser = getCurrentUser();
         doctorAppointments = allAppointments.filter(apt => apt.doctorId === currentUser.data.id);
+    } else {
+        // Use mock data if no stored data
+        const currentUser = getCurrentUser();
+        doctorAppointments = mockDoctorAppointments.filter(apt => apt.doctorId === currentUser.data.id);
     }
     
-    // Load patient reports from localStorage
+    // Load patient reports from localStorage or use mock data
     const storedReports = localStorage.getItem('patient_reports');
     if (storedReports) {
         patientReports = JSON.parse(storedReports);
+    } else {
+        // Use mock data if no stored data
+        patientReports = [...mockPatientReports];
     }
     
     // Add doctor-created reports
@@ -173,6 +128,39 @@ function updateDashboardStats() {
         }).length;
     
     document.getElementById('total-patient-reports').textContent = patientReports.length;
+}
+
+// Load user profile
+function loadUserProfile() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('welcome-message').textContent = 
+        `Welcome, Dr. ${userData.lastName}! Ready to help your patients today.`;
+    
+    // Update profile section
+    document.getElementById('profile-name').textContent = 
+        `Dr. ${userData.firstName} ${userData.lastName}`;
+    document.getElementById('profile-email').textContent = userData.email;
+    document.getElementById('profile-specialization').textContent = 
+        userData.specialization.replace('-', ' ').toUpperCase();
+    document.getElementById('profile-phone').textContent = userData.phone || '-';
+    document.getElementById('profile-degree').textContent = userData.degree || '-';
+    document.getElementById('profile-institution').textContent = userData.institution || '-';
+    document.getElementById('profile-experience').textContent = userData.experience || '-';
+    document.getElementById('profile-fee').textContent = userData.consultationFee || '-';
+    document.getElementById('profile-workplace').textContent = userData.workingPlace || '-';
+    document.getElementById('profile-working-days').textContent = 
+        formatWorkingDays(userData.workingDays) || '-';
+    document.getElementById('profile-working-hours').textContent = 
+        `${userData.startTime} - ${userData.endTime}` || '-';
+    document.getElementById('profile-bio').textContent = userData.bio || '-';
+    document.getElementById('profile-license').textContent = userData.licenseId || '-';
+    
+    // Update profile picture
+    if (userData.profilePicture) {
+        document.getElementById('profile-picture').src = userData.profilePicture;
+    }
 }
 
 // Show/hide sections
@@ -303,11 +291,12 @@ function loadPatientReports() {
             const patient = patients.find(p => p.id === report.patientId);
             const patientName = patient ? `${patient.firstName} ${patient.lastName}` : report.patientName || 'Unknown';
             
+            const displayDate = report.time ? `${report.date} ${report.time}` : report.date;
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${patientName}</td>
                 <td>${report.type}</td>
-                <td>${report.date}</td>
+                <td>${displayDate}</td>
                 <td>
                     <button class="btn btn-small" onclick="viewPatientReport(${report.id})">View Report</button>
                 </td>
@@ -383,6 +372,26 @@ function closeViewReportModal() {
     document.getElementById('view-report-modal').style.display = 'none';
 }
 
+function openEditProfileModal() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('edit-first-name').value = userData.firstName;
+    document.getElementById('edit-last-name').value = userData.lastName;
+    document.getElementById('edit-phone').value = userData.phone || '';
+    document.getElementById('edit-fee').value = userData.consultationFee || '';
+    document.getElementById('edit-workplace').value = userData.workingPlace || '';
+    document.getElementById('edit-start-time').value = userData.startTime || '';
+    document.getElementById('edit-end-time').value = userData.endTime || '';
+    document.getElementById('edit-bio').value = userData.bio || '';
+    
+    document.getElementById('edit-profile-modal').style.display = 'block';
+}
+
+function closeEditProfileModal() {
+    document.getElementById('edit-profile-modal').style.display = 'none';
+}
+
 // Add patient report
 document.addEventListener('DOMContentLoaded', function() {
     const addPatientReportForm = document.getElementById('add-patient-report-form');
@@ -404,16 +413,30 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (fileInput.files[0]) {
                 fileName = fileInput.files[0].name;
+            } else {
+                // Use a random mock file name if no file selected
+                const mockFiles = ['consultation_notes.pdf', 'diagnosis_report.pdf', 'prescription.jpg', 'lab_results.pdf', 'follow_up.pdf'];
+                fileName = mockFiles[Math.floor(Math.random() * mockFiles.length)];
             }
             
+            // Get current date and time
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+            const currentTime = now.toLocaleTimeString('en-IN', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
             const reportData = {
-                id: Date.now(), // Unique ID
+                id: Date.now() + Math.floor(Math.random() * 1000), // Unique ID
                 patientId: patientId,
                 patientName: patient ? `${patient.firstName} ${patient.lastName}` : '',
                 doctorId: currentUser.data.id,
                 doctorName: `Dr. ${currentUser.data.firstName} ${currentUser.data.lastName}`,
                 type: document.getElementById('patient-report-type').value,
-                date: document.getElementById('patient-report-date').value,
+                date: currentDate,
+                time: currentTime,
                 notes: document.getElementById('patient-report-notes').value,
                 fileName: fileName
             };
@@ -430,6 +453,35 @@ document.addEventListener('DOMContentLoaded', function() {
             showSuccessMessage('Report added successfully!');
             loadPatientReports();
             updateDashboardStats();
+        });
+    }
+});
+
+// Edit profile
+document.addEventListener('DOMContentLoaded', function() {
+    const editProfileForm = document.getElementById('edit-profile-form');
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const updateData = {
+                firstName: document.getElementById('edit-first-name').value,
+                lastName: document.getElementById('edit-last-name').value,
+                phone: document.getElementById('edit-phone').value,
+                consultationFee: parseInt(document.getElementById('edit-fee').value) || 0,
+                workingPlace: document.getElementById('edit-workplace').value,
+                startTime: document.getElementById('edit-start-time').value,
+                endTime: document.getElementById('edit-end-time').value,
+                bio: document.getElementById('edit-bio').value
+            };
+            
+            if (updateUserData(updateData)) {
+                closeEditProfileModal();
+                showSuccessMessage('Profile updated successfully!');
+                loadUserProfile();
+            } else {
+                alert('Failed to update profile!');
+            }
         });
     }
 });
@@ -452,6 +504,27 @@ function viewPatientReport(reportId) {
         `;
         openViewReportModal();
     }
+}
+
+// Change profile picture
+function changeProfilePicture() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                document.getElementById('profile-picture').src = imageUrl;
+                updateUserData({ profilePicture: imageUrl });
+                showSuccessMessage('Profile picture updated successfully!');
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    input.click();
 }
 
 // Show success message
