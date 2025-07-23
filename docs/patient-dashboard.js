@@ -9,10 +9,10 @@ const mockAppointments = [
     {
         id: 1001,
         patientId: 1,
-        patientName: 'Manoj',
+        patientName: 'John Doe',
         doctorId: 1,
-        doctorName: 'Dr. Preethi',
-        date: '2025-07-23',
+        doctorName: 'Dr. Sarah Johnson',
+        date: '2025-01-20',
         time: '10:00',
         reason: 'Regular checkup',
         status: 'scheduled'
@@ -20,12 +20,12 @@ const mockAppointments = [
     {
         id: 1002,
         patientId: 1,
-        patientName: 'Manoj',
+        patientName: 'John Doe',
         doctorId: 2,
-        doctorName: 'Dr. Prasanna Kumar',
-        date: '2025-07-24',
+        doctorName: 'Dr. Michael Chen',
+        date: '2025-01-15',
         time: '14:00',
-        reason: 'Chest pain consultation',
+        reason: 'Knee pain consultation',
         status: 'completed'
     }
 ];
@@ -35,19 +35,19 @@ const mockReports = [
         id: 2001,
         patientId: 1,
         type: 'blood-test',
-        doctor: 'Dr. N.Gupta',
-        date: '2025-07-23',
+        doctor: 'Dr. Sarah Johnson',
+        date: '2025-01-10',
         notes: 'All blood parameters are normal',
-        fileName: 'bloodtest.jpeg'
+        fileName: 'blood_test_report.pdf'
     },
     {
         id: 2002,
         patientId: 1,
         type: 'x-ray',
-        doctor: 'Dr. Shivu',
-        date: '2025-07-24',
+        doctor: 'Dr. Michael Chen',
+        date: '2025-01-08',
         notes: 'Chest X-ray shows clear lungs',
-        fileName: 'xray.jpeg'
+        fileName: 'chest_xray.jpg'
     }
 ];
 
@@ -64,8 +64,134 @@ document.addEventListener('DOMContentLoaded', function() {
     populateDoctorDropdown();
     initializeDateInputs();
     loadAllDoctors();
+    
+    // Initialize form handlers
+    initializeFormHandlers();
 });
 
+// Initialize form handlers
+function initializeFormHandlers() {
+    // Book appointment form
+    const bookingForm = document.getElementById('booking-form');
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const currentUser = getCurrentUser();
+            const doctorId = parseInt(document.getElementById('doctor-select').value);
+            const doctors = getAllDoctors();
+            const doctor = doctors.find(d => d.id === doctorId);
+            
+            if (!doctor) {
+                alert('Please select a doctor');
+                return;
+            }
+            
+            const appointmentData = {
+                id: Date.now() + Math.floor(Math.random() * 1000), // Unique ID
+                patientId: currentUser.data.id,
+                patientName: `${currentUser.data.firstName} ${currentUser.data.lastName}`,
+                doctorId: doctorId,
+                doctorName: `Dr. ${doctor.firstName} ${doctor.lastName}`,
+                date: document.getElementById('appointment-date').value,
+                time: document.getElementById('appointment-time').value,
+                reason: document.getElementById('appointment-reason').value,
+                status: 'scheduled'
+            };
+            
+            // Save to localStorage
+            let allAppointments = JSON.parse(localStorage.getItem('patient_appointments') || '[]');
+            allAppointments.push(appointmentData);
+            localStorage.setItem('patient_appointments', JSON.stringify(allAppointments));
+            
+            // Update local data
+            patientAppointments.push(appointmentData);
+            
+            closeBookingModal();
+            showSuccessMessage('Appointment booked successfully! You will be informed shortly.');
+            loadAppointments();
+            updateDashboardStats();
+        });
+    }
+    
+    // Add report form
+    const addReportForm = document.getElementById('add-report-form');
+    if (addReportForm) {
+        addReportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const currentUser = getCurrentUser();
+            const fileInput = document.getElementById('report-file');
+            let fileName = '';
+            
+            if (fileInput.files[0]) {
+                fileName = fileInput.files[0].name;
+            } else {
+                // Use a random mock file name if no file selected
+                const mockFiles = ['blood_test.pdf', 'xray_report.jpg', 'mri_scan.pdf', 'prescription.jpg', 'lab_results.pdf'];
+                fileName = mockFiles[Math.floor(Math.random() * mockFiles.length)];
+            }
+            
+            // Get current date and time
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+            const currentTime = now.toLocaleTimeString('en-IN', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            const reportData = {
+                id: Date.now() + Math.floor(Math.random() * 1000), // Unique ID
+                patientId: currentUser.data.id,
+                type: document.getElementById('report-type').value,
+                doctor: document.getElementById('report-doctor').value,
+                date: currentDate,
+                time: currentTime,
+                notes: document.getElementById('report-notes').value,
+                fileName: fileName
+            };
+            
+            // Save to localStorage
+            let allReports = JSON.parse(localStorage.getItem('patient_reports') || '[]');
+            allReports.push(reportData);
+            localStorage.setItem('patient_reports', JSON.stringify(allReports));
+            
+            // Update local data
+            patientReports.push(reportData);
+            
+            closeAddReportModal();
+            showSuccessMessage('Report added successfully!');
+            loadReports();
+            updateDashboardStats();
+        });
+    }
+    
+    // Edit profile form
+    const editProfileForm = document.getElementById('edit-profile-form');
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const updateData = {
+                firstName: document.getElementById('edit-first-name').value,
+                lastName: document.getElementById('edit-last-name').value,
+                phone: document.getElementById('edit-phone').value,
+                weight: parseFloat(document.getElementById('edit-weight').value) || 0,
+                height: parseInt(document.getElementById('edit-height').value) || 0,
+                address: document.getElementById('edit-address').value
+            };
+            
+            if (updateUserData(updateData)) {
+                closeEditProfileModal();
+                showSuccessMessage('Profile updated successfully!');
+                loadUserProfile();
+            } else {
+                alert('Failed to update profile!');
+            }
+        });
+    }
+}
 // Load dashboard data
 function loadDashboardData() {
     // Load appointments from localStorage or use mock data
@@ -207,35 +333,35 @@ function loadAllDoctors() {
     const additionalMockDoctors = [
         {
             id: 7,
-            firstName: 'Dr. Prasanna',
-            lastName: 'Kumar',
-            specialization: 'orthopedic',
-            degree: 'MBBS, MS',
-            institution: 'Harvard Medical School',
-            experience: 9,
-            consultationFee: 600,
-            workingPlace: 'Orthopedic Speciality Clinic',
+            firstName: 'Dr. Anita',
+            lastName: 'Verma',
+            specialization: 'dermatology',
+            degree: 'MBBS, MD',
+            institution: 'AIIMS Delhi',
+            experience: 10,
+            consultationFee: 800,
+            workingPlace: 'Skin Care Clinic',
             workingDays: ['monday', 'tuesday', 'wednesday', 'friday'],
             startTime: '10:00',
             endTime: '18:00',
             bio: 'Dermatologist specializing in skin disorders and cosmetic treatments.',
-            profilePicture: 'Prasanna.jpeg'
+            profilePicture: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=300'
         },
         {
             id: 8,
-            firstName: 'Dr. Sheethal',
-            lastName: 'S',
-            specialization: 'cardiology',
+            firstName: 'Dr. Vikram',
+            lastName: 'Singh',
+            specialization: 'neurology',
             degree: 'MBBS, DM',
             institution: 'PGI Chandigarh',
             experience: 18,
-            consultationFee: 400,
+            consultationFee: 2500,
             workingPlace: 'Neuro Care Hospital',
             workingDays: ['monday', 'wednesday', 'thursday', 'friday'],
             startTime: '09:00',
             endTime: '17:00',
             bio: 'Neurologist with expertise in brain and nervous system disorders.',
-            profilePicture: 'Sheethal.jpeg'
+            profilePicture: 'https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?auto=compress&cs=tinysrgb&w=300'
         },
         {
             id: 9,
@@ -342,14 +468,14 @@ function searchDoctors() {
         filteredDoctors = filteredDoctors.filter(doctor => {
             const fee = doctor.consultationFee;
             switch (feeFilter) {
-                case '0-500':
-                    return fee <= 500;
-                case '500-1000':
-                    return fee > 500 && fee <= 1000;
+                case '0-1000':
+                    return fee <= 1000;
                 case '1000-2000':
                     return fee > 1000 && fee <= 2000;
-                case '2000+':
-                    return fee > 2000;
+                case '2000-3000':
+                    return fee > 2000 && fee <= 3000;
+                case '3000+':
+                    return fee > 3000;
                 default:
                     return true;
             }
@@ -495,132 +621,6 @@ function closeEditProfileModal() {
     document.getElementById('edit-profile-modal').style.display = 'none';
 }
 
-// Book appointment
-document.addEventListener('DOMContentLoaded', function() {
-    const bookingForm = document.getElementById('booking-form');
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const currentUser = getCurrentUser();
-            const doctorId = parseInt(document.getElementById('doctor-select').value);
-            const doctors = getAllDoctors();
-            const doctor = doctors.find(d => d.id === doctorId);
-            
-            if (!doctor) {
-                alert('Please select a doctor');
-                return;
-            }
-            
-            const appointmentData = {
-                id: Date.now() + Math.floor(Math.random() * 1000), // Unique ID
-                patientId: currentUser.data.id,
-                patientName: `${currentUser.data.firstName} ${currentUser.data.lastName}`,
-                doctorId: doctorId,
-                doctorName: `Dr. ${doctor.firstName} ${doctor.lastName}`,
-                date: document.getElementById('appointment-date').value,
-                time: document.getElementById('appointment-time').value,
-                reason: document.getElementById('appointment-reason').value,
-                status: 'scheduled'
-            };
-            
-            // Save to localStorage
-            let allAppointments = JSON.parse(localStorage.getItem('patient_appointments') || '[]');
-            allAppointments.push(appointmentData);
-            localStorage.setItem('patient_appointments', JSON.stringify(allAppointments));
-            
-            // Update local data
-            patientAppointments.push(appointmentData);
-            
-            closeBookingModal();
-            showSuccessMessage('Appointment booked successfully! You will be informed shortly.');
-            loadAppointments();
-            updateDashboardStats();
-        });
-    }
-});
-
-// Add report
-document.addEventListener('DOMContentLoaded', function() {
-    const addReportForm = document.getElementById('add-report-form');
-    if (addReportForm) {
-        addReportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const currentUser = getCurrentUser();
-            const fileInput = document.getElementById('report-file');
-            let fileName = '';
-            
-            if (fileInput.files[0]) {
-                fileName = fileInput.files[0].name;
-            } else {
-                // Use a random mock file name if no file selected
-                const mockFiles = ['blood_test.pdf', 'xray_report.jpg', 'mri_scan.pdf', 'prescription.jpg', 'lab_results.pdf'];
-                fileName = mockFiles[Math.floor(Math.random() * mockFiles.length)];
-            }
-            
-            // Get current date and time
-            const now = new Date();
-            const currentDate = now.toISOString().split('T')[0];
-            const currentTime = now.toLocaleTimeString('en-IN', { 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            
-            const reportData = {
-                id: Date.now() + Math.floor(Math.random() * 1000), // Unique ID
-                patientId: currentUser.data.id,
-                type: document.getElementById('report-type').value,
-                doctor: document.getElementById('report-doctor').value,
-                date: currentDate,
-                time: currentTime,
-                notes: document.getElementById('report-notes').value,
-                fileName: fileName
-            };
-            
-            // Save to localStorage
-            let allReports = JSON.parse(localStorage.getItem('patient_reports') || '[]');
-            allReports.push(reportData);
-            localStorage.setItem('patient_reports', JSON.stringify(allReports));
-            
-            // Update local data
-            patientReports.push(reportData);
-            
-            closeAddReportModal();
-            showSuccessMessage('Report added successfully!');
-            loadReports();
-            updateDashboardStats();
-        });
-    }
-});
-
-// Edit profile
-document.addEventListener('DOMContentLoaded', function() {
-    const editProfileForm = document.getElementById('edit-profile-form');
-    if (editProfileForm) {
-        editProfileForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const updateData = {
-                firstName: document.getElementById('edit-first-name').value,
-                lastName: document.getElementById('edit-last-name').value,
-                phone: document.getElementById('edit-phone').value,
-                weight: parseFloat(document.getElementById('edit-weight').value) || 0,
-                height: parseInt(document.getElementById('edit-height').value) || 0,
-                address: document.getElementById('edit-address').value
-            };
-            
-            if (updateUserData(updateData)) {
-                closeEditProfileModal();
-                showSuccessMessage('Profile updated successfully!');
-                loadUserProfile();
-            } else {
-                alert('Failed to update profile!');
-            }
-        });
-    }
-});
 
 // View report
 function viewReport(reportId) {
