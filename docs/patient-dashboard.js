@@ -9,10 +9,10 @@ const mockAppointments = [
     {
         id: 1001,
         patientId: 1,
-        patientName: 'John Doe',
+        patientName: 'Manoj',
         doctorId: 1,
-        doctorName: 'Dr. Sarah Johnson',
-        date: '2025-01-20',
+        doctorName: 'Dr. Preethi',
+        date: '2025-07-24',
         time: '10:00',
         reason: 'Regular checkup',
         status: 'scheduled'
@@ -20,13 +20,13 @@ const mockAppointments = [
     {
         id: 1002,
         patientId: 1,
-        patientName: 'John Doe',
+        patientName: 'Manoj',
         doctorId: 2,
-        doctorName: 'Dr. Michael Chen',
+        doctorName: 'Dr. Adhi',
         date: '2025-01-15',
         time: '14:00',
         reason: 'Knee pain consultation',
-        status: 'completed'
+        status: 'Scheduled'
     }
 ];
 
@@ -35,19 +35,19 @@ const mockReports = [
         id: 2001,
         patientId: 1,
         type: 'blood-test',
-        doctor: 'Dr. Sarah Johnson',
-        date: '2025-01-10',
-        notes: 'All blood parameters are normal',
+        doctor: 'Dr.N.G.Gupta',
+        date: '2025-03-15',
+        notes: 'normal',
         fileName: 'bloodtest.jpeg'
     },
     {
         id: 2002,
         patientId: 1,
         type: 'x-ray',
-        doctor: 'Dr. Michael Chen',
+        doctor: 'Dr. Myna',
         date: '2025-01-08',
-        notes: 'Chest X-ray shows clear lungs',
-        fileName: 'chest_xray.jpg'
+        notes: 'clear lungs',
+        fileName: 'xray.jpeg'
     }
 ];
 
@@ -68,6 +68,80 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize form handlers
     initializeFormHandlers();
 });
+
+// Load user profile
+function loadUserProfile() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('welcome-message').textContent = 
+        `Welcome back, ${userData.firstName}! Good to see you again.`;
+    
+    // Update profile section
+    document.getElementById('profile-name').textContent = 
+        `${userData.firstName} ${userData.lastName}`;
+    document.getElementById('profile-email').textContent = userData.email;
+    document.getElementById('profile-phone').textContent = userData.phone || '-';
+    document.getElementById('profile-dob').textContent = userData.dateOfBirth || '-';
+    document.getElementById('profile-gender').textContent = userData.gender || '-';
+    document.getElementById('profile-blood-group').textContent = userData.bloodGroup || '-';
+    document.getElementById('profile-weight').textContent = userData.weight || '-';
+    document.getElementById('profile-height').textContent = userData.height || '-';
+    document.getElementById('profile-address').textContent = userData.address || '-';
+    
+    // Calculate BMI
+    if (userData.weight && userData.height) {
+        const heightInMeters = userData.height / 100;
+        const bmi = (userData.weight / (heightInMeters * heightInMeters)).toFixed(1);
+        document.getElementById('profile-bmi').textContent = bmi;
+    }
+    
+    // Update profile picture
+    if (userData.profilePicture) {
+        document.getElementById('profile-picture').src = userData.profilePicture;
+    }
+}
+
+// Change profile picture
+function changeProfilePicture() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                document.getElementById('profile-picture').src = imageUrl;
+                updateUserData({ profilePicture: imageUrl });
+                showSuccessMessage('Profile picture updated successfully!');
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    input.click();
+}
+
+// Open edit profile modal
+function openEditProfileModal() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('edit-first-name').value = userData.firstName;
+    document.getElementById('edit-last-name').value = userData.lastName;
+    document.getElementById('edit-phone').value = userData.phone || '';
+    document.getElementById('edit-weight').value = userData.weight || '';
+    document.getElementById('edit-height').value = userData.height || '';
+    document.getElementById('edit-address').value = userData.address || '';
+    
+    document.getElementById('edit-profile-modal').style.display = 'block';
+}
+
+// Close edit profile modal
+function closeEditProfileModal() {
+    document.getElementById('edit-profile-modal').style.display = 'none';
+}
 
 // Initialize form handlers
 function initializeFormHandlers() {
@@ -192,6 +266,7 @@ function initializeFormHandlers() {
         });
     }
 }
+
 // Load dashboard data
 function loadDashboardData() {
     // Load appointments from localStorage or use mock data
@@ -243,39 +318,6 @@ function updateDashboardStats() {
     document.getElementById('total-appointments').textContent = patientAppointments.length;
     document.getElementById('upcoming-appointments').textContent = upcomingAppointments.length;
     document.getElementById('total-reports').textContent = patientReports.length;
-}
-
-// Load user profile
-function loadUserProfile() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('welcome-message').textContent = 
-        `Welcome back, ${userData.firstName}! Good to see you again.`;
-    
-    // Update profile section
-    document.getElementById('profile-name').textContent = 
-        `${userData.firstName} ${userData.lastName}`;
-    document.getElementById('profile-email').textContent = userData.email;
-    document.getElementById('profile-phone').textContent = userData.phone || '-';
-    document.getElementById('profile-dob').textContent = userData.dateOfBirth || '-';
-    document.getElementById('profile-gender').textContent = userData.gender || '-';
-    document.getElementById('profile-blood-group').textContent = userData.bloodGroup || '-';
-    document.getElementById('profile-weight').textContent = userData.weight || '-';
-    document.getElementById('profile-height').textContent = userData.height || '-';
-    document.getElementById('profile-address').textContent = userData.address || '-';
-    
-    // Calculate BMI
-    if (userData.weight && userData.height) {
-        const heightInMeters = userData.height / 100;
-        const bmi = (userData.weight / (heightInMeters * heightInMeters)).toFixed(1);
-        document.getElementById('profile-bmi').textContent = bmi;
-    }
-    
-    // Update profile picture
-    if (userData.profilePicture) {
-        document.getElementById('profile-picture').src = userData.profilePicture;
-    }
 }
 
 // Show/hide sections
@@ -333,19 +375,19 @@ function loadAllDoctors() {
     const additionalMockDoctors = [
         {
             id: 7,
-            firstName: 'Dr. Anita',
-            lastName: 'Verma',
-            specialization: 'dermatology',
-            degree: 'MBBS, MD',
-            institution: 'AIIMS Delhi',
+            firstName: 'Dr. Prasanna',
+            lastName: 'Kumar',
+            specialization: 'cardiology',
+            degree: 'MBBS, MS',
+            institution: 'Harvard Medical School',
             experience: 10,
-            consultationFee: 800,
-            workingPlace: 'Skin Care Clinic',
+            consultationFee: 600,
+            workingPlace: 'Speciality Clinic',
             workingDays: ['monday', 'tuesday', 'wednesday', 'friday'],
             startTime: '10:00',
             endTime: '18:00',
-            bio: 'Dermatologist specializing in skin disorders and cosmetic treatments.',
-            profilePicture: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=300'
+            bio: 'Cardiology specializing in chest disorders.',
+            profilePicture: 'Prasanna.jpeg'
         },
         {
             id: 8,
@@ -468,14 +510,14 @@ function searchDoctors() {
         filteredDoctors = filteredDoctors.filter(doctor => {
             const fee = doctor.consultationFee;
             switch (feeFilter) {
-                case '0-1000':
-                    return fee <= 1000;
+                case '0-500':
+                    return fee <= 500;
+                case '500-1000':
+                    return fee > 500 && fee <= 1000;
                 case '1000-2000':
                     return fee > 1000 && fee <= 2000;
-                case '2000-3000':
-                    return fee > 2000 && fee <= 3000;
-                case '3000+':
-                    return fee > 3000;
+                case '2000+':
+                    return fee > 2000;
                 default:
                     return true;
             }
@@ -603,52 +645,12 @@ function closeAddReportModal() {
     document.getElementById('add-report-form').reset();
 }
 
-function openEditProfileModal() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('edit-first-name').value = userData.firstName;
-    document.getElementById('edit-last-name').value = userData.lastName;
-    document.getElementById('edit-phone').value = userData.phone || '';
-    document.getElementById('edit-weight').value = userData.weight || '';
-    document.getElementById('edit-height').value = userData.height || '';
-    document.getElementById('edit-address').value = userData.address || '';
-    
-    document.getElementById('edit-profile-modal').style.display = 'block';
-}
-
-function closeEditProfileModal() {
-    document.getElementById('edit-profile-modal').style.display = 'none';
-}
-
-
 // View report
 function viewReport(reportId) {
     const report = patientReports.find(r => r.id === reportId);
     if (report) {
         alert(`Report Details:\n\nType: ${report.type}\nDoctor: ${report.doctor || report.doctorName || 'Self-added'}\nDate: ${report.date}\nNotes: ${report.notes || 'No notes'}\n${report.fileName ? `File: ${report.fileName}` : ''}`);
     }
-}
-
-// Change profile picture
-function changeProfilePicture() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageUrl = e.target.result;
-                document.getElementById('profile-picture').src = imageUrl;
-                updateUserData({ profilePicture: imageUrl });
-                showSuccessMessage('Profile picture updated successfully!');
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    input.click();
 }
 
 // Show success message

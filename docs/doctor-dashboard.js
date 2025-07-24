@@ -9,10 +9,10 @@ const mockDoctorAppointments = [
     {
         id: 3001,
         patientId: 1,
-        patientName: 'John Doe',
+        patientName: 'Smitha',
         doctorId: 1,
-        doctorName: 'Dr. Sarah Johnson',
-        date: '2025-01-20',
+        doctorName: 'Dr. Amog',
+        date: '2025-07-24',
         time: '10:00',
         reason: 'Regular checkup',
         status: 'scheduled'
@@ -20,10 +20,10 @@ const mockDoctorAppointments = [
     {
         id: 3002,
         patientId: 2,
-        patientName: 'Jane Smith',
+        patientName: 'Adhi',
         doctorId: 1,
-        doctorName: 'Dr. Sarah Johnson',
-        date: '2025-01-20',
+        doctorName: 'Dr. Amog',
+        date: '2025-07-24',
         time: '11:00',
         reason: 'Heart consultation',
         status: 'scheduled'
@@ -34,26 +34,59 @@ const mockPatientReports = [
     {
         id: 4001,
         patientId: 1,
-        patientName: 'Manoj',
+        patientName: 'Smitha',
         doctorId: 1,
-        doctorName: 'Dr. Sarah Johnson',
+        doctorName: 'Dr. Amog',
         type: 'consultation',
-        date: '2025-01-15',
+        date: '2025-07-24',
         notes: 'Patient shows good recovery progress',
         fileName: 'bloodtest.jpeg'
     },
     {
         id: 4002,
         patientId: 2,
-        patientName: 'Jane Smith',
+        patientName: 'Adhi',
         doctorId: 1,
-        doctorName: 'Dr. Sarah Johnson',
-        type: 'diagnosis',
-        date: '2025-01-12',
-        notes: 'Diagnosed with mild hypertension',
-        fileName: 'diagnosis_report.pdf'
+        doctorName: 'Dr. Amog',
+        type: 'consultation',
+        date: '2025-07-24',
+        notes: 'Normal',
+        fileName: 'xray.jpeg'
     }
 ];
+
+// Load user profile
+function loadUserProfile() {
+    const currentUser = getCurrentUser();
+    const userData = currentUser.data;
+    
+    document.getElementById('welcome-message').textContent = 
+        `Welcome, Dr. ${userData.lastName}! Ready to help your patients today.`;
+    
+    // Update profile section
+    document.getElementById('profile-name').textContent = 
+        `Dr. ${userData.firstName} ${userData.lastName}`;
+    document.getElementById('profile-email').textContent = userData.email;
+    document.getElementById('profile-specialization').textContent = 
+        userData.specialization.replace('-', ' ').toUpperCase();
+    document.getElementById('profile-phone').textContent = userData.phone || '-';
+    document.getElementById('profile-degree').textContent = userData.degree || '-';
+    document.getElementById('profile-institution').textContent = userData.institution || '-';
+    document.getElementById('profile-experience').textContent = userData.experience || '-';
+    document.getElementById('profile-fee').textContent = userData.consultationFee || '-';
+    document.getElementById('profile-workplace').textContent = userData.workingPlace || '-';
+    document.getElementById('profile-working-days').textContent = 
+        formatWorkingDays(userData.workingDays) || '-';
+    document.getElementById('profile-working-hours').textContent = 
+        `${userData.startTime} - ${userData.endTime}` || '-';
+    document.getElementById('profile-bio').textContent = userData.bio || '-';
+    document.getElementById('profile-license').textContent = userData.licenseId || '-';
+    
+    // Update profile picture
+    if (userData.profilePicture) {
+        document.getElementById('profile-picture').src = userData.profilePicture;
+    }
+}
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
@@ -223,39 +256,6 @@ function updateDashboardStats() {
         }).length;
     
     document.getElementById('total-patient-reports').textContent = patientReports.length;
-}
-
-// Load user profile
-function loadUserProfile() {
-    const currentUser = getCurrentUser();
-    const userData = currentUser.data;
-    
-    document.getElementById('welcome-message').textContent = 
-        `Welcome, Dr. ${userData.lastName}! Ready to help your patients today.`;
-    
-    // Update profile section
-    document.getElementById('profile-name').textContent = 
-        `Dr. ${userData.firstName} ${userData.lastName}`;
-    document.getElementById('profile-email').textContent = userData.email;
-    document.getElementById('profile-specialization').textContent = 
-        userData.specialization.replace('-', ' ').toUpperCase();
-    document.getElementById('profile-phone').textContent = userData.phone || '-';
-    document.getElementById('profile-degree').textContent = userData.degree || '-';
-    document.getElementById('profile-institution').textContent = userData.institution || '-';
-    document.getElementById('profile-experience').textContent = userData.experience || '-';
-    document.getElementById('profile-fee').textContent = userData.consultationFee || '-';
-    document.getElementById('profile-workplace').textContent = userData.workingPlace || '-';
-    document.getElementById('profile-working-days').textContent = 
-        formatWorkingDays(userData.workingDays) || '-';
-    document.getElementById('profile-working-hours').textContent = 
-        `${userData.startTime} - ${userData.endTime}` || '-';
-    document.getElementById('profile-bio').textContent = userData.bio || '-';
-    document.getElementById('profile-license').textContent = userData.licenseId || '-';
-    
-    // Update profile picture
-    if (userData.profilePicture) {
-        document.getElementById('profile-picture').src = userData.profilePicture;
-    }
 }
 
 // Show/hide sections
